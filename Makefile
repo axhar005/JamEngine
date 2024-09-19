@@ -17,9 +17,9 @@ else
 endif
 
 #--- RAYLIB CONFIGURATION ---#
-# Define paths
 RAYLIB_DIR = lib/raylib
 RAYLIB_BUILD_DIR = $(RAYLIB_DIR)/build
+RAYLIB_REPO_URL = https://github.com/raysan5/raylib.git
 
 # Check if raylib is installed on the system
 ifeq ($(UNAME_S),Linux)
@@ -40,6 +40,8 @@ ifeq ($(wildcard $(RAYLIB_SYSTEM_LIB)),)
 else
     USE_LOCAL_RAYLIB = false
 endif
+
+USE_LOCAL_RAYLIB = true
 
 # Include paths
 CFLAGS += -Iinclude
@@ -80,11 +82,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 # Build raylib if using local version
 $(RAYLIB_BUILD_DIR)/libraylib.a:
 	@if [ "$(USE_LOCAL_RAYLIB)" = "true" ]; then \
-		echo "Building local raylib..."; \
+		if [ ! -d "$(RAYLIB_DIR)" ]; then \
+			echo "Raylib not found on the system. Cloning Raylib..."; \
+			git clone --depth=1 $(RAYLIB_REPO_URL) $(RAYLIB_DIR); \
+		fi; \
+		echo "Building local Raylib..."; \
 		mkdir -p $(RAYLIB_BUILD_DIR); \
 		cd $(RAYLIB_BUILD_DIR) && cmake .. && $(MAKE); \
 	else \
-		echo "Using system-installed raylib."; \
+		echo "Using system-installed Raylib."; \
 	fi
 
 run:
@@ -101,6 +107,9 @@ fclean: clean
 	@if [ "$(USE_LOCAL_RAYLIB)" = "true" ]; then \
 		rm -rf $(RAYLIB_BUILD_DIR); \
 	fi
+
+rclean: fclean
+	rm -rf $(RAYLIB_DIR);
 
 re: fclean all
 
