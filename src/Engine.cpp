@@ -61,9 +61,9 @@ void Engine::stepLoop(){
 
 int Engine::addObject(Object &object, bool render)
 {
-	for (auto &&i : objectList)
+	for (auto &&obj : objectList)
 	{
-		if(&i == &object){
+		if(&obj == &object){
 			return -1;
 		}
 	}
@@ -72,6 +72,14 @@ int Engine::addObject(Object &object, bool render)
 	if (render)
 		renderList.push_back(&object);
 	return objectList.size()-1;
+}
+
+void Engine::renderLoop()
+{
+	for (auto &&obj : renderList)
+	{
+		// DrawTexture(*obj->texture, obj->position.x, obj->position.y, WHITE);
+	}
 }
 
 void Engine::loop(void (*func)(Engine &))
@@ -84,7 +92,7 @@ void Engine::loop(void (*func)(Engine &))
 		func(*this);
 		stepLoop();
 		BeginDrawing();
-		// render
+			renderLoop(); /* render */
 		EndDrawing();
 	}
 }
