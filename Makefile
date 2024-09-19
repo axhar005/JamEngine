@@ -1,5 +1,5 @@
 #--- APPLICATION NAME ---#
-NAME = jam_engine
+NAME = JamEngine
 
 #--- COMPILER AND OPTIONS ---#
 CXX = g++
