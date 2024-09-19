@@ -41,8 +41,6 @@ else
     USE_LOCAL_RAYLIB = false
 endif
 
-USE_LOCAL_RAYLIB = true
-
 # Include paths
 CFLAGS += -Iinclude
 
