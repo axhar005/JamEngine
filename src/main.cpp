@@ -14,7 +14,7 @@ void initTexture(Engine& e)
 {
 	e.textures = {
 		// {"player_down", {"asset/player/player_down_0.png", "asset/player/player_down_1.png"}},
-		{"fireball", {"asset/fireball.png"}}
+		{"fireball", {"asset/FireBall.png"}}
 	};
 }
 
@@ -27,7 +27,8 @@ void initObject(Engine& e)
 
 int main()
 {
-	Engine e("ENGINE", 300, 400);
+	Engine::initInstance("ENGINE", 500, 600);
+	Engine& e = Engine::getInstance();
 	initTexture(e);
 	initObject(e);
 	e.loop(mainLoop);

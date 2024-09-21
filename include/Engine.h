@@ -6,24 +6,29 @@
 	class Engine
 	{
 		private:
+			Engine(std::string windowName, int windowHeight, int windowWidth);
+			~Engine();
+			Engine(const Engine&) = delete;
+			Engine& operator=(const Engine&) = delete;
+			Engine(Engine&&) = delete;
+			Engine& operator=(Engine&&) = delete;
+			void loadTextureImage();
+			void unloadTextureImage();
+			void renderLoop();
+			void stepLoop();
 			int _windowHeight;
 			int _windowWidth;
 			int _uniqueID;
 			bool _closeWindow;
 			std::string _windowName;
+			static Engine* _instance;
 
 		public:
-			Engine(std::string windowName, int windowHeight, int windowWidth);
-			~Engine();
-			
-			void loadTextureImage();
-			void unloadTextureImage();
+			static Engine& getInstance();
+			static void initInstance(std::string windowName, int windowHeight, int windowWidth);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
-			void renderLoop();
-			void stepLoop();
-			int addObject(Object &object, bool render);
-
+			int addObject(Object& object, bool render);
 			SpriteMap 				sprites;
 			TexturePath 			textures;
 			std::vector<Object> 	objectList;

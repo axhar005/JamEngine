@@ -1,4 +1,5 @@
 #include "../include/Engine.h"
+Engine* Engine::_instance = nullptr;
 
 Engine::Engine(std::string windowName, int windowHeight, int windowWidth)
 {
@@ -14,6 +15,21 @@ Engine::~Engine()
 {
 	unloadTextureImage();
 	CloseWindow();
+}
+
+void Engine::initInstance(std::string windowName, int windowHeight, int windowWidth) {
+		if (_instance == nullptr) {
+			_instance = new Engine(windowName, windowHeight, windowWidth);
+		} else {
+			throw std::runtime_error("Instance alrady initialized.");
+		}
+	}
+
+Engine& Engine::getInstance() {
+	if (_instance == nullptr) {
+		throw std::runtime_error("Instance none initialized.");
+	}
+	return *_instance;
 }
 
 void Engine::loadTextureImage()
@@ -92,6 +108,9 @@ void Engine::loop(void (*func)(Engine &))
 		func(*this);
 		stepLoop();
 		BeginDrawing();
+			ClearBackground(RAYWHITE);
+			DrawGrid(20, 10.0f);
+
 			renderLoop(); /* render */
 		EndDrawing();
 	}
