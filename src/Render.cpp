@@ -19,7 +19,7 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
-void Engine::Rander(void) {
+void Engine::Render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->camera);
 	
 }

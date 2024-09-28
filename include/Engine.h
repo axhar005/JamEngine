@@ -25,7 +25,7 @@
 			void closeWindow();
 			void stepLoop();
 			int  addObject(Object &object, bool render);
-			void Rander(void);
+			void Render(void);
 
 			SpriteMap				sprites;
 			TexturePath				textures;
