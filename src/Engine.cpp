@@ -117,7 +117,7 @@ bool Engine::removeObjectByID(int id)
 				}
 				break;
 			}
-			delete &it;
+			delete *it;
 			objectList.erase(it);
 			return true;
 		}
