@@ -53,8 +53,7 @@ void Engine::unloadTextureImage()
 }
 
 void Engine::stepLoop(){
-	for (auto &&i : objectList)
-	{
+	for (auto &&i : objectList) {
 		i.step();
 	}
 }
@@ -63,7 +62,7 @@ int Engine::addObject(Object &object, bool render)
 {
 	for (auto &&i : objectList)
 	{
-		if(&i == &object){
+		if(&i == &object) {
 			return -1;
 		}
 	}
