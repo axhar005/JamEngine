@@ -117,7 +117,7 @@ bool Engine::removeObjectByID(int id)
 				}
 				break;
 			}
-			delete &it;
+			delete *it;
 			objectList.erase(it);
 			return true;
 		}
@@ -134,6 +134,7 @@ void Engine::removeAll()
 		uiRenderList.erase(itt);
 	}
 	for (auto it = objectList.begin(); it != objectList.end(); ) {
+		delete *it;
 		objectList.erase(it);
 	}
 }
