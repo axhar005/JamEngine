@@ -1,11 +1,11 @@
 #include "../include/Engine.h"
 Engine* Engine::_instance = nullptr;
 
-Engine::Engine(std::string windowName, int windowHeight, int windowWidth)
+Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 {
-	_windowName = windowName;
-	_windowHeight = windowHeight;
 	_windowWidth = windowWidth;
+	_windowHeight = windowHeight;
+	_windowName = windowName;
 	_objectUniqueID = 0;
 	_closeWindow = false;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
@@ -17,9 +17,9 @@ Engine::~Engine()
 	CloseWindow();
 }
 
-void Engine::initInstance(std::string windowName, int windowHeight, int windowWidth) {
+void Engine::initInstance(int windowWidth, int windowHeight, std::string windowName) {
 		if (_instance == nullptr) {
-			_instance = new Engine(windowName, windowHeight, windowWidth);
+			_instance = new Engine(windowWidth, windowHeight, windowName);
 		} else {
 			throw std::runtime_error("Instance alrady initialized.");
 		}
@@ -73,26 +73,78 @@ void Engine::stepLoop()
 {
 	for (auto &&i : objectList)
 	{
-		i.step();
+		i->step();
 	}
 }
 
-int Engine::addObject(Object &object, bool render)
+int Engine::addObject(Object& object, bool render)
 {
 	for (auto &&obj : objectList)
 	{
-		if(&obj == &object){
+		if(obj == &object){
 			return -1;
 		}
 	}
 	object.id = _objectUniqueID++;
-	objectList.push_back(object);
+	objectList.push_back(&object);
 	if (render)
 		renderList.push_back(&object);
 	return _objectUniqueID;
 }
 
+Object* Engine::getObjectByID(int id)
+{
+	for (auto &&obj : objectList)
+	{
+		if(obj->id == id){ return obj; }
+	}
+	return NULL;
+}
 
+bool Engine::removeObjectByID(int id)
+{
+	for (auto it = objectList.begin(); it != objectList.end(); ) {
+		if ((*it)->id == id){
+			for (auto itt = renderList.begin(); itt != renderList.end(); ) {
+				if ((*itt)->id == id){
+					renderList.erase(itt);
+				}
+				break;
+			}
+			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); ) {
+				if ((*itt)->id == id){
+					uiRenderList.erase(itt);
+				}
+				break;
+			}
+			delete &it;
+			objectList.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
+void Engine::removeAll()
+{
+	for (auto itt = renderList.begin(); itt != renderList.end(); ) {
+		renderList.erase(itt);
+	}
+	for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); ) {
+		uiRenderList.erase(itt);
+	}
+	for (auto it = objectList.begin(); it != objectList.end(); ) {
+		objectList.erase(it);
+	}
+}
+
+void Engine::renderLoop()
+{
+	for (auto &&obj : renderList)
+	{
+		DrawTexture(*obj->texture, obj->position.x, obj->position.y, WHITE);
+	}
+}
 
 void Engine::loop(void (*func)(Engine &))
 {

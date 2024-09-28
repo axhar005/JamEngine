@@ -6,16 +6,17 @@
 	class Engine
 	{
 		private:
-			Engine(std::string windowName, int windowHeight, int windowWidth);
+			Engine(int windowWidth, int windowHeight, std::string windowName);
 			~Engine();
 			Engine(const Engine&) = delete;
 			Engine(Engine&&) = delete;
 			Engine& operator=(const Engine&) = delete;
 			Engine& operator=(Engine&&) = delete;
-			void  unloadTextureImage();
-			void  renderLoop();
-			void  stepLoop();
-			void  render(void);
+			void unloadTextureImage();
+			void renderLoop();
+			void stepLoop();
+			void Render(void);
+			void removeAll();
 
 			static Engine*				_instance;
 			int							_windowHeight;
@@ -29,14 +30,16 @@
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
 			void loadTextureImage();
+			bool removeObjectByID(int id);
+			Object* getObjectByID(int id);
 			static Engine& getInstance();
-			static void initInstance(std::string windowName, int windowHeight, int windowWidth);
+			static void initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
 			int addObject(Object& object, bool render);
 			SpriteMap 					sprites;
 			TexturePath 				textures;
-			std::vector<Object>			objectList;
+			std::vector<Object*>			objectList;
 			std::vector<Object*>		renderList;
 			std::vector<Object*>		uiRenderList;
 	};
