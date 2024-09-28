@@ -36,7 +36,7 @@
 			static void initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
-			int addObject(Object& object, bool render);
+			int addObject(Object* object, bool render);
 			SpriteMap 					sprites;
 			TexturePath 				textures;
 			std::vector<Object*>			objectList;

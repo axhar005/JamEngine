@@ -21,12 +21,12 @@ void initTexture(Engine& e)
 
 void initObject(Engine& e)
 {
-	new Fireball({100, 100}, e.sprites["fireball"]);
+	e.addObject(new Fireball({100, 100}, e.sprites["fireball"]), true);
 }
 
 int main()
 {
-	Engine::initInstance(640, 480, "ENGINE");
+	Engine::initInstance(1280, 720, "ENGINE");
 	Engine& e = Engine::getInstance();
 	initTexture(e);
 	initObject(e);

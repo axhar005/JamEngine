@@ -10,13 +10,16 @@
 			Object(Vector2 _position, Sprite sprite);
 			virtual ~Object();
 			virtual void step();
-			Vector2		position;
+			void updateHitbox();
+			int			id;
 			Sprite		sprite;
+			Vector2		position;
 			Texture2D*	texture;
-			Rectangle	hitbox;
+			Hitbox		hitbox;
 			int			frameIndex;
 			int			animationSpeed;
-			int			id;
+			float		rotation;
+
 	};
 
 #endif

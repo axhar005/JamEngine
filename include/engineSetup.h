@@ -5,6 +5,12 @@
 	#include <map>
 	#include <vector>
 
+	struct Hitbox
+	{
+		Rectangle	box;
+		Vector2		offset;
+	};
+
 	struct SpriteFrame
 	{
 		Image		image;

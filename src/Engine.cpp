@@ -15,6 +15,7 @@ Engine::~Engine()
 {
 	unloadTextureImage();
 	CloseWindow();
+	removeAll();
 }
 
 void Engine::initInstance(int windowWidth, int windowHeight, std::string windowName) {
@@ -77,18 +78,20 @@ void Engine::stepLoop()
 	}
 }
 
-int Engine::addObject(Object& object, bool render)
+int Engine::addObject(Object* object, bool render)
 {
+	if (object == NULL)
+		return -1;
 	for (auto &&obj : objectList)
 	{
-		if(obj == &object){
+		if(obj == object){
 			return -1;
 		}
 	}
-	object.id = _objectUniqueID++;
-	objectList.push_back(&object);
+	object->id = _objectUniqueID++;
+	objectList.push_back(object);
 	if (render)
-		renderList.push_back(&object);
+		renderList.push_back(object);
 	return _objectUniqueID;
 }
 
@@ -127,16 +130,12 @@ bool Engine::removeObjectByID(int id)
 
 void Engine::removeAll()
 {
-	for (auto itt = renderList.begin(); itt != renderList.end(); ) {
-		renderList.erase(itt);
-	}
-	for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); ) {
-		uiRenderList.erase(itt);
-	}
 	for (auto it = objectList.begin(); it != objectList.end(); ) {
 		delete *it;
-		objectList.erase(it);
 	}
+	renderList.clear();
+	uiRenderList.clear();
+	objectList.clear();
 }
 
 void Engine::renderLoop()

@@ -1,14 +1,21 @@
 #include "../include/Object.h"
 #include "../include/Engine.h"
 
-Object::Object(Vector2 _position, Sprite _sprite) : position(_position), sprite(_sprite), frameIndex(0), animationSpeed(0)
+Object::Object(Vector2 _position, Sprite _sprite) : sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0)
 {
-	texture = &sprite[frameIndex].texture;
-	Engine& e = Engine::getInstance();
-	e.addObject(*this, true);
+	if (!sprite.empty()){
+		texture = &sprite[frameIndex].texture;
+		hitbox.box.height = texture->height;
+		hitbox.box.width = texture->width;
+	}
 }
 
 Object::~Object()
+{
+
+}
+
+void Object::updateHitbox()
 {
 
 }
