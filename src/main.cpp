@@ -8,6 +8,10 @@ void mainLoop(Engine& e)
 	{
 		e.closeWindow();
 	}
+	if (IsKeyDown(KEY_W)) { e.objectList[0]->position.y--; }
+	if (IsKeyDown(KEY_S)) { e.objectList[0]->position.y++; }
+	if (IsKeyDown(KEY_A)) { e.objectList[0]->position.x--; }
+	if (IsKeyDown(KEY_D)) { e.objectList[0]->position.x++; }
 }
 
 void initTexture(Engine& e)
@@ -30,6 +34,8 @@ int main()
 	Engine& e = Engine::getInstance();
 	initTexture(e);
 	initObject(e);
+	Camera2D cam = {{0,0}, {0,0}, 0, 1};
+	e.set2DCamera(cam);
 	e.loop(mainLoop);
 	return 0;
 }

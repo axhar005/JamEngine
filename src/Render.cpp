@@ -22,14 +22,20 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
 	///
-	if (this->_2DCamera) { BeginMode2D(*this->_2DCamera); } //! look for cam
+	if (this->_2DCamera) { BeginMode2D(*this->_2DCamera); } //? look for cam
 	for (size_t i = 0; i < renderList.size(); i++) {
 		if (renderList[i] && renderList[i]->texture) {
-			const Object& tmp = *renderList[i];
-			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
+			Object& tmp = *renderList[i]; //!! put back const after test
+			tmp.hitbox.x = tmp.position.x;
+			tmp.hitbox.y = tmp.position.y;
+			tmp.hitbox.height = 16;
+			tmp.hitbox.width = 16;
+			if (CheckCollisionRecs(ViewPort, tmp.hitbox))
+				DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
-	if (this->_2DCamera) { EndMode2D(); } //! end 2Dmode
+	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
+	DrawRectangleLinesEx(ViewPort, 5, BLUE);
 	///
 	for (size_t i = 0; i < uiRenderList.size(); i++) {
 		if (uiRenderList[i] && uiRenderList[i]->texture) {
