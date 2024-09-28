@@ -15,7 +15,7 @@
 			void unloadTextureImage();
 			void renderLoop();
 			void stepLoop();
-			void Render(void);
+			void render(void);
 			void removeAll();
 
 			static Engine*				_instance;
