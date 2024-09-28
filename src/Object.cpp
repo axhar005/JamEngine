@@ -5,7 +5,7 @@ Object::Object(Vector2 _position, Sprite _sprite) : position(_position), sprite(
 {
 	texture = &sprite[frameIndex].texture;
 	Engine& e = Engine::getInstance();
-	e.addObject(*this, false);
+	e.addObject(*this, true);
 }
 
 Object::~Object()
