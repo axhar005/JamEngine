@@ -13,6 +13,7 @@
 			Vector2		position;
 			Sprite		sprite;
 			Texture2D*	texture;
+			Rectangle	hitbox;
 			int			frameIndex;
 			int			animationSpeed;
 			int			id;

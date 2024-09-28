@@ -1,11 +1,12 @@
 #include "../include/Engine.h"
+Engine* Engine::_instance = nullptr;
 
 Engine::Engine(std::string windowName, int windowHeight, int windowWidth)
 {
 	_windowName = windowName;
 	_windowHeight = windowHeight;
 	_windowWidth = windowWidth;
-	_uniqueID = 0;
+	_objectUniqueID = 0;
 	_closeWindow = false;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
 }
@@ -14,6 +15,22 @@ Engine::~Engine()
 {
 	unloadTextureImage();
 	CloseWindow();
+}
+
+void Engine::initInstance(std::string windowName, int windowHeight, int windowWidth) {
+		if (_instance == nullptr) {
+			_instance = new Engine(windowName, windowHeight, windowWidth);
+		} else {
+			throw std::runtime_error("Instance alrady initialized.");
+		}
+	}
+
+Engine& Engine::getInstance()
+{
+	if (_instance == nullptr) {
+		throw std::runtime_error("Instance none initialized.");
+	}
+	return *_instance;
 }
 
 void Engine::loadTextureImage()
@@ -52,30 +69,39 @@ void Engine::unloadTextureImage()
 	}
 }
 
-void Engine::stepLoop(){
-	for (auto &&i : objectList) {
+void Engine::stepLoop()
+{
+	for (auto &&i : objectList)
+	{
 		i.step();
 	}
 }
 
 int Engine::addObject(Object &object, bool render)
 {
-	for (auto &&i : objectList)
+	for (auto &&obj : objectList)
 	{
-		if(&i == &object) {
+		if(&obj == &object){
 			return -1;
 		}
 	}
-	object.id = ++_uniqueID;
+	object.id = _objectUniqueID++;
 	objectList.push_back(object);
 	if (render)
 		renderList.push_back(&object);
-	return objectList.size()-1;
+	return _objectUniqueID;
+}
+
+void Engine::renderLoop()
+{
+	for (auto &&obj : renderList)
+	{
+		// DrawTexture(*obj->texture, obj->position.x, obj->position.y, WHITE);
+	}
 }
 
 void Engine::loop(void (*func)(Engine &))
 {
-	loadTextureImage();
 	SetTargetFPS(60);
 	SetExitKey(0);
 	while (!WindowShouldClose() && !_closeWindow)
@@ -83,11 +109,15 @@ void Engine::loop(void (*func)(Engine &))
 		func(*this);
 		stepLoop();
 		BeginDrawing();
-		// render
+			ClearBackground(RAYWHITE);
+			DrawGrid(20, 10.0f);
+
+			renderLoop(); /* render */
 		EndDrawing();
 	}
 }
 
-void Engine::closeWindow(){
+void Engine::closeWindow()
+{
 	_closeWindow = true;
 }
