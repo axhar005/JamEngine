@@ -16,13 +16,12 @@ void initTexture(Engine& e)
 		// {"player_down", {"asset/player/player_down_0.png", "asset/player/player_down_1.png"}},
 		{"fireball", {"asset/FireBall.png"}}
 	};
+	e.loadTextureImage();
 }
 
 void initObject(Engine& e)
 {
 	Fireball f({0, 0}, e.sprites["fireball"]);
-
-	e.addObject(f, true);
 }
 
 int main()

@@ -6,7 +6,7 @@ Engine::Engine(std::string windowName, int windowHeight, int windowWidth)
 	_windowName = windowName;
 	_windowHeight = windowHeight;
 	_windowWidth = windowWidth;
-	_uniqueID = 0;
+	_objectUniqueID = 0;
 	_closeWindow = false;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
 }
@@ -25,7 +25,8 @@ void Engine::initInstance(std::string windowName, int windowHeight, int windowWi
 		}
 	}
 
-Engine& Engine::getInstance() {
+Engine& Engine::getInstance()
+{
 	if (_instance == nullptr) {
 		throw std::runtime_error("Instance none initialized.");
 	}
@@ -68,7 +69,8 @@ void Engine::unloadTextureImage()
 	}
 }
 
-void Engine::stepLoop(){
+void Engine::stepLoop()
+{
 	for (auto &&i : objectList)
 	{
 		i.step();
@@ -83,11 +85,11 @@ int Engine::addObject(Object &object, bool render)
 			return -1;
 		}
 	}
-	object.id = ++_uniqueID;
+	object.id = _objectUniqueID++;
 	objectList.push_back(object);
 	if (render)
 		renderList.push_back(&object);
-	return objectList.size()-1;
+	return _objectUniqueID;
 }
 
 void Engine::renderLoop()
@@ -100,7 +102,6 @@ void Engine::renderLoop()
 
 void Engine::loop(void (*func)(Engine &))
 {
-	loadTextureImage();
 	SetTargetFPS(60);
 	SetExitKey(0);
 	while (!WindowShouldClose() && !_closeWindow)
@@ -116,6 +117,7 @@ void Engine::loop(void (*func)(Engine &))
 	}
 }
 
-void Engine::closeWindow(){
+void Engine::closeWindow()
+{
 	_closeWindow = true;
 }
