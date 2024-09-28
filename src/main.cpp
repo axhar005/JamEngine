@@ -21,7 +21,7 @@ void initTexture(Engine& e)
 
 void initObject(Engine& e)
 {
-	new Fireball({0, 0}, e.sprites["fireball"]);
+	new Fireball({100, 100}, e.sprites["fireball"]);
 }
 
 int main()

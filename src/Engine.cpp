@@ -157,7 +157,8 @@ void Engine::loop(void (*func)(Engine &))
 		stepLoop();
 		BeginDrawing();
 			ClearBackground(RAYWHITE);
-			renderLoop(); /* render */
+			DrawGrid(20, 10.0f);
+			render();
 		EndDrawing();
 	}
 }
