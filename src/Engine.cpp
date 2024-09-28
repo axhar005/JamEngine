@@ -92,18 +92,12 @@ int Engine::addObject(Object &object, bool render)
 	return _objectUniqueID;
 }
 
-void Engine::renderLoop()
-{
-	for (auto &&obj : renderList)
-	{
-		// DrawTexture(*obj->texture, obj->position.x, obj->position.y, WHITE);
-	}
-}
+
 
 void Engine::loop(void (*func)(Engine &))
 {
 	SetTargetFPS(60);
-	SetExitKey(0);
+	SetExitKey(KEY_ESCAPE);
 	while (!WindowShouldClose() && !_closeWindow)
 	{
 		func(*this);
@@ -111,8 +105,7 @@ void Engine::loop(void (*func)(Engine &))
 		BeginDrawing();
 			ClearBackground(RAYWHITE);
 			DrawGrid(20, 10.0f);
-
-			renderLoop(); /* render */
+			render();
 		EndDrawing();
 	}
 }

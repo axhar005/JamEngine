@@ -15,7 +15,7 @@
 			void  unloadTextureImage();
 			void  renderLoop();
 			void  stepLoop();
-			void  Render(void);
+			void  render(void);
 
 			static Engine*				_instance;
 			int							_windowHeight;
