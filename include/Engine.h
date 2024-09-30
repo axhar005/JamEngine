@@ -27,6 +27,7 @@
 			Camera2D*					_2DCamera;
 
 		public:
+			void set2DCameraZoom(float zoom);
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
 			void loadTextureImage();

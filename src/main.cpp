@@ -12,6 +12,11 @@ void mainLoop(Engine& e)
 	if (IsKeyDown(KEY_S)) { e.objectList[0]->position.y++; }
 	if (IsKeyDown(KEY_A)) { e.objectList[0]->position.x--; }
 	if (IsKeyDown(KEY_D)) { e.objectList[0]->position.x++; }
+	static float zoom = 1;
+	const float zoomJump = 0.1;
+	if (IsKeyPressed(KEY_UP) && zoom + zoomJump <= 4)   {zoom += zoomJump; }
+	if (IsKeyPressed(KEY_DOWN) && zoom - zoomJump >= 0) {zoom -= zoomJump; }
+	e.set2DCameraZoom(zoom);
 }
 
 void initTexture(Engine& e)
