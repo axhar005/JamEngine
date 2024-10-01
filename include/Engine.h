@@ -39,7 +39,7 @@
 			int addObject(Object* object, bool render);
 			SpriteMap 					sprites;
 			TexturePath 				textures;
-			std::vector<Object*>			objectList;
+			std::vector<Object*>		objectList;
 			std::vector<Object*>		renderList;
 			std::vector<Object*>		uiRenderList;
 	};

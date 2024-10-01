@@ -5,6 +5,8 @@
 	#include <map>
 	#include <vector>
 
+	#define VECTOR_RESERVE 100
+
 	struct Hitbox
 	{
 		Rectangle	box;

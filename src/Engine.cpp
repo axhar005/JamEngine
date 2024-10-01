@@ -3,6 +3,9 @@ Engine* Engine::_instance = nullptr;
 
 Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 {
+	objectList.reserve(VECTOR_RESERVE);
+	renderList.reserve(VECTOR_RESERVE);
+	uiRenderList.reserve(VECTOR_RESERVE);
 	_windowWidth = windowWidth;
 	_windowHeight = windowHeight;
 	_windowName = windowName;
@@ -42,6 +45,7 @@ void Engine::loadTextureImage()
 		const std::vector<std::string> &paths = item.second;
 
 		std::vector<SpriteFrame> spriteList;
+		spriteList.reserve(paths.size());
 		for (const std::string &path : paths)
 		{
 			SpriteFrame s;
