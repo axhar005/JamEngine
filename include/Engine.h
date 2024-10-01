@@ -27,9 +27,15 @@
 			Camera2D*					_2DCamera;
 
 		public:
+			// Camera
+			void set2DCameraPotions(Vector2 pos);
+			void set2DCameraPotions(Object* obj, bool center);
+
 			void set2DCameraZoom(float zoom);
+			
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
+
 			void loadTextureImage();
 			bool removeObjectByID(int id);
 			Object* getObjectByID(int id);
