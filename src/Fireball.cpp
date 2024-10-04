@@ -3,6 +3,8 @@
 
 Fireball::Fireball(Vector2 _position, Sprite _sprite) : Object(_position, _sprite)
 {
+	this->hitbox.height = 16;
+	this->hitbox.width = 16;
 }
 
 Fireball::~Fireball()
@@ -11,9 +13,7 @@ Fireball::~Fireball()
 
 void Fireball::step()
 {
+	this->hitbox.x = this->position.x;
+	this->hitbox.y = this->position.y;
 	// do nothing
-	std::cout << this->position.x << std::endl;
-	this->position.x++;
-	if (this->position.x > GetScreenWidth())
-		this->position.x = 0;
 }

@@ -15,7 +15,7 @@
 			Sprite		sprite;
 			Vector2		position;
 			Texture2D*	texture;
-			Hitbox		hitbox;
+			Rectangle	hitbox;
 			int			frameIndex;
 			int			animationSpeed;
 			float		rotation;
