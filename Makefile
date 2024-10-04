@@ -41,7 +41,7 @@ else
     USE_LOCAL_RAYLIB = false
 endif
 
-USE_LOCAL_RAYLIB = true
+# USE_LOCAL_RAYLIB = true
 
 # Include paths
 CFLAGS += -Iinclude
@@ -58,7 +58,7 @@ endif
 ifeq ($(UNAME_S),Linux)
     LDFLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
 else ifeq ($(UNAME_S),Darwin)
-    LDFLAGS += -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+    LDFLAGS += -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -fsanitize=address
 else ifeq ($(UNAME_S),Windows)
     LDFLAGS += -lopengl32 -lgdi32 -lwinmm
 endif

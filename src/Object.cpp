@@ -5,8 +5,8 @@ Object::Object(Vector2 _position, Sprite _sprite) : sprite(_sprite), position(_p
 {
 	if (!sprite.empty()){
 		texture = &sprite[frameIndex].texture;
-		hitbox.box.height = texture->height;
-		hitbox.box.width = texture->width;
+		hitbox.height = texture->height;
+		hitbox.width = texture->width;
 	}
 }
 

@@ -38,12 +38,12 @@ void initTexture(Engine& e)
 
 void initObject(Engine& e)
 {
-	new Object({0,0},e.sprites["dev"]);
+	e.addObject(new Object({0,0},e.sprites["dev"]), true);
 	e.objectList[0]->hitbox.height = 20;
 	e.objectList[0]->hitbox.width = 20;
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
-			new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]);
+			e.addObject(new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]), true);
 		}
 	}
 }
@@ -53,6 +53,7 @@ int main()
 	Engine::initInstance(1280, 720, "ENGINE");
 	Engine& e = Engine::getInstance();
 	initTexture(e);
+	std::cout << "ici" << std::endl;
 	initObject(e);
 	Camera2D cam = {{0,0}, {0,0}, 0, 1};
 	e.set2DCamera(cam);
