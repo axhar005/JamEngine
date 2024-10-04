@@ -13,7 +13,7 @@ void mainLoop(Engine& e)
 void initTexture(Engine& e)
 {
 	e.textures = {
-		{"fireball", {"asset/Fireball.png"}},
+		{"fireball", {"asset/no_texture.png"}},
 		// {"player_down", {"asset/player/player_down_0.png", "asset/player/player_down_1.png"}},
 	};
 	e.loadTextureImage();
