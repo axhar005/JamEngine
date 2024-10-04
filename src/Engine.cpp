@@ -154,11 +154,9 @@ void Engine::loop(void (*func)(Engine &))
 {
 	SetTargetFPS(60);
 	SetExitKey(KEY_ESCAPE);
-	std::cout << "ici1" << std::endl;
 
 	while (!WindowShouldClose() && !_closeWindow)
 	{
-	std::cout << "ici2" << std::endl;
 
 		func(*this);
 		stepLoop();

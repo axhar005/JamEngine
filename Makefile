@@ -25,9 +25,6 @@ RAYLIB_REPO_URL = https://github.com/raysan5/raylib.git
 ifeq ($(UNAME_S),Linux)
     RAYLIB_SYSTEM_LIB := /usr/local/lib/libraylib.a
     RAYLIB_SYSTEM_INCLUDE := /usr/local/include/raylib.h
-else ifeq ($(UNAME_S),Darwin)
-    RAYLIB_SYSTEM_LIB := /usr/local/lib/libraylib.a
-    RAYLIB_SYSTEM_INCLUDE := /usr/local/include/raylib.h
 else ifeq ($(UNAME_S),Windows)
     RAYLIB_SYSTEM_LIB := C:/raylib/lib/libraylib.a
     RAYLIB_SYSTEM_INCLUDE := C:/raylib/include/raylib.h
@@ -98,17 +95,17 @@ run:
 
 clean:
 	rm -f $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d
-	@if [ "$(USE_LOCAL_RAYLIB)" = "true" ]; then \
-		$(MAKE) -C $(RAYLIB_BUILD_DIR) clean; \
-	fi
 
 fclean: clean
 	rm -f $(NAME)
-	@if [ "$(USE_LOCAL_RAYLIB)" = "true" ]; then \
-		rm -rf $(RAYLIB_BUILD_DIR); \
-	fi
 
 rclean: fclean
+	@if [ "$(USE_LOCAL_RAYLIB)" = "true" ]; then \
+		if [ -d "$(RAYLIB_BUILD_DIR)" ]; then \
+			$(MAKE) -C $(RAYLIB_BUILD_DIR) clean; \
+			rm -rf "$(RAYLIB_BUILD_DIR)"; \
+		fi; \
+	fi
 	rm -rf $(RAYLIB_DIR);
 
 re: fclean all

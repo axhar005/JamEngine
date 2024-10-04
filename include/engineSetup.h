@@ -1,6 +1,10 @@
 #ifndef ENGINE_SETUP_H
 # define ENGINE_SETUP_H
-	#include <raylib.h>
+	#if (__APPLE__ || __MACH__)
+		#include "../lib/raylib/src/raylib.h"
+	#else
+		#include <raylib.h>
+	#endif
 	#include <iostream>
 	#include <map>
 	#include <vector>

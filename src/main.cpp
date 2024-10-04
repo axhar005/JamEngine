@@ -53,7 +53,6 @@ int main()
 	Engine::initInstance(1280, 720, "ENGINE");
 	Engine& e = Engine::getInstance();
 	initTexture(e);
-	std::cout << "ici" << std::endl;
 	initObject(e);
 	Camera2D cam = {{0,0}, {0,0}, 0, 1};
 	e.set2DCamera(cam);
