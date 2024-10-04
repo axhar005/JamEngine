@@ -78,6 +78,7 @@ void Engine::stepLoop()
 {
 	for (auto &&i : objectList)
 	{
+		i->update();
 		i->step();
 	}
 }
@@ -157,7 +158,6 @@ void Engine::loop(void (*func)(Engine &))
 
 	while (!WindowShouldClose() && !_closeWindow)
 	{
-
 		func(*this);
 		stepLoop();
 		BeginDrawing();
