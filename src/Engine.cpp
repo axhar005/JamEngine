@@ -86,6 +86,7 @@ void Engine::stepLoop()
 {
 	for (auto &&i : objectList)
 	{
+		i->update();
 		i->step();
 	}
 }
@@ -100,11 +101,11 @@ int Engine::addObject(Object* object, bool render)
 			return -1;
 		}
 	}
-	object->id = _objectUniqueID++;
+	object->id = _objectUniqueID;
 	objectList.push_back(object);
 	if (render)
 		renderList.push_back(object);
-	return object->id;
+	return _objectUniqueID++;
 }
 
 Object* Engine::getObjectByID(int id)
@@ -165,7 +166,6 @@ void Engine::loop(void (*func)(Engine &))
 
 	while (!WindowShouldClose() && !_closeWindow)
 	{
-
 		func(*this);
 		stepLoop();
 		BeginDrawing();

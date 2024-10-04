@@ -9,18 +9,18 @@
 		public:
 			Object(Vector2 _position, Sprite sprite);
 			Object(Vector2 _position, Sprite sprite, int layerLV);
-			virtual ~Object();
-			virtual void step();
-			void updateHitbox();
-			int			id;
-			Sprite		sprite;
-			Vector2		position;
-			Texture2D*	texture;
-			Rectangle	hitbox;
-			int			frameIndex;
-			int			animationSpeed;
-			float		rotation;
-			int			layer;
+			virtual 		~Object();
+			virtual void 	step();
+			void 			update();
+			int				id;
+			Sprite			sprite;
+			Vector2			position;
+			Texture2D*		texture;
+			Rectangle		hitbox;
+			int				frameIndex;
+			int				animationSpeed;
+			float			rotation;
+			int				layer;
 
 	};
 

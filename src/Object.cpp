@@ -23,9 +23,9 @@ Object::~Object()
 
 }
 
-void Object::updateHitbox()
-{
-
+void Object::update(){
+	hitbox.x = this->position.x;
+	hitbox.y = this->position.y;
 }
 
 void Object::step()
