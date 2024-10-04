@@ -93,6 +93,9 @@ $(RAYLIB_BUILD_DIR)/libraylib.a:
 run:
 	./$(NAME)
 
+raylib:
+	git clone --depth=1 $(RAYLIB_REPO_URL) $(RAYLIB_DIR);
+
 clean:
 	rm -f $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d
 
