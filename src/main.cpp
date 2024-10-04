@@ -12,8 +12,6 @@ void mainLoop(Engine& e)
 	if (IsKeyDown(KEY_S)) { e.objectList[e.objectList.size() -1]->position.y +=  cameraSpeed; }
 	if (IsKeyDown(KEY_A)) { e.objectList[e.objectList.size() -1]->position.x += -cameraSpeed; }
 	if (IsKeyDown(KEY_D)) { e.objectList[e.objectList.size() -1]->position.x +=  cameraSpeed; }
-	e.objectList[0]->hitbox.x = e.objectList[0]->position.x;
-	e.objectList[0]->hitbox.y = e.objectList[0]->position.y;
 	if (IsKeyPressed(KEY_UP) && zoom + zoomJump <= 4)   {zoom += zoomJump; }
 	if (IsKeyPressed(KEY_DOWN) && zoom - zoomJump >= 0) {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
@@ -40,8 +38,8 @@ void initObject(Engine& e)
 {
 	int tmp = 0;
 	const int id = e.addObject(new Object({0,0},e.sprites["dev"]), true);
-	e.objectList[0]->hitbox.height = 20;
-	e.objectList[0]->hitbox.width = 20;
+	e.objectList[0]->hitbox.box.height = 20;
+	e.objectList[0]->hitbox.box.width = 20;
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
 			e.addObject(new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]), true);
