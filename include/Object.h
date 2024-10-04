@@ -8,6 +8,7 @@
 
 		public:
 			Object(Vector2 _position, Sprite sprite);
+			Object(Vector2 _position, Sprite sprite, int layerLV);
 			virtual ~Object();
 			virtual void step();
 			void updateHitbox();
@@ -19,6 +20,7 @@
 			int			frameIndex;
 			int			animationSpeed;
 			float		rotation;
+			int			layer;
 
 	};
 

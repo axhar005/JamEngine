@@ -37,6 +37,8 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
+#define drawId 0
+
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
 	const Color box = {255, 0, 0, 70};
@@ -47,8 +49,16 @@ void Engine::render(void) {
 		if (renderList[i] && renderList[i]->texture) {
 			Object& tmp = *renderList[i]; //!! put back const after test
 			if (!this->_2DCamera || CheckCollisionRecs(ViewPort, tmp.hitbox)) {
+				
+				#if (drawId)
+					char sdev[50];
+					sprintf(sdev, "%li %u", i, tmp.layer);
+				#endif
 				DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
-				DrawRectangleRec(tmp.hitbox, box);
+				//DrawRectangleRec(tmp.hitbox, box);
+				#if (drawId)
+					DrawText(sdev, tmp.position.x, tmp.position.y, 5, BLUE);
+				#endif
 				hits++;
 			}
 		}

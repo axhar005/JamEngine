@@ -5,6 +5,8 @@ Fireball::Fireball(Vector2 _position, Sprite _sprite) : Object(_position, _sprit
 {
 	this->hitbox.height = 16;
 	this->hitbox.width = 16;
+	this->hitbox.x = this->position.x;
+	this->hitbox.y = this->position.y;
 }
 
 Fireball::~Fireball()

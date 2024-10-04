@@ -17,7 +17,6 @@
 			void stepLoop();
 			void render(void);
 			void removeAll();
-
 			static Engine*				_instance;
 			int							_windowHeight;
 			int							_windowWidth;
@@ -35,6 +34,8 @@
 			
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
+
+			void sortLayer(void);
 
 			void loadTextureImage();
 			bool removeObjectByID(int id);

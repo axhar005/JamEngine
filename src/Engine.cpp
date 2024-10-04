@@ -74,6 +74,14 @@ void Engine::unloadTextureImage()
 	}
 }
 
+static bool  lookLayer(Object* &a, Object* &b) {
+	return (a->layer < b->layer);
+}
+
+void Engine::sortLayer(void) {
+	std::sort(objectList.begin(), objectList.end(), lookLayer);
+}
+
 void Engine::stepLoop()
 {
 	for (auto &&i : objectList)
@@ -96,7 +104,7 @@ int Engine::addObject(Object* object, bool render)
 	objectList.push_back(object);
 	if (render)
 		renderList.push_back(object);
-	return _objectUniqueID;
+	return object->id;
 }
 
 Object* Engine::getObjectByID(int id)
