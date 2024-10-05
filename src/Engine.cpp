@@ -80,7 +80,7 @@ static bool  lookLayer(Object* &a, Object* &b) {
 }
 
 void Engine::sortLayer(void) {
-	std::sort(objectList.begin(), objectList.end(), lookLayer);
+	std::sort(renderList.begin(), renderList.end(), lookLayer);
 }
 
 void Engine::stepLoop()
@@ -94,7 +94,7 @@ void Engine::stepLoop()
 
 void Engine::drawLoop()
 {
-	for (auto &&i : renderList)
+	for (auto &&i : objectList)
 	{
 		i->draw();
 	}
@@ -119,14 +119,20 @@ int Engine::addObject(Object* object, bool render)
 
 int Engine::addObject(Trigger* trigger)
 {
-	// if (trigger == NULL)
-	// 	return -1;
-	// for (auto &&obj : triggerList)
-	// {
-	// 	if(obj == trigger){
-	// 		return -1;
-	// 	}
-	// }
+	if (trigger == NULL)
+		return -1;
+	for (auto &&obj : objectList)
+	{
+		if(obj == trigger){
+			return -1;
+		}
+	}
+	for (auto &&obj : triggerList)
+	{
+		if(obj == trigger){
+			return -1;
+		}
+	}
 	trigger->id = _objectUniqueID;
 	objectList.push_back(trigger);
 	triggerList.push_back(trigger);
@@ -169,6 +175,12 @@ bool Engine::removeObjectByID(int id)
 				}
 				break;
 			}
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); ) {
+				if ((*itt)->id == id){
+					triggerList.erase(itt);
+				}
+				break;
+			}
 			delete *it;
 			objectList.erase(it);
 			return true;
@@ -206,10 +218,10 @@ void Engine::loop(void (*func)(Engine &))
 		func(*this);
 		stepLoop();
 		BeginDrawing();
-			ClearBackground(RAYWHITE);
-			drawLoop();
-			DrawGrid(20, 10.0f);
-			render();
+		ClearBackground(RAYWHITE);
+		DrawGrid(20, 10.0f);
+		render();
+		drawLoop();
 		EndDrawing();
 	}
 }

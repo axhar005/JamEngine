@@ -10,14 +10,16 @@ class Trigger : public Object {
 		std::vector<Object*>	hitList;
 		Object*					target;
 	public:
+		bool drawTrigger;
 		Trigger(Vector2 pos);
 		~Trigger();
 		void setTarget(Object* targetPtr);
+		void step();
 	//
 		void add(Object* obj);
 		void add(std::vector<Object*>& objs);
 		void remove(int id);
-		void draw();
+		void draw(void);
 		std::vector<int> hit(void);
 };
 
