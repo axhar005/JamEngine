@@ -37,3 +37,8 @@ void Object::step()
 {
 	// do nothing
 }
+
+void Object::draw()
+{
+	
+}

@@ -14,6 +14,7 @@
 			Object(Vector2 _position, Sprite sprite, int layerLV);
 			virtual 		~Object();
 			virtual void 	step();
+			virtual void 	draw();
 			void 			update();
 			int				id;
 			Sprite			sprite;

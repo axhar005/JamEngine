@@ -69,6 +69,9 @@ void Engine::render(void) {
 	sprintf(s, "totals hits = %u", hits);
 	DrawText(s, 4,20, 30, BLUE);
 	DrawFPS(0,0);
+	char ss[50];
+	sprintf(ss, "pos x: %.0f, pos y: %.0f", Engine::getInstance().objectList[objectList.size()-1]->position.x, Engine::getInstance().objectList[objectList.size()-1]->position.y);
+	DrawText(ss, 4, 60, 30, BLUE);
 	for (size_t i = 0; i < uiRenderList.size(); i++) {
 		if (uiRenderList[i] && uiRenderList[i]->texture) {
 			const Object& tmp = *uiRenderList[i];

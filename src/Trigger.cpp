@@ -32,6 +32,9 @@ void Trigger::setTarget(Object* targetPtr) {
 	if (targetPtr) { this->target = targetPtr; }
 }
 
+void Trigger::draw(){
+	DrawRectangleRec(hitbox.box, {255,255,0,255});
+}
 
 #define drawBox 1
 
@@ -43,7 +46,7 @@ std::vector<int> Trigger::hit(void) {
 			result.push_back(hitList[i]->id);
 			#if (drawBox)
 			{
-				const Color box = {0, 0, 255, 70};
+				const Color box = {255, 255, 0, 255};
 				const Rectangle rec = GetCollisionRec(this->hitbox.box, hitList[i]->hitbox.box);
 				DrawRectangleRec(rec, box);
 			}
@@ -51,4 +54,4 @@ std::vector<int> Trigger::hit(void) {
 		}
 	}
 	return result;
-	}
+}

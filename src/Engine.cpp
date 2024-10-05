@@ -6,6 +6,7 @@ Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 	objectList.reserve(VECTOR_RESERVE);
 	renderList.reserve(VECTOR_RESERVE);
 	uiRenderList.reserve(VECTOR_RESERVE);
+	triggerList.reserve(VECTOR_RESERVE);
 	_windowWidth = windowWidth;
 	_windowHeight = windowHeight;
 	_windowName = windowName;
@@ -91,6 +92,14 @@ void Engine::stepLoop()
 	}
 }
 
+void Engine::drawLoop()
+{
+	for (auto &&i : renderList)
+	{
+		i->draw();
+	}
+}
+
 int Engine::addObject(Object* object, bool render)
 {
 	if (object == NULL)
@@ -110,14 +119,14 @@ int Engine::addObject(Object* object, bool render)
 
 int Engine::addObject(Trigger* trigger)
 {
-	if (trigger == NULL)
-		return -1;
-	for (auto &&obj : triggerList)
-	{
-		if(obj == trigger){
-			return -1;
-		}
-	}
+	// if (trigger == NULL)
+	// 	return -1;
+	// for (auto &&obj : triggerList)
+	// {
+	// 	if(obj == trigger){
+	// 		return -1;
+	// 	}
+	// }
 	trigger->id = _objectUniqueID;
 	objectList.push_back(trigger);
 	triggerList.push_back(trigger);
@@ -175,6 +184,7 @@ void Engine::removeAll()
 	}
 	renderList.clear();
 	uiRenderList.clear();
+	triggerList.clear();
 	objectList.clear();
 }
 
@@ -197,6 +207,7 @@ void Engine::loop(void (*func)(Engine &))
 		stepLoop();
 		BeginDrawing();
 			ClearBackground(RAYWHITE);
+			drawLoop();
 			DrawGrid(20, 10.0f);
 			render();
 		EndDrawing();

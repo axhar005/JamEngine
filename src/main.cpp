@@ -1,6 +1,8 @@
 #include "../include/Engine.h"
 #include "../include/Fireball.h"
 
+int tid;
+
 void mainLoop(Engine& e)
 {
 	// your gameplay
@@ -12,8 +14,8 @@ void mainLoop(Engine& e)
 	if (IsKeyDown(KEY_S)) { e.objectList[e.objectList.size() -1]->position.y +=  cameraSpeed; }
 	if (IsKeyDown(KEY_A)) { e.objectList[e.objectList.size() -1]->position.x += -cameraSpeed; }
 	if (IsKeyDown(KEY_D)) { e.objectList[e.objectList.size() -1]->position.x +=  cameraSpeed; }
-	if (IsKeyPressed(KEY_UP) && zoom + zoomJump <= 10)   {zoom += zoomJump; }
-	if (IsKeyPressed(KEY_DOWN) && zoom - zoomJump >= 0) {zoom -= zoomJump; }
+	if (IsKeyDown(KEY_UP) && zoom + zoomJump <= 10)   {zoom += zoomJump; }
+	if (IsKeyDown(KEY_DOWN) && zoom - zoomJump >= 0) {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
 	e.set2DCameraPotions(e.objectList[e.objectList.size() -1], true);
 	for (size_t i = 0; i < e.objectList.size() - 1; i++) {
@@ -21,8 +23,6 @@ void mainLoop(Engine& e)
 		e.objectList[i]->position.x +=  a;
 		e.objectList[i]->position.y += -a;
 	}
-	// e.addObject(new Trigger())
-	
 }
 
 void initTexture(Engine& e)
@@ -52,6 +52,7 @@ void initObject(Engine& e)
 			triggerObj->add(tmpobj);
 		}
 	}
+	
 	Object* player = e.getObjectByID(id);
 	player->layer = 4;
 	triggerObj->hit();

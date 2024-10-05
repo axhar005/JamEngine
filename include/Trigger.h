@@ -17,6 +17,7 @@ class Trigger : public Object {
 		void add(Object* obj);
 		void add(std::vector<Object*>& objs);
 		void remove(int id);
+		void draw();
 		std::vector<int> hit(void);
 };
 
