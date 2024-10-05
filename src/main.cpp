@@ -52,7 +52,7 @@ void initObject(Engine& e)
 			triggerObj->add(tmpobj);
 		}
 	}
-	
+
 	Object* player = e.getObjectByID(id);
 	player->layer = 4;
 	triggerObj->hit();
@@ -63,7 +63,7 @@ int main()
 {
 	Engine::initInstance(1280, 720, "ENGINE");
 	Engine& e = Engine::getInstance();
-	
+
 	initTexture(e);
 	initObject(e);
 	Camera2D cam = {{0,0}, {0,0}, 0, 1};
