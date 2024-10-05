@@ -45,7 +45,7 @@ void Trigger::draw(void) {
 }
 
 // if you want to see that the zone were the box overlap
-#define drawBox true
+#define drawBox false
 
 std::vector<int> Trigger::hit(void) {
 	std::vector<int> result;

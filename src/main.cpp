@@ -13,6 +13,7 @@ void mainLoop(Engine& e)
 	const float zoomJump = 0.1;
 	const int  cameraSpeed = 5 / (zoom / 2);
 	static bool showTrigger = false;
+	std::cout << e.triggerList.size() << std::endl;
 	if (IsKeyPressed(KEY_P)) { e.closeWindow(); }
 	if (playerPtr) {
 		if (IsKeyDown(KEY_W)) { playerPtr->position.y += -cameraSpeed; }
@@ -66,7 +67,6 @@ void initObject(Engine& e)
 	Object* player = e.getObjectByID(playerid);
 	triggerObj->add(player);
 	player->layer = 4;
-	triggerObj->hit();
 	e.sortLayer();
 }
 

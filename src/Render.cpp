@@ -37,7 +37,8 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
-#define drawId false
+#define drawId      false
+#define drawTrigger false
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
@@ -59,9 +60,11 @@ void Engine::render(void) {
 				DrawText(sdev, tmp.position.x, tmp.position.y, 5, BLUE);
 				#endif
 				hits++;
+				tmp.draw();
 			}
 		}
 	}
+	#if (drawTrigger)
 	for (size_t i = 0; i < this->triggerList.size(); i++) {
 		if (triggerList[i]) {
 			Trigger* tmp = triggerList[i];
@@ -70,6 +73,7 @@ void Engine::render(void) {
 			tmp->hit();
 		}
 	}
+	#endif
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
 	char s[50];

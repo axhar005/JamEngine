@@ -218,10 +218,11 @@ void Engine::loop(void (*func)(Engine &))
 		func(*this);
 		stepLoop();
 		BeginDrawing();
-		ClearBackground(RAYWHITE);
-		DrawGrid(20, 10.0f);
-		render();
-		drawLoop();
+		{
+			ClearBackground(RAYWHITE);
+			DrawGrid(20, 10.0f);
+			render();
+		}
 		EndDrawing();
 	}
 }
