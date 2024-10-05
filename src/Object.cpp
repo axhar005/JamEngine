@@ -49,5 +49,5 @@ void Object::step()
 
 void Object::draw()
 {
-	
+
 }

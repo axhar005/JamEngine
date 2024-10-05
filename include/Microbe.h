@@ -15,9 +15,10 @@
 	#define MICROBE_CANIBALISM_FACTOR 0.8f
 	#define MICROBE_DIGESTION_FACTOR 0.9f
 
+	#define MICROBE_FLEE_RADIUS 256
+	#define MICROBE_PURSUE_RADIUS 256
+	#define MICROBE_GRAZE_RADIUS 256
 	#define MICROBE_GOAL_RADIUS 8
-
-	// NOTE : add PetriDish class
 
 	// a class for entities that can move and interact with other entities or nutrients ( food )
 	class Microbe : public Nutrient // make nutrient object too
@@ -29,7 +30,7 @@
 			Vector2 wanderGoal;
 
 		public:
-			Microbe(Vector2 _position, Sprite _sprite, std::string _species, bool _isPlayer);
+			Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer);
 			~Microbe();
 
 			void step();
@@ -55,8 +56,7 @@
 			void devour(Microbe* target);
 			void graze(Nutrient* target);
 
-			bool overlapsOther(Microbe* target);
-			bool overlapsNutrient(Nutrient* target);
+			bool overlapsMicrobe(Microbe* target);
 
 			bool canGraze(Nutrient* target);
 			bool canDevour(Microbe* target);
@@ -69,8 +69,7 @@
 			std::string getSpecies();
 	};
 
+	float getDistance(Vector2 start, Vector2 end);
 	Vector2 getNormalisedDirection(Vector2 start, Vector2 end);
-
-	// NOTE : add way to add/remove microbes from a global list
 
 #endif

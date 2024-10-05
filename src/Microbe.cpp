@@ -1,9 +1,11 @@
 #include "../include/Microbe.h"
-#include <raylib.h>
+#include "../include/PetriDish.h"
 
-Microbe::Microbe(Vector2 _position, Sprite _sprite, std::string _species, bool _isPlayer) :
-	Nutrient(_position, _sprite, MICROBE_START_SIZE)
+Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer) :
+	Nutrient(_position, _sprite, _petriDish, MICROBE_START_SIZE, false)
 {
+	this->petriDish = _petriDish;
+	this->petriDish->addMicrobe(this);
 	this->refreshSpeed(); //	makes speed invertly proportional to its size
 	this->refreshSize(); //		sets hitbox size to size
 	this->refreshPos(); //		sets hitbox position to position ( clamped to petriDish )
@@ -71,11 +73,11 @@ void Microbe::divide()
 		this->size /= 2;
 		this->refreshSpeed();
 
-		Microbe* newMicrobe = new Microbe(this->position, this->sprite, this->species, false);
+		Microbe* newMicrobe = new Microbe(this->position, this->sprite, this->petriDish, this->species, false);
 		newMicrobe->size = this->size;
 		newMicrobe->refreshSpeed();
 
-		// add newMicrobe to PetriDish
+		this->petriDish->addMicrobe(newMicrobe);
 	}
 }
 
@@ -88,51 +90,109 @@ void Microbe::starve()
 	}
 
 	// NOTE : use nutrient sprite instead
-	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->size);
-
-	// add nutrient to PetriDish
-
+	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->petriDish, this->size);
+	this->petriDish->addNutrient(nutrient);
+	this->petriDish->removeMicrobe(this);
 	this->die();
 }
 
 void Microbe::die()
 {
-	// remove this from PetriDish
+	this->petriDish->removeMicrobe(this);
+	delete this;
 }
 
 Microbe* Microbe::findClosestPredator()
 {
-	// find closest predator
-	// return pointer to it
-	return nullptr;
+	int closest_distance = 999999;
+	Microbe* target = nullptr;
+
+	for (Microbe* predator : this->petriDish->getMicrobes())
+	{
+		if (this->canBeDevouredBy(predator))
+		{
+			int distance = getDistance(this->position, predator->position);
+			if (distance < closest_distance)
+			{
+				closest_distance = distance;
+				target = predator;
+			}
+		}
+	}
+	return target;
 }
 
 Microbe* Microbe::findClosestPrey()
 {
-	// find closest prey
-	// return pointer to it
-	return nullptr;
+	int closest_distance = 999999;
+	Microbe* target = nullptr;
+
+	for (Microbe* prey : this->petriDish->getMicrobes())
+	{
+		if (this->canDevour(prey))
+		{
+			int distance = getDistance(this->position, prey->position);
+			if (distance < closest_distance)
+			{
+				closest_distance = distance;
+				target = prey;
+			}
+		}
+	}
+	return target;
 }
 
 
 Nutrient* Microbe::findClosestNutrient()
 {
-	// find closest nutrient
-	// return pointer to it
-	return nullptr;
-}
+	int closest_distance = 999999;
+	Nutrient* target = nullptr;
 
+	for (Nutrient* nutrient : this->petriDish->getNutrients())
+	{
+		int distance = getDistance(this->position, nutrient->position);
+		if (distance < closest_distance)
+		{
+			closest_distance = distance;
+			target = nutrient;
+		}
+	}
+	return target;
+}
 
 void Microbe::getNewWanderGoal()
 {
-	// create a random goal within a certain distance from this->position, and set it as wanderGoal
+	int radius = this->petriDish->getRadius();
+
+	this->wanderGoal.x = GetRandomValue( radius, radius);
+	this->wanderGoal.y = GetRandomValue( radius, radius);
+
+	this->wanderGoal = getNormalisedDirection(Vector2{0, 0}, this->wanderGoal);
+
+	int distance = GetRandomValue(0, radius);
+	this->wanderGoal.x *= distance;
+	this->wanderGoal.y *= distance;
 }
 
-void Microbe::move(Vector2 direction)
+void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
 {
-	// NOTE : assumes direction is normalized
-	this->position.x += direction.x * this->speed;
-	this->position.y += direction.y * this->speed;
+	Vector2 center;
+	center.x = 0;
+	center.y = 0;
+
+	if ( getDistance(this->position, center) >= this->petriDish->getRadius())
+	{
+		Vector2 newPosDir = getNormalisedDirection(center, this->position);
+		this->position.x = newPosDir.x * this->petriDish->getRadius();
+		this->position.y = newPosDir.y * this->petriDish->getRadius();
+	}
+	else
+	{
+		this->position.x = this->position.x + direction.x * this->speed;
+		this->position.y = this->position.y + direction.y * this->speed;
+	}
+
+	//this->refreshPos();
 }
 
 void Microbe::moveTowards(Vector2 target)
@@ -149,12 +209,48 @@ void Microbe::moveAwayFrom(Vector2 target)
 
 void Microbe::wander()
 {
+	// NOTE : make sure to avoid walls
 	// if found predators of other species, move away from them
-	// if found prey of other species, move towards them
-	// if found nutrients, move towards them
-	// if found same species, move away from them
-	// if none found, use wander goal
-	// if goal reach, set new goal
+	// else if found prey of other species, move towards them
+	// else if found nutrients, move towards them
+	// else if found same species, move away from them
+	// else if none found, use wander goal
+
+	Nutrient* target;
+
+	// insert logic to avoid walls
+
+	target = this->findClosestPredator();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_FLEE_RADIUS)
+	{
+		this->moveAwayFrom(target->position);
+		return;
+	}
+
+	target = this->findClosestPrey();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_PURSUE_RADIUS)
+	{
+		this->moveTowards(target->position);
+		return;
+	}
+
+	// insert logic to get away from same species
+
+	target = this->findClosestNutrient();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_GRAZE_RADIUS)
+	{
+		this->moveTowards(target->position);
+		return;
+	}
+	{
+		this->moveTowards(target->position);
+		return;
+	}
+
+	if (this->hasReachedWanderGoal())
+		this->getNewWanderGoal();
+
+	this->moveTowards(this->wanderGoal);
 }
 
 void Microbe::devour(Microbe* target)
@@ -166,7 +262,6 @@ void Microbe::devour(Microbe* target)
 	}
 }
 
-
 void Microbe::graze(Nutrient* target)
 {
 	if (this->canGraze(target))
@@ -176,15 +271,9 @@ void Microbe::graze(Nutrient* target)
 	}
 }
 
-
-bool Microbe::overlapsOther(Microbe* target)
+bool Microbe::overlapsMicrobe(Microbe* target)
 {
-	// check if this->hitbox overlaps with target->hitbox
-	return false;
-}
-
-bool Microbe::overlapsNutrient(Nutrient* target)
-{
+	(void)target;
 	// check if this->hitbox overlaps with target->hitbox
 	return false;
 }
