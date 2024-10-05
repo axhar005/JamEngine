@@ -1,8 +1,8 @@
 
-default: compile
-.PHONY: default
+#--- GENERALIZED MAKEFILE ---#
 
-include mk-inc/Settings.mk
-include mk-inc/Env.mk
-include mk-inc/Commands.mk
+include mk-inc/Makefile_default.mk
 
+#--- 42 MACOS SPECIFIC ---#
+
+#include mk-inc/Makefile_macos.mk
