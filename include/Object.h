@@ -5,17 +5,20 @@
 	class Object
 	{
 		private:
+			std::string		 name;
 
 		protected:
 			Object(Vector2 _position);
 
 		public:
-			Object(Vector2 _position, Sprite sprite);
-			Object(Vector2 _position, Sprite sprite, int layerLV);
-			virtual 		~Object();
-			virtual void 	step();
-			virtual void 	draw();
-			void 			update();
+			Object(Vector2	_position, Sprite sprite);
+			Object(Vector2	_position, Sprite sprite, int layerLV);
+			virtual			~Object();
+			virtual void	step();
+			virtual void	draw();
+			void			update();
+			virtual void	setName(const char* _name);
+			virtual const	std::string&	getName(void);
 			int				id;
 			Sprite			sprite;
 			Vector2			position;

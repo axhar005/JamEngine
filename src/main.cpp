@@ -13,7 +13,6 @@ void mainLoop(Engine& e)
 	const float zoomJump = 0.1;
 	const int  cameraSpeed = 5 / (zoom / 2);
 	static bool showTrigger = false;
-	std::cout << e.triggerList.size() << std::endl;
 	if (IsKeyPressed(KEY_P)) { e.closeWindow(); }
 	if (playerPtr) {
 		if (IsKeyDown(KEY_W)) { playerPtr->position.y += -cameraSpeed; }
@@ -50,7 +49,6 @@ void initTexture(Engine& e)
 
 void initObject(Engine& e)
 {
-	int tmp = 0;
 	playerid = e.addObject(new Object({0,0},e.sprites["dev"]), true);
 	e.objectList[0]->hitbox.box.height = 20;
 	e.objectList[0]->hitbox.box.width = 20;
@@ -59,14 +57,16 @@ void initObject(Engine& e)
 	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigerid);
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
-			e.addObject(new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]), true);
-			Object* tmpobj = e.getObjectByID(tmp);
+			int a = e.addObject(new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]), true);
+			Object* tmpobj = e.getObjectByID(a);
 			tmpobj->layer = 1;
+			tmpobj->setName("X");
 		}
 	}
 	Object* player = e.getObjectByID(playerid);
 	triggerObj->add(player);
 	player->layer = 4;
+	player->setName("dev");
 	e.sortLayer();
 }
 

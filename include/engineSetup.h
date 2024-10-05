@@ -10,6 +10,7 @@
 	#include <vector>
 	#include <algorithm>
 	#include <array>
+	#include <strings.h>
 
 	#define VECTOR_RESERVE 100
 

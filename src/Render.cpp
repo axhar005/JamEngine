@@ -51,13 +51,16 @@ void Engine::render(void) {
 			Object& tmp = *renderList[i]; //!! put back const after test
 			if (!this->_2DCamera || CheckCollisionRecs(ViewPort, tmp.hitbox.box)) {
 				#if (drawId)
-				char sdev[50];
-				sprintf(sdev, "%li %u", i, tmp.layer);
+				char sdev[80];
+				bzero(sdev, 80);
+				const char *name = tmp.getName().c_str();
+				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
 				DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 				DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
-				DrawText(sdev, tmp.position.x, tmp.position.y, 5, BLUE);
+				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
+				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
 				#endif
 				hits++;
 				tmp.draw();
