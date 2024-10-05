@@ -37,7 +37,8 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
-#define drawId false
+#define drawId      false
+#define drawTrigger false
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
@@ -50,25 +51,33 @@ void Engine::render(void) {
 			Object& tmp = *renderList[i]; //!! put back const after test
 			if (!this->_2DCamera || CheckCollisionRecs(ViewPort, tmp.hitbox.box)) {
 				#if (drawId)
-				char sdev[50];
-				sprintf(sdev, "%li %u", i, tmp.layer);
+				char sdev[80];
+				bzero(sdev, 80);
+				const char *name = tmp.getName().c_str();
+				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
 				DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 				DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
-				DrawText(sdev, tmp.position.x, tmp.position.y, 5, BLUE);
+				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
+				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
 				#endif
 				tmp.draw();
 				hits++;
+				tmp.draw();
 			}
 		}
 	}
+	#if (drawTrigger)
 	for (size_t i = 0; i < this->triggerList.size(); i++) {
 		if (triggerList[i]) {
 			Trigger* tmp = triggerList[i];
 			tmp->draw();
+			// if you want to see that the zone were the box overlap
+			tmp->hit();
 		}
 	}
+	#endif
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
 	char s[50];

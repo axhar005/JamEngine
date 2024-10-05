@@ -10,6 +10,8 @@
 	#include <vector>
 	#include <algorithm>
 	#include <array>
+	#include <strings.h>
+	#include <string.h>
 	#include "hitbox.h"
 
 	#define VECTOR_RESERVE 100

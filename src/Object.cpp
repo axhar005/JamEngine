@@ -23,6 +23,15 @@ Object::Object(Vector2 _position, Sprite _sprite, int _layerLV) : sprite(_sprite
 	}
 }
 
+void Object::setName(const char* _name) {
+	if (_name)
+		this->name = _name;
+}
+
+const std::string& Object::getName(void) {
+	return this->name;
+}
+
 Object::~Object()
 {
 	Engine::getInstance().removeObjectByID(this->id);
@@ -40,5 +49,5 @@ void Object::step()
 
 void Object::draw()
 {
-	
+
 }

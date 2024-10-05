@@ -5,6 +5,7 @@
 	class Object
 	{
 		private:
+			std::string		 name;
 
 		protected:
 			Object(Vector2 _position);
@@ -16,6 +17,8 @@
 			virtual void 	step();
 			virtual void 	draw();
 			void 			update();
+			virtual void	setName(const char* _name);
+			virtual const	std::string&	getName(void);
 			int				id;
 			Sprite			sprite;
 			Vector2			position;

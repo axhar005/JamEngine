@@ -1,5 +1,6 @@
 ### C++ ###
 lib/raylib
+TestGame
 
 # Prerequisites
 *.d
@@ -34,6 +35,7 @@ lib/raylib
 *.out
 *.app
 JamEngine
+TestGame
 
 ### Linux ###
 *~
