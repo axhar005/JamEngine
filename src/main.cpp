@@ -60,10 +60,6 @@ void initObject(Engine& e)
 			triggerObj->add(tmpobj);
 		}
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> 3d9dae24f8a197b2d443a3a571104b34251abc40
 	Object* player = e.getObjectByID(id);
 	player->layer = 4;
 	triggerObj->hit();
