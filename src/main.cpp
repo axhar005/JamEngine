@@ -33,7 +33,7 @@ void mainLoop(Engine& e)
 		e.triggerList[i]->drawTrigger = showTrigger;
 	}
 	}
-	for (size_t i = 1; i < e.renderList.size() - 2; i++) {
+	for (size_t i = 1; i < e.renderList.size() - 1; i++) {
 		float a = (i % 2 == 0) ? 0.05 : -0.05;
 		e.renderList[i]->position.x +=  +a;
 		e.renderList[i]->position.y +=  -a;
@@ -43,6 +43,11 @@ void mainLoop(Engine& e)
 	}else{
 		player->showHitbox = false;
 	}
+	//for (size_t i = 0; i < e.renderList.size(); i++) {
+	//	std::cout << "|" << e.renderList[i]->id;
+	//}
+	//std::cout << std::endl;
+	e.sortLayer();
 }
 
 void initTexture(Engine& e)
@@ -69,10 +74,10 @@ void initObject(Engine& e)
 	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigerid);
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
-			int a = e.addObject(new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]), true);
-			Object* tmpobj = e.getObjectByID(a);
+			Object* tmpobj = new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]);
 			tmpobj->layer = 1;
 			tmpobj->setName("X");
+			int a = e.addObject(tmpobj, true);
 		}
 	}
 	player = (Player*)e.getObjectByID(playerid);

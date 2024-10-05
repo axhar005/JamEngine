@@ -69,7 +69,14 @@
     "span": "cpp",
     "unordered_set": "cpp",
     "text_encoding": "cpp",
-    "numbers": "cpp"
+    "numbers": "cpp",
+    "cctype": "cpp",
+    "clocale": "cpp",
+    "cstdarg": "cpp",
+    "cwctype": "cpp",
+    "numeric": "cpp",
+    "system_error": "cpp",
+    "streambuf": "cpp"
   },
   "cmake.ignoreCMakeListsMissing": true,
   "C_Cpp_Runner.cCompilerPath": "gcc",

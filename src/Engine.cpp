@@ -82,12 +82,12 @@ void Engine::unloadTextureImage()
 	}
 }
 
-static bool  lookLayer(Object* &a, Object* &b) {
+static bool  lookLayer(Object* a, Object* b) {
 	return (a->layer < b->layer);
 }
 
 void Engine::sortLayer(void) {
-	std::sort(renderList.begin(), renderList.end(), lookLayer);
+	std::stable_sort(renderList.begin(), renderList.end(), lookLayer);
 }
 
 void Engine::stepLoop()
