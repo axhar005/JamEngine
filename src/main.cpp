@@ -75,7 +75,7 @@ void initObject(Engine& e)
 			tmpobj->setName("X");
 		}
 	}
-	Player* player = (Player*)e.getObjectByID(playerid);
+	player = (Player*)e.getObjectByID(playerid);
 	triggerObj->add(player);
 	player->layer = 4;
 	player->setName("dev");
