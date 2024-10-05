@@ -80,7 +80,7 @@ static bool  lookLayer(Object* &a, Object* &b) {
 }
 
 void Engine::sortLayer(void) {
-	std::sort(objectList.begin(), objectList.end(), lookLayer);
+	std::sort(renderList.begin(), renderList.end(), lookLayer);
 }
 
 void Engine::stepLoop()
@@ -94,7 +94,7 @@ void Engine::stepLoop()
 
 void Engine::drawLoop()
 {
-	for (auto &&i : renderList)
+	for (auto &&i : objectList)
 	{
 		i->draw();
 	}
@@ -218,10 +218,10 @@ void Engine::loop(void (*func)(Engine &))
 		func(*this);
 		stepLoop();
 		BeginDrawing();
-			ClearBackground(RAYWHITE);
-			drawLoop();
-			DrawGrid(20, 10.0f);
-			render();
+		ClearBackground(RAYWHITE);
+		DrawGrid(20, 10.0f);
+		render();
+		drawLoop();
 		EndDrawing();
 	}
 }

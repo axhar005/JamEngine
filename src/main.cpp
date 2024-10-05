@@ -8,20 +8,27 @@ void mainLoop(Engine& e)
 	// your gameplay
 	static float zoom = 1;
 	const float zoomJump = 0.1;
-	const int  cameraSpeed = 10 / zoom;
+	const int  cameraSpeed = 5 / (zoom / 2);
 	if (IsKeyPressed(KEY_P)) { e.closeWindow(); }
-	if (IsKeyDown(KEY_W)) { e.objectList[e.objectList.size() -1]->position.y += -cameraSpeed; }
-	if (IsKeyDown(KEY_S)) { e.objectList[e.objectList.size() -1]->position.y +=  cameraSpeed; }
-	if (IsKeyDown(KEY_A)) { e.objectList[e.objectList.size() -1]->position.x += -cameraSpeed; }
-	if (IsKeyDown(KEY_D)) { e.objectList[e.objectList.size() -1]->position.x +=  cameraSpeed; }
-	if (IsKeyDown(KEY_UP) && zoom + zoomJump <= 10)   {zoom += zoomJump; }
-	if (IsKeyDown(KEY_DOWN) && zoom - zoomJump >= 0) {zoom -= zoomJump; }
+	if (IsKeyDown(KEY_W)) { e.renderList[e.renderList.size() -1]->position.y += -cameraSpeed; }
+	if (IsKeyDown(KEY_S)) { e.renderList[e.renderList.size() -1]->position.y +=  cameraSpeed; }
+	if (IsKeyDown(KEY_A)) { e.renderList[e.renderList.size() -1]->position.x += -cameraSpeed; }
+	if (IsKeyDown(KEY_D)) { e.renderList[e.renderList.size() -1]->position.x +=  cameraSpeed; }
+	if (IsKeyDown(KEY_UP)   && zoom + zoomJump <= 7) {zoom += zoomJump; }
+	if (IsKeyDown(KEY_DOWN) && zoom - zoomJump > 0.1)  {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
-	e.set2DCameraPotions(e.objectList[e.objectList.size() -1], true);
-	for (size_t i = 0; i < e.objectList.size() - 1; i++) {
+	e.set2DCameraPotions(e.renderList[e.renderList.size() -1], true);
+	static bool showTrigger = false;
+	if (IsKeyPressed(KEY_O)) {
+		showTrigger = !showTrigger;
+		for(size_t i = 0; i < e.triggerList.size(); i++) {
+		e.triggerList[i]->drawTrigger = showTrigger;
+	}
+	}
+	for (size_t i = 1; i < e.renderList.size() - 2; i++) {
 		float a = (i % 2 == 0) ? 0.05 : -0.05;
-		e.objectList[i]->position.x +=  a;
-		e.objectList[i]->position.y += -a;
+		e.renderList[i]->position.x +=  +a;
+		e.renderList[i]->position.y +=  -a;
 	}
 }
 
@@ -43,6 +50,7 @@ void initObject(Engine& e)
 	e.objectList[0]->hitbox.box.height = 20;
 	e.objectList[0]->hitbox.box.width = 20;
 	trigger = e.addObject(new Trigger({0,0,}), false);
+	e.triggerList.push_back((Trigger *)e.getObjectByID(trigger));
 	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigger);
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
@@ -52,7 +60,6 @@ void initObject(Engine& e)
 			triggerObj->add(tmpobj);
 		}
 	}
-	
 	Object* player = e.getObjectByID(id);
 	player->layer = 4;
 	triggerObj->hit();
