@@ -37,18 +37,23 @@ void initTexture(Engine& e)
 void initObject(Engine& e)
 {
 	int tmp = 0;
+	int trigger = 0;
 	const int id = e.addObject(new Object({0,0},e.sprites["dev"]), true);
 	e.objectList[0]->hitbox.box.height = 20;
 	e.objectList[0]->hitbox.box.width = 20;
+	trigger = e.addObject(new Trigger({0,0,}), false);
+	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigger);
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
 			e.addObject(new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]), true);
 			Object* tmpobj = e.getObjectByID(tmp);
 			tmpobj->layer = 1;
+			triggerObj->add(tmpobj);
 		}
 	}
 	Object* player = e.getObjectByID(id);
 	player->layer = 4;
+	triggerObj->hit();
 	e.sortLayer();
 }
 
@@ -56,6 +61,7 @@ int main()
 {
 	Engine::initInstance(1280, 720, "ENGINE");
 	Engine& e = Engine::getInstance();
+	
 	initTexture(e);
 	initObject(e);
 	Camera2D cam = {{0,0}, {0,0}, 0, 1};
