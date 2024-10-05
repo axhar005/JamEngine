@@ -44,7 +44,8 @@ void Trigger::draw(void) {
 		DrawRectangleRec(hitbox.box, {255,128,0,100});
 }
 
-#define drawBox 1
+// if you want to see that the zone were the box overlap
+#define drawBox true
 
 std::vector<int> Trigger::hit(void) {
 	std::vector<int> result;
@@ -54,7 +55,7 @@ std::vector<int> Trigger::hit(void) {
 			result.push_back(hitList[i]->id);
 			#if (drawBox)
 			{
-				const Color box = {255, 128, 0, 55};
+				const Color box = {0, 255, 0, 100};
 				const Rectangle rec = GetCollisionRec(this->hitbox.box, hitList[i]->hitbox.box);
 				DrawRectangleRec(rec, box);
 			}

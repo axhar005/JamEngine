@@ -66,6 +66,8 @@ void Engine::render(void) {
 		if (triggerList[i]) {
 			Trigger* tmp = triggerList[i];
 			tmp->draw();
+			// if you want to see that the zone were the box overlap
+			tmp->hit();
 		}
 	}
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
