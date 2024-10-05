@@ -1,7 +1,8 @@
 #include "../include/Engine.h"
 #include "../include/Fireball.h"
+#include "../include/Player.h"
 
-int tid;
+Player* player;
 
 void mainLoop(Engine& e)
 {
@@ -30,6 +31,11 @@ void mainLoop(Engine& e)
 		e.renderList[i]->position.x +=  +a;
 		e.renderList[i]->position.y +=  -a;
 	}
+	if (CheckCollisionEllipseRecs(player->hitbox.box, e.objectList[2]->hitbox.box)){
+		player->showHitbox = true;
+	}else{
+		player->showHitbox = false;
+	}
 }
 
 void initTexture(Engine& e)
@@ -46,10 +52,10 @@ void initObject(Engine& e)
 {
 	int tmp = 0;
 	int trigger = 0;
-	const int id = e.addObject(new Object({0,0},e.sprites["dev"]), true);
+	const int id = e.addObject(new Player({0,0},e.sprites["dev"]), true);
 	e.objectList[0]->hitbox.box.height = 20;
 	e.objectList[0]->hitbox.box.width = 20;
-	trigger = e.addObject(new Trigger({0,0,}), false);
+	trigger = e.addObject(new Trigger({0,0,}, {10, 10}), false);
 	e.triggerList.push_back((Trigger *)e.getObjectByID(trigger));
 	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigger);
 	for (int j = 0; j < 200; j++) {
@@ -60,7 +66,7 @@ void initObject(Engine& e)
 			triggerObj->add(tmpobj);
 		}
 	}
-	Object* player = e.getObjectByID(id);
+	player = (Player *)e.getObjectByID(id);
 	player->layer = 4;
 	triggerObj->hit();
 	e.sortLayer();
@@ -70,7 +76,6 @@ int main()
 {
 	Engine::initInstance(1280, 720, "ENGINE");
 	Engine& e = Engine::getInstance();
-
 	initTexture(e);
 	initObject(e);
 	Camera2D cam = {{0,0}, {0,0}, 0, 1};

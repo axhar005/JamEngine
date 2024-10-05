@@ -42,7 +42,7 @@
 			void loadTextureImage();
 			Object* getObjectByID(int id);
 			static Engine& getInstance();
-			static void initInstance(int windowWidth, int windowHeight, std::string windowName);
+			static Engine& initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
 

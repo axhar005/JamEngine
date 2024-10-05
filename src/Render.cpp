@@ -58,6 +58,7 @@ void Engine::render(void) {
 				#if (drawId)
 				DrawText(sdev, tmp.position.x, tmp.position.y, 5, BLUE);
 				#endif
+				tmp.draw();
 				hits++;
 			}
 		}

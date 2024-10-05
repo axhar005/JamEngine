@@ -10,8 +10,8 @@
 			Object(Vector2 _position);
 
 		public:
-			Object(Vector2 _position, Sprite sprite);
-			Object(Vector2 _position, Sprite sprite, int layerLV);
+			Object(Vector2 _position, Sprite _sprite);
+			Object(Vector2 _position, Sprite _sprite, int _layerLV);
 			virtual 		~Object();
 			virtual void 	step();
 			virtual void 	draw();

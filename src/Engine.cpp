@@ -22,13 +22,14 @@ Engine::~Engine()
 	removeAll();
 }
 
-void Engine::initInstance(int windowWidth, int windowHeight, std::string windowName) {
-		if (_instance == nullptr) {
-			_instance = new Engine(windowWidth, windowHeight, windowName);
-		} else {
-			throw std::runtime_error("Instance alrady initialized.");
-		}
+Engine& Engine::initInstance(int windowWidth, int windowHeight, std::string windowName) {
+	if (_instance == nullptr) {
+		_instance = new Engine(windowWidth, windowHeight, windowName);
+	} else {
+		throw std::runtime_error("Instance alrady initialized.");
 	}
+	return *_instance;
+}
 
 Engine& Engine::getInstance()
 {
@@ -43,7 +44,7 @@ void Engine::loadTextureImage()
 	for (const auto &item : textures)
 	{
 		const std::string &key = item.first;
-		const std::vector<std::string> &paths = item.second;
+		const std::vector<std::string>& paths = item.second;
 
 		std::vector<SpriteFrame> spriteList;
 		spriteList.reserve(paths.size());
@@ -221,7 +222,6 @@ void Engine::loop(void (*func)(Engine &))
 		ClearBackground(RAYWHITE);
 		DrawGrid(20, 10.0f);
 		render();
-		drawLoop();
 		EndDrawing();
 	}
 }
