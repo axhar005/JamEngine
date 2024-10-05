@@ -169,6 +169,12 @@ bool Engine::removeObjectByID(int id)
 				}
 				break;
 			}
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); ) {
+				if ((*itt)->id == id){
+					triggerList.erase(itt);
+				}
+				break;
+			}
 			delete *it;
 			objectList.erase(it);
 			return true;
