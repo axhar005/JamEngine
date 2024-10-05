@@ -160,6 +160,45 @@ void Microbe::wander()
 	// if found same species, move away from them
 	// if none found, use wander goal
 	// if goal reach, set new goal
+
+	for (Microbe* predator : this->petriDish->getMicrobes())
+	{
+		if (this->canBeDevouredBy(predator))
+		{
+			this->moveAwayFrom(predator->position);
+			return;
+		}
+	}
+	for (Microbe* prey : this->petriDish->getMicrobes())
+	{
+		if (this->canDevour(prey))
+		{
+			this->moveTowards(prey->position);
+			return;
+		}
+	}
+	for (Nutrient* nutrient : this->petriDish->getNutrients())
+	{
+		this->moveTowards(nutrient->position);
+		return;
+	}
+
+	if (!this->isOnEdge())
+	{
+		for (Microbe* other : this->petriDish->getMicrobes())
+		{
+			if (this->isSameSpecies(other))
+			{
+				this->moveAwayFrom(other->position);
+				return;
+			}
+		}
+	}
+
+	if (this->hasReachedWanderGoal())
+		this->getNewWanderGoal();
+
+	this->moveTowards(this->wanderGoal);
 }
 
 void Microbe::devour(Microbe* target)
@@ -171,7 +210,6 @@ void Microbe::devour(Microbe* target)
 	}
 }
 
-
 void Microbe::graze(Nutrient* target)
 {
 	if (this->canGraze(target))
@@ -182,14 +220,7 @@ void Microbe::graze(Nutrient* target)
 }
 
 
-bool Microbe::overlapsOther(Microbe* target)
-{
-	(void)target;
-	// check if this->hitbox overlaps with target->hitbox
-	return false;
-}
-
-bool Microbe::overlapsNutrient(Nutrient* target)
+bool Microbe::overlapsMicrobe(Microbe* target)
 {
 	(void)target;
 	// check if this->hitbox overlaps with target->hitbox

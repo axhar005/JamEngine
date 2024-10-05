@@ -37,9 +37,12 @@
 
 			int getSize();
 			PetriDish* getPetriDish();
+
+			bool overlapsNutrient(Nutrient* target);
+
+			bool isOnEdge();
 	};
 
 	// NOTE : fuse Nutrients that overlap?
-	// NOTE : add way to add/remove nutrients from the PetriDish
 
 #endif

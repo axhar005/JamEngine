@@ -53,8 +53,7 @@
 			void devour(Microbe* target);
 			void graze(Nutrient* target);
 
-			bool overlapsOther(Microbe* target);
-			bool overlapsNutrient(Nutrient* target);
+			bool overlapsMicrobe(Microbe* target);
 
 			bool canGraze(Nutrient* target);
 			bool canDevour(Microbe* target);
@@ -69,7 +68,5 @@
 
 	float getDistance(Vector2 start, Vector2 end);
 	Vector2 getNormalisedDirection(Vector2 start, Vector2 end);
-
-	// NOTE : add way to add/remove microbes from a global list
 
 #endif

@@ -67,3 +67,17 @@ void Nutrient::die()
 
 int Nutrient::getSize() {return this->size;}
 PetriDish* Nutrient::getPetriDish() {return this->petriDish;}
+
+bool Nutrient::overlapsNutrient(Nutrient* target)
+{
+	(void)target;
+	// check if this->hitbox overlaps with target->hitbox
+	return false;
+}
+
+bool Nutrient::isOnEdge()
+{
+	// check if nutrient is near the edge of the petriDish, to avoid faceplanting into the wall
+	// TODO : implement me
+	return true;
+}
