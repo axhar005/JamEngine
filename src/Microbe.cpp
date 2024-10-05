@@ -81,8 +81,8 @@ void Microbe::refreshSpeed()
 {
 	// speed is inversely proportional to size, and linearly distributed between min and max speed
 
-	int speed_range = MICROBE_MAX_SPEED - MICROBE_MIN_SPEED;
-	int size_range = MICROBE_MAX_SIZE - MICROBE_MIN_SIZE;
+	float speed_range = MICROBE_MAX_SPEED - MICROBE_MIN_SPEED;
+	float size_range = MICROBE_MAX_SIZE - MICROBE_MIN_SIZE;
 
 	float norm_size = (this->size - MICROBE_MIN_SIZE) / size_range;
 
