@@ -1,5 +1,4 @@
 #include "../include/Nutrient.h"
-#include "../include/Engine.h"
 
 Nutrient::Nutrient(Vector2 _position, Sprite _sprite, int _size) :
 	Object(_position, _sprite)

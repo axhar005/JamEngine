@@ -10,6 +10,9 @@
 
 	#define NUTRIENT_GROWTH_RATE 0 // to be implemented
 
+	// NOTE : add PetriDish class
+
+	// a class for food objects, and the parent class to microbes ( entities )
 	class Nutrient : public Object
 	{
 		private:

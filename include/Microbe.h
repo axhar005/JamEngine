@@ -1,10 +1,6 @@
 #ifndef FIREBALL_H
 # define FIREBALL_H
-	#include "../include/Object.h"
 	#include "Nutrient.h"
-	#include <raylib.h>
-	#include "engineSetup.h"
-
 
 	#define MICROBE_MIN_SIZE 8
 	#define MICROBE_MAX_SIZE 256
@@ -21,6 +17,9 @@
 
 	#define MICROBE_GOAL_RADIUS 8
 
+	// NOTE : add PetriDish class
+
+	// a class for entities that can move and interact with other entities or nutrients ( food )
 	class Microbe : public Nutrient // make nutrient object too
 	{
 		private:
@@ -36,8 +35,6 @@
 			void step();
 
 			void refreshSpeed();
-			void refreshSize();
-			void refreshPos();
 
 			void grow(int amount);
 			void shrink(int amount);
@@ -68,7 +65,6 @@
 			bool isSameSpecies(Microbe* target);
 			bool hasReachedWanderGoal();
 
-			int getSize();
 			int getSpeed();
 			std::string getSpecies();
 	};
