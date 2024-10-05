@@ -89,7 +89,7 @@ void Microbe::starve()
 
 	// NOTE : use nutrient sprite instead
 	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->size);
-
+	(void)nutrient;
 	// add nutrient to PetriDish
 
 	this->die();
@@ -179,12 +179,14 @@ void Microbe::graze(Nutrient* target)
 
 bool Microbe::overlapsOther(Microbe* target)
 {
+	(void)target;
 	// check if this->hitbox overlaps with target->hitbox
 	return false;
 }
 
 bool Microbe::overlapsNutrient(Nutrient* target)
 {
+	(void)target;
 	// check if this->hitbox overlaps with target->hitbox
 	return false;
 }
