@@ -6,6 +6,9 @@
 	{
 		private:
 
+		protected:
+			Object(Vector2 _position);
+
 		public:
 			Object(Vector2 _position, Sprite sprite);
 			Object(Vector2 _position, Sprite sprite, int layerLV);
@@ -21,7 +24,6 @@
 			int				animationSpeed;
 			float			rotation;
 			int				layer;
-
 	};
 
 #endif

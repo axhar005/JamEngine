@@ -1,7 +1,7 @@
 {
   "files.associations": {
     "*.ms": "shellscript",
-    "*.h": "c",
+    "*.h": "cpp",
     "*.c": "c",
     "*.hpp": "cpp",
     "*.cpp": "cpp",

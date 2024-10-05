@@ -10,6 +10,10 @@ Object::Object(Vector2 _position, Sprite _sprite) : sprite(_sprite), position(_p
 	}
 }
 
+Object::Object(Vector2 _position) : position(_position), frameIndex(0), animationSpeed(0), layer(0) {
+
+}
+
 Object::Object(Vector2 _position, Sprite _sprite, int layerLV) : sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), layer(layerLV) {
 	if (!sprite.empty()){
 		texture = &sprite[frameIndex].texture;

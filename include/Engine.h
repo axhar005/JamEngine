@@ -2,6 +2,7 @@
 # define ENGINE_H
 	#include "engineSetup.h"
 	#include "Object.h"
+	#include "Trigger.h"
 
 	class Engine
 	{
