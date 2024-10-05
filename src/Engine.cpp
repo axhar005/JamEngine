@@ -119,14 +119,20 @@ int Engine::addObject(Object* object, bool render)
 
 int Engine::addObject(Trigger* trigger)
 {
-	// if (trigger == NULL)
-	// 	return -1;
-	// for (auto &&obj : triggerList)
-	// {
-	// 	if(obj == trigger){
-	// 		return -1;
-	// 	}
-	// }
+	if (trigger == NULL)
+		return -1;
+	for (auto &&obj : objectList)
+	{
+		if(obj == trigger){
+			return -1;
+		}
+	}
+	for (auto &&obj : triggerList)
+	{
+		if(obj == trigger){
+			return -1;
+		}
+	}
 	trigger->id = _objectUniqueID;
 	objectList.push_back(trigger);
 	triggerList.push_back(trigger);
