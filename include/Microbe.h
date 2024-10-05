@@ -13,15 +13,28 @@
 
 	#define MICROBE_STARVE_RATE 0 // to be implemented
 	#define MICROBE_CANIBALISM_FACTOR 0.8f
+	#define MICROBE_VEGANISM_FACTOR 0.9f
 	#define MICROBE_DIGESTION_FACTOR 0.9f
 
 	#define MICROBE_FLEE_RADIUS 256
 	#define MICROBE_PURSUE_RADIUS 256
 	#define MICROBE_GRAZE_RADIUS 256
+	#define MICROBE_SPREAD_RADIUS 256
+
 	#define MICROBE_GOAL_RADIUS 8
 
+	typedef enum e_MicroSpecies
+	{
+		KIKI,
+		BUBA,
+		NENE,
+		SOSO,
+		GUGU,
+		NUM_MICRO_SPECIES
+	} MicroSpecies;
+
 	// a class for entities that can move and interact with other entities or nutrients ( food )
-	class Microbe : public Nutrient // make nutrient object too
+	class Microbe : public Nutrient
 	{
 		private:
 			int speed;
@@ -46,8 +59,9 @@
 			Microbe* findClosestPredator();
 			Microbe* findClosestPrey();
 			Nutrient* findClosestNutrient();
-			void getNewWanderGoal();
+			void setNewWanderGoal();
 
+			void clampPos();
 			void move(Vector2 direction);
 			void moveTowards(Vector2 target);
 			void moveAwayFrom(Vector2 target);
@@ -66,6 +80,7 @@
 			bool hasReachedWanderGoal();
 
 			int getSpeed();
+			bool getIsPlayer();
 			std::string getSpecies();
 	};
 

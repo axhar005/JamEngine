@@ -24,18 +24,22 @@
 			PetriDish(Vector2 _position, Sprite _sprite, int _radius);
 			~PetriDish();
 
-			void step();
-
 			void addNutrient(Nutrient* nutrient);
 			void addMicrobe(Microbe* microbe);
 
 			void removeNutrient(Nutrient* nutrient);
 			void removeMicrobe(Microbe* microbe);
 
+			void spawnPlayer(std::string species, Sprite _sprite);
+			void spawnMicrobe(std::string species, Sprite _sprite, int count);
+			void spawnNutrient(int count, Sprite _sprite);
+
 			std::vector<Nutrient*> getNutrients();
 			std::vector<Microbe*> getMicrobes();
+			Microbe* getPlayer();
 
 			int getRadius();
+			Vector2 getRandomPos();
 	};
 
 #endif

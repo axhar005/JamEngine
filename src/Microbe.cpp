@@ -160,21 +160,9 @@ Nutrient* Microbe::findClosestNutrient()
 	return target;
 }
 
-void Microbe::getNewWanderGoal()
-{
-	int radius = this->petriDish->getRadius();
+void Microbe::setNewWanderGoal() {this->wanderGoal = this->petriDish->getRandomPos();}
 
-	this->wanderGoal.x = GetRandomValue( radius, radius);
-	this->wanderGoal.y = GetRandomValue( radius, radius);
-
-	this->wanderGoal = getNormalisedDirection(Vector2{0, 0}, this->wanderGoal);
-
-	int distance = GetRandomValue(0, radius);
-	this->wanderGoal.x *= distance;
-	this->wanderGoal.y *= distance;
-}
-
-void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
+void Microbe::clampPos()
 {
 	Vector2 center;
 	center.x = 0;
@@ -186,13 +174,15 @@ void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
 		this->position.x = newPosDir.x * this->petriDish->getRadius();
 		this->position.y = newPosDir.y * this->petriDish->getRadius();
 	}
-	else
-	{
-		this->position.x = this->position.x + direction.x * this->speed;
-		this->position.y = this->position.y + direction.y * this->speed;
-	}
+}
 
-	//this->refreshPos();
+void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
+{
+	this->position.x = this->position.x + direction.x * this->speed;
+	this->position.y = this->position.y + direction.y * this->speed;
+
+	this->clampPos();
+	this->refreshPos();
 }
 
 void Microbe::moveTowards(Vector2 target)
@@ -211,8 +201,8 @@ void Microbe::wander()
 {
 	// NOTE : make sure to avoid walls
 	// if found predators of other species, move away from them
-	// else if found prey of other species, move towards them
 	// else if found nutrients, move towards them
+	// else if found prey of other species, move towards them
 	// else if found same species, move away from them
 	// else if none found, use wander goal
 
@@ -227,6 +217,13 @@ void Microbe::wander()
 		return;
 	}
 
+	target = this->findClosestNutrient();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_GRAZE_RADIUS)
+	{
+		this->moveTowards(target->position);
+		return;
+	}
+
 	target = this->findClosestPrey();
 	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_PURSUE_RADIUS)
 	{
@@ -236,19 +233,8 @@ void Microbe::wander()
 
 	// insert logic to get away from same species
 
-	target = this->findClosestNutrient();
-	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_GRAZE_RADIUS)
-	{
-		this->moveTowards(target->position);
-		return;
-	}
-	{
-		this->moveTowards(target->position);
-		return;
-	}
-
 	if (this->hasReachedWanderGoal())
-		this->getNewWanderGoal();
+		this->setNewWanderGoal();
 
 	this->moveTowards(this->wanderGoal);
 }
@@ -280,7 +266,7 @@ bool Microbe::overlapsMicrobe(Microbe* target)
 
 bool Microbe::canGraze(Nutrient* target)
 {
-	if (this->size * MICROBE_CANIBALISM_FACTOR < target->getSize()) {return false;}
+	if (this->size * MICROBE_VEGANISM_FACTOR < target->getSize()) {return false;}
 	return true;
 }
 
@@ -308,4 +294,5 @@ bool Microbe::hasReachedWanderGoal()
 }
 
 int Microbe::getSpeed() {return this->speed;}
+bool Microbe::getIsPlayer() {return this->isPlayer;}
 std::string Microbe::getSpecies() {return this->species;}

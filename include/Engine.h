@@ -33,7 +33,7 @@
 			void set2DCameraPotions(Object* obj, bool center);
 
 			void set2DCameraZoom(float zoom);
-			
+
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
 
