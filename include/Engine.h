@@ -39,14 +39,19 @@
 			void sortLayer(void);
 
 			void loadTextureImage();
-			bool removeObjectByID(int id);
 			Object* getObjectByID(int id);
 			static Engine& getInstance();
 			static void initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
+
 			int addObject(Object* object, bool render);
 			int addObject(Trigger* trigger);
+			int addObjectToRender(Object* object);
+
+			bool removeObjectByID(int id);
+			bool removeObjectRenderByID(int id);
+
 			SpriteMap 					sprites;
 			TexturePath 				textures;
 			std::vector<Object*>		objectList;

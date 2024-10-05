@@ -39,12 +39,12 @@ std::vector<int> Trigger::hit(void) {
 	std::vector<int> result;
 	result.reserve(hitList.size() / 2);
 	for (size_t i = 0; i < hitList.size(); i++) {
-		if (CheckCollisionRecs(this->hitbox, hitList[i]->hitbox)) {
+		if (CheckCollisionRecs(this->hitbox.box, hitList[i]->hitbox.box)) {
 			result.push_back(hitList[i]->id);
 			#if (drawBox)
 			{
 				const Color box = {0, 0, 255, 70};
-				const Rectangle rec = GetCollisionRec(this->hitbox, hitList[i]->hitbox);
+				const Rectangle rec = GetCollisionRec(this->hitbox.box, hitList[i]->hitbox.box);
 				DrawRectangleRec(rec, box);
 			}
 			#endif

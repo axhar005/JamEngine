@@ -133,6 +133,17 @@ Object* Engine::getObjectByID(int id)
 	return NULL;
 }
 
+bool Engine::removeObjectRenderByID(int id)
+{
+	for (auto it = renderList.begin(); it != renderList.end(); ) {
+		if ((*it)->id == id){
+			renderList.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Engine::removeObjectByID(int id)
 {
 	for (auto it = objectList.begin(); it != objectList.end(); ) {
