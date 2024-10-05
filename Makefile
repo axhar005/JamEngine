@@ -34,8 +34,10 @@ endif
 ifeq ($(wildcard $(RAYLIB_SYSTEM_LIB)),)
     # raylib not found on the system, use local version
     USE_LOCAL_RAYLIB = true
+    $(info Utilisation de la version locale de raylib)
 else
     USE_LOCAL_RAYLIB = false
+    $(info Utilisation de la version système de raylib)
 endif
 
 # USE_LOCAL_RAYLIB = true
@@ -69,7 +71,7 @@ DEP = $(OBJ:.o=.d)
 #--- RULES ---#
 all: $(NAME)
 
-$(NAME): $(OBJ) $(RAYLIB_BUILD_DIR)/libraylib.a
+$(NAME): $(RAYLIB_BUILD_DIR)/libraylib.a $(OBJ)
 	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp

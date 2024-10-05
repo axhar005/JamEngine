@@ -5,14 +5,14 @@ void mainLoop(Engine& e)
 {
 	// your gameplay
 	static float zoom = 1;
-	const float zoomJump = 0.05;
+	const float zoomJump = 0.1;
 	const int  cameraSpeed = 10 / zoom;
 	if (IsKeyPressed(KEY_P)) { e.closeWindow(); }
 	if (IsKeyDown(KEY_W)) { e.objectList[e.objectList.size() -1]->position.y += -cameraSpeed; }
 	if (IsKeyDown(KEY_S)) { e.objectList[e.objectList.size() -1]->position.y +=  cameraSpeed; }
 	if (IsKeyDown(KEY_A)) { e.objectList[e.objectList.size() -1]->position.x += -cameraSpeed; }
 	if (IsKeyDown(KEY_D)) { e.objectList[e.objectList.size() -1]->position.x +=  cameraSpeed; }
-	if (IsKeyPressed(KEY_UP) && zoom + zoomJump <= 4)   {zoom += zoomJump; }
+	if (IsKeyPressed(KEY_UP) && zoom + zoomJump <= 10)   {zoom += zoomJump; }
 	if (IsKeyPressed(KEY_DOWN) && zoom - zoomJump >= 0) {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
 	e.set2DCameraPotions(e.objectList[e.objectList.size() -1], true);

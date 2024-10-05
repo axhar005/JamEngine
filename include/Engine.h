@@ -45,11 +45,13 @@
 			void loop(void (*func)(Engine &));
 			void closeWindow();
 			int addObject(Object* object, bool render);
+			int addObject(Trigger* trigger);
 			SpriteMap 					sprites;
 			TexturePath 				textures;
 			std::vector<Object*>		objectList;
 			std::vector<Object*>		renderList;
 			std::vector<Object*>		uiRenderList;
+			std::vector<Trigger*>		triggerList;
 	};
 
 #endif
