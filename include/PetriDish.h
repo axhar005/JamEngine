@@ -16,11 +16,12 @@
 	class PetriDish : public Object
 	{
 		private:
+			int radius;
 			std::vector<Nutrient*> nutrients;
 			std::vector<Microbe*> microbes;
 
 		public:
-			PetriDish(Vector2 _position, Sprite _sprite);
+			PetriDish(Vector2 _position, Sprite _sprite, int _radius);
 			~PetriDish();
 
 			void step();
@@ -33,6 +34,8 @@
 
 			std::vector<Nutrient*> getNutrients();
 			std::vector<Microbe*> getMicrobes();
+
+			int getRadius();
 	};
 
 #endif

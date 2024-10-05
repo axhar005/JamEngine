@@ -2,7 +2,7 @@
 default: compile
 .PHONY: default
 
-include Settings.mk
-include Env.mk
-include Commands.mk
+include mk-inc/Settings.mk
+include mk-inc/Env.mk
+include mk-inc/Commands.mk
 

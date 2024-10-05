@@ -92,9 +92,7 @@ void Microbe::starve()
 	// NOTE : use nutrient sprite instead
 	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->petriDish, this->size);
 	this->petriDish->addNutrient(nutrient);
-
 	this->petriDish->removeMicrobe(this);
-
 	this->die();
 }
 
@@ -106,38 +104,95 @@ void Microbe::die()
 
 Microbe* Microbe::findClosestPredator()
 {
-	// find closest predator
-	// return pointer to it
-	return nullptr;
+	int closest_distance = 999999;
+	Microbe* target = nullptr;
+
+	for (Microbe* predator : this->petriDish->getMicrobes())
+	{
+		if (this->canBeDevouredBy(predator))
+		{
+			int distance = getDistance(this->position, predator->position);
+			if (distance < closest_distance)
+			{
+				closest_distance = distance;
+				target = predator;
+			}
+		}
+	}
+	return target;
 }
 
 Microbe* Microbe::findClosestPrey()
 {
-	// find closest prey
-	// return pointer to it
-	return nullptr;
+	int closest_distance = 999999;
+	Microbe* target = nullptr;
+
+	for (Microbe* prey : this->petriDish->getMicrobes())
+	{
+		if (this->canDevour(prey))
+		{
+			int distance = getDistance(this->position, prey->position);
+			if (distance < closest_distance)
+			{
+				closest_distance = distance;
+				target = prey;
+			}
+		}
+	}
+	return target;
 }
 
 
 Nutrient* Microbe::findClosestNutrient()
 {
-	// find closest nutrient
-	// return pointer to it
-	return nullptr;
-}
+	int closest_distance = 999999;
+	Nutrient* target = nullptr;
 
+	for (Nutrient* nutrient : this->petriDish->getNutrients())
+	{
+		int distance = getDistance(this->position, nutrient->position);
+		if (distance < closest_distance)
+		{
+			closest_distance = distance;
+			target = nutrient;
+		}
+	}
+	return target;
+}
 
 void Microbe::getNewWanderGoal()
 {
-	// create a random goal within a certain distance from this->position, and set it as wanderGoal
+	int radius = this->petriDish->getRadius();
+
+	this->wanderGoal.x = GetRandomValue( radius, radius);
+	this->wanderGoal.y = GetRandomValue( radius, radius);
+
+	this->wanderGoal = getNormalisedDirection(Vector2{0, 0}, this->wanderGoal);
+
+	int distance = GetRandomValue(0, radius);
+	this->wanderGoal.x *= distance;
+	this->wanderGoal.y *= distance;
 }
 
-void Microbe::move(Vector2 direction)
+void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
 {
-	// NOTE : assumes direction is normalized
-	// clamp direction to within petriDish
-	this->position.x += direction.x * this->speed;
-	this->position.y += direction.y * this->speed;
+	Vector2 center;
+	center.x = 0;
+	center.y = 0;
+
+	if ( getDistance(this->position, center) >= this->petriDish->getRadius())
+	{
+		Vector2 newPosDir = getNormalisedDirection(center, this->position);
+		this->position.x = newPosDir.x * this->petriDish->getRadius();
+		this->position.y = newPosDir.y * this->petriDish->getRadius();
+	}
+	else
+	{
+		this->position.x = this->position.x + direction.x * this->speed;
+		this->position.y = this->position.y + direction.y * this->speed;
+	}
+
+	//this->refreshPos();
 }
 
 void Microbe::moveTowards(Vector2 target)
@@ -154,45 +209,42 @@ void Microbe::moveAwayFrom(Vector2 target)
 
 void Microbe::wander()
 {
+	// NOTE : make sure to avoid walls
 	// if found predators of other species, move away from them
-	// if found prey of other species, move towards them
-	// if found nutrients, move towards them
-	// if found same species, move away from them
-	// if none found, use wander goal
-	// if goal reach, set new goal
+	// else if found prey of other species, move towards them
+	// else if found nutrients, move towards them
+	// else if found same species, move away from them
+	// else if none found, use wander goal
 
-	for (Microbe* predator : this->petriDish->getMicrobes())
+	Nutrient* target;
+
+	// insert logic to avoid walls
+
+	target = this->findClosestPredator();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_FLEE_RADIUS)
 	{
-		if (this->canBeDevouredBy(predator))
-		{
-			this->moveAwayFrom(predator->position);
-			return;
-		}
-	}
-	for (Microbe* prey : this->petriDish->getMicrobes())
-	{
-		if (this->canDevour(prey))
-		{
-			this->moveTowards(prey->position);
-			return;
-		}
-	}
-	for (Nutrient* nutrient : this->petriDish->getNutrients())
-	{
-		this->moveTowards(nutrient->position);
+		this->moveAwayFrom(target->position);
 		return;
 	}
 
-	if (!this->isOnEdge())
+	target = this->findClosestPrey();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_PURSUE_RADIUS)
 	{
-		for (Microbe* other : this->petriDish->getMicrobes())
-		{
-			if (this->isSameSpecies(other))
-			{
-				this->moveAwayFrom(other->position);
-				return;
-			}
-		}
+		this->moveTowards(target->position);
+		return;
+	}
+
+	// insert logic to get away from same species
+
+	target = this->findClosestNutrient();
+	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_GRAZE_RADIUS)
+	{
+		this->moveTowards(target->position);
+		return;
+	}
+	{
+		this->moveTowards(target->position);
+		return;
 	}
 
 	if (this->hasReachedWanderGoal())
@@ -218,7 +270,6 @@ void Microbe::graze(Nutrient* target)
 		target->die();
 	}
 }
-
 
 bool Microbe::overlapsMicrobe(Microbe* target)
 {

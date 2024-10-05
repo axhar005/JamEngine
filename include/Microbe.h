@@ -15,6 +15,9 @@
 	#define MICROBE_CANIBALISM_FACTOR 0.8f
 	#define MICROBE_DIGESTION_FACTOR 0.9f
 
+	#define MICROBE_FLEE_RADIUS 256
+	#define MICROBE_PURSUE_RADIUS 256
+	#define MICROBE_GRAZE_RADIUS 256
 	#define MICROBE_GOAL_RADIUS 8
 
 	// a class for entities that can move and interact with other entities or nutrients ( food )
