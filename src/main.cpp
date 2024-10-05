@@ -21,7 +21,7 @@ void mainLoop(Engine& e)
 		e.objectList[i]->position.x +=  a;
 		e.objectList[i]->position.y += -a;
 	}
-	e.addObject(new Trigger())
+	// e.addObject(new Trigger())
 	
 }
 
