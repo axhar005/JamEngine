@@ -1,7 +1,7 @@
 {
   "files.associations": {
     "*.ms": "shellscript",
-    "*.h": "c",
+    "*.h": "cpp",
     "*.c": "c",
     "*.hpp": "cpp",
     "*.cpp": "cpp",
@@ -60,7 +60,16 @@
     "memory_resource": "cpp",
     "utility": "cpp",
     "cinttypes": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "__hash_table": "cpp",
+    "__tree": "cpp",
+    "deque": "cpp",
+    "list": "cpp",
+    "set": "cpp",
+    "span": "cpp",
+    "unordered_set": "cpp",
+    "text_encoding": "cpp",
+    "numbers": "cpp"
   },
   "cmake.ignoreCMakeListsMissing": true,
   "C_Cpp_Runner.cCompilerPath": "gcc",

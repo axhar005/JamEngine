@@ -5,8 +5,10 @@
 
 Fireball::Fireball(Vector2 _position, Sprite _sprite) : Object(_position, _sprite)
 {
-	this->hitbox.height = 16;
-	this->hitbox.width = 16;
+	hitbox.box.height = 16;
+	hitbox.box.width = 16;
+	hitbox.box.x = position.x + hitbox.offset.x;
+	hitbox.box.y = position.y + hitbox.offset.y;
 }
 
 Fireball::~Fireball()
@@ -15,7 +17,7 @@ Fireball::~Fireball()
 
 void Fireball::step()
 {
-	this->hitbox.x = this->position.x;
-	this->hitbox.y = this->position.y;
+	hitbox.box.x = position.x + hitbox.offset.x;
+	hitbox.box.y = position.y + hitbox.offset.y;
 	// do nothing
 }

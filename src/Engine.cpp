@@ -6,6 +6,7 @@ Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 	objectList.reserve(VECTOR_RESERVE);
 	renderList.reserve(VECTOR_RESERVE);
 	uiRenderList.reserve(VECTOR_RESERVE);
+	triggerList.reserve(VECTOR_RESERVE);
 	_windowWidth = windowWidth;
 	_windowHeight = windowHeight;
 	_windowName = windowName;
@@ -74,11 +75,28 @@ void Engine::unloadTextureImage()
 	}
 }
 
+static bool  lookLayer(Object* &a, Object* &b) {
+	return (a->layer < b->layer);
+}
+
+void Engine::sortLayer(void) {
+	std::sort(objectList.begin(), objectList.end(), lookLayer);
+}
+
 void Engine::stepLoop()
 {
 	for (auto &&i : objectList)
 	{
+		i->update();
 		i->step();
+	}
+}
+
+void Engine::drawLoop()
+{
+	for (auto &&i : renderList)
+	{
+		i->draw();
 	}
 }
 
@@ -92,11 +110,27 @@ int Engine::addObject(Object* object, bool render)
 			return -1;
 		}
 	}
-	object->id = _objectUniqueID++;
+	object->id = _objectUniqueID;
 	objectList.push_back(object);
 	if (render)
 		renderList.push_back(object);
-	return _objectUniqueID;
+	return _objectUniqueID++;
+}
+
+int Engine::addObject(Trigger* trigger)
+{
+	// if (trigger == NULL)
+	// 	return -1;
+	// for (auto &&obj : triggerList)
+	// {
+	// 	if(obj == trigger){
+	// 		return -1;
+	// 	}
+	// }
+	trigger->id = _objectUniqueID;
+	objectList.push_back(trigger);
+	triggerList.push_back(trigger);
+	return _objectUniqueID++;
 }
 
 Object* Engine::getObjectByID(int id)
@@ -106,6 +140,17 @@ Object* Engine::getObjectByID(int id)
 		if(obj->id == id){ return obj; }
 	}
 	return NULL;
+}
+
+bool Engine::removeObjectRenderByID(int id)
+{
+	for (auto it = renderList.begin(); it != renderList.end(); ) {
+		if ((*it)->id == id){
+			renderList.erase(it);
+			return true;
+		}
+	}
+	return false;
 }
 
 bool Engine::removeObjectByID(int id)
@@ -139,6 +184,7 @@ void Engine::removeAll()
 	}
 	renderList.clear();
 	uiRenderList.clear();
+	triggerList.clear();
 	objectList.clear();
 }
 
@@ -157,11 +203,11 @@ void Engine::loop(void (*func)(Engine &))
 
 	while (!WindowShouldClose() && !_closeWindow)
 	{
-
 		func(*this);
 		stepLoop();
 		BeginDrawing();
 			ClearBackground(RAYWHITE);
+			drawLoop();
 			DrawGrid(20, 10.0f);
 			render();
 		EndDrawing();

@@ -8,6 +8,8 @@
 	#include <iostream>
 	#include <map>
 	#include <vector>
+	#include <algorithm>
+	#include <array>
 
 	#define VECTOR_RESERVE 100
 

@@ -2,6 +2,7 @@
 # define ENGINE_H
 	#include "engineSetup.h"
 	#include "Object.h"
+	#include "Trigger.h"
 
 	class Engine
 	{
@@ -15,9 +16,9 @@
 			void unloadTextureImage();
 			void renderLoop();
 			void stepLoop();
+			void drawLoop();
 			void render(void);
 			void removeAll();
-
 			static Engine*				_instance;
 			int							_windowHeight;
 			int							_windowWidth;
@@ -36,19 +37,28 @@
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
 
+			void sortLayer(void);
+
 			void loadTextureImage();
-			bool removeObjectByID(int id);
 			Object* getObjectByID(int id);
 			static Engine& getInstance();
 			static void initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
+
 			int addObject(Object* object, bool render);
+			int addObject(Trigger* trigger);
+			int addObjectToRender(Object* object);
+
+			bool removeObjectByID(int id);
+			bool removeObjectRenderByID(int id);
+
 			SpriteMap 					sprites;
 			TexturePath 				textures;
 			std::vector<Object*>		objectList;
 			std::vector<Object*>		renderList;
 			std::vector<Object*>		uiRenderList;
+			std::vector<Trigger*>		triggerList;
 	};
 
 #endif
