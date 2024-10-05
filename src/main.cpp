@@ -20,6 +20,7 @@ void mainLoop(Engine& e)
 		if (IsKeyDown(KEY_A)) { playerPtr->position.x += -cameraSpeed; }
 		if (IsKeyDown(KEY_D)) { playerPtr->position.x +=  cameraSpeed; }
 	}
+	if (IsKeyPressed(KEY_T)) {e.playSound("untitled.wav"); }
 	if (IsKeyDown(KEY_UP)   && zoom + zoomJump <= 7) {zoom += zoomJump; }
 	if (IsKeyDown(KEY_DOWN) && zoom - zoomJump > 0.1)  {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
@@ -47,6 +48,10 @@ void initTexture(Engine& e)
 	e.loadTextureImage();
 }
 
+void initAudio(Engine& e) {
+	
+}
+
 void initObject(Engine& e)
 {
 	playerid = e.addObject(new Object({0,0},e.sprites["dev"]), true);
@@ -68,6 +73,7 @@ void initObject(Engine& e)
 	player->layer = 4;
 	player->setName("dev");
 	e.sortLayer();
+	e.importSound("audio/untitled.wav");
 }
 
 int main()

@@ -13,10 +13,16 @@ Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 	_objectUniqueID = 0;
 	_closeWindow = false;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
+	//sound <--- 
+	InitAudioDevice();
+	SetMasterVolume(1);
 }
 
 Engine::~Engine()
 {
+	removeAllSound();
+	CloseAudioDevice();
+	// ^---
 	unloadTextureImage();
 	CloseWindow();
 	removeAll();
@@ -205,6 +211,46 @@ void Engine::renderLoop()
 	for (auto &&obj : renderList)
 	{
 		DrawTexture(*obj->texture, obj->position.x, obj->position.y, WHITE);
+	}
+}
+
+
+
+void Engine::importSound(const char* name) {
+	std::string tmpname;
+	if (!name)
+		return;
+	const char* tmp = strrchr(name, '/');
+	if (!tmp)
+		return ;
+	if (tmp[0] == '/')
+		tmpname = tmp + 1;
+	else
+		tmpname = tmp;
+	if (soundMap.find(tmpname) == soundMap.end()) {
+		Sound s = LoadSound(name);
+		std::cout << tmpname << std::endl;
+		soundMap[tmpname] = s;
+	}
+	else {
+		std::cerr << name << " is all ready in map" << std::endl;
+	}
+}
+
+void Engine::removeAllSound(void) {
+	for (std::map<std::string, Sound>::iterator it = this->soundMap.begin();
+	it != this->soundMap.end(); it++) {
+		Sound tmp = (*it).second;
+		UnloadSound(tmp);
+	}
+}
+
+void Engine::playSound(const char* name) {
+	if (!name)
+		return ;
+	if (soundMap.find(name) != soundMap.end()) {
+		if (IsSoundReady(soundMap[name]))
+			PlaySound(soundMap[name]);
 	}
 }
 

@@ -4,8 +4,8 @@
 	#include "Object.h"
 	#include "Trigger.h"
 
-	class Engine
-	{
+class Engine
+{
 		private:
 			Engine(int windowWidth, int windowHeight, std::string windowName);
 			~Engine();
@@ -59,6 +59,12 @@
 			std::vector<Object*>		renderList;
 			std::vector<Object*>		uiRenderList;
 			std::vector<Trigger*>		triggerList;
-	};
+			//
+			float						volume;
+			void	importSound(const char* name);
+			void	removeAllSound(void);
+			void	playSound(const char* name);
+			std::map<std::string, Sound>		soundMap;
+};
 
 #endif

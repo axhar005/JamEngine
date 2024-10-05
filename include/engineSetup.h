@@ -11,6 +11,7 @@
 	#include <algorithm>
 	#include <array>
 	#include <strings.h>
+	#include <string.h>
 
 	#define VECTOR_RESERVE 100
 
