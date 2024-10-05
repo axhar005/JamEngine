@@ -4,13 +4,12 @@
 	#include <raylib.h>
 	#include "engineSetup.h"
 
-
 	#define NUTRIENT_MIN_SIZE 1
 	#define NUTRIENT_MAX_SIZE 8
 
 	#define NUTRIENT_GROWTH_RATE 0 // to be implemented
 
-	// NOTE : add PetriDish class
+	class PetriDish;
 
 	// a class for food objects, and the parent class to microbes ( entities )
 	class Nutrient : public Object
@@ -20,10 +19,10 @@
 
 		protected:
 			int size;
-			//PetriDish* petriDish;
+			PetriDish* petriDish;
 
 		public:
-			Nutrient(Vector2 _position, Sprite _sprite, int _size);
+			Nutrient(Vector2 _position, Sprite _sprite, PetriDish *_petriDish, int _size, bool addToPetriDish = true);
 			~Nutrient();
 
 			void step();
@@ -37,7 +36,7 @@
 			void die();
 
 			int getSize();
-			//PetriDish* getPetriDish();
+			PetriDish* getPetriDish();
 	};
 
 	// NOTE : fuse Nutrients that overlap?

@@ -1,9 +1,11 @@
 #include "../include/Microbe.h"
-#include <raylib.h>
+#include "../include/PetriDish.h"
 
-Microbe::Microbe(Vector2 _position, Sprite _sprite, std::string _species, bool _isPlayer) :
-	Nutrient(_position, _sprite, MICROBE_START_SIZE)
+Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer) :
+	Nutrient(_position, _sprite, _petriDish, MICROBE_START_SIZE, false)
 {
+	this->petriDish = _petriDish;
+	this->petriDish->addMicrobe(this);
 	this->refreshSpeed(); //	makes speed invertly proportional to its size
 	this->refreshSize(); //		sets hitbox size to size
 	this->refreshPos(); //		sets hitbox position to position ( clamped to petriDish )
@@ -71,11 +73,11 @@ void Microbe::divide()
 		this->size /= 2;
 		this->refreshSpeed();
 
-		Microbe* newMicrobe = new Microbe(this->position, this->sprite, this->species, false);
+		Microbe* newMicrobe = new Microbe(this->position, this->sprite, this->petriDish, this->species, false);
 		newMicrobe->size = this->size;
 		newMicrobe->refreshSpeed();
 
-		// add newMicrobe to PetriDish
+		this->petriDish->addMicrobe(newMicrobe);
 	}
 }
 
@@ -88,16 +90,18 @@ void Microbe::starve()
 	}
 
 	// NOTE : use nutrient sprite instead
-	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->size);
+	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->petriDish, this->size);
+	this->petriDish->addNutrient(nutrient);
 
-	// add nutrient to PetriDish
+	this->petriDish->removeMicrobe(this);
 
 	this->die();
 }
 
 void Microbe::die()
 {
-	// remove this from PetriDish
+	this->petriDish->removeMicrobe(this);
+	delete this;
 }
 
 Microbe* Microbe::findClosestPredator()
@@ -131,6 +135,7 @@ void Microbe::getNewWanderGoal()
 void Microbe::move(Vector2 direction)
 {
 	// NOTE : assumes direction is normalized
+	// clamp direction to within petriDish
 	this->position.x += direction.x * this->speed;
 	this->position.y += direction.y * this->speed;
 }
