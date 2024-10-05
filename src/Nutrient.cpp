@@ -1,8 +1,12 @@
 #include "../include/Nutrient.h"
+#include "../include/PetriDish.h"
 
-Nutrient::Nutrient(Vector2 _position, Sprite _sprite, int _size) :
+Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, int _size, bool addToPetriDish) :
 	Object(_position, _sprite)
 {
+	this->petriDish = _petriDish;
+	if (addToPetriDish)
+		this->petriDish->addNutrient(this);
 	this->size = _size;
 
 	if (this->size <= 0)
@@ -57,7 +61,9 @@ void Nutrient::setRandomSize()
 
 void Nutrient::die()
 {
-	// remove this from PetriDish
+	this->petriDish->removeNutrient(this);
+	delete this;
 }
 
 int Nutrient::getSize() {return this->size;}
+PetriDish* Nutrient::getPetriDish() {return this->petriDish;}

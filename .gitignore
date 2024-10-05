@@ -35,6 +35,7 @@ TestGame
 *.out
 *.app
 JamEngine
+TestGame
 
 ### Linux ###
 *~
