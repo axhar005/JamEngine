@@ -1,7 +1,8 @@
 #ifndef FIREBALL_H
 # define FIREBALL_H
 	#include "../include/Object.h"
-#include <raylib.h>
+	#include "Nutrient.h"
+	#include <raylib.h>
 	#include "engineSetup.h"
 
 
@@ -18,30 +19,35 @@
 	#define MICROBE_CANIBALISM_FACTOR 0.8f
 	#define MICROBE_DIGESTION_FACTOR 0.9f
 
-	class Microbe : public Object // make food object too
+	#define MICROBE_GOAL_RADIUS 8
+
+	class Microbe : public Nutrient // make nutrient object too
 	{
 		private:
-			int size;
 			int speed;
 			bool isPlayer;
 			std::string species;
 			Vector2 wanderGoal;
 
 		public:
-			Microbe(Vector2 _position, Sprite sprite, std::string _species, bool _isPlayer);
+			Microbe(Vector2 _position, Sprite _sprite, std::string _species, bool _isPlayer);
 			~Microbe();
 
 			void step();
 
+			void refreshSpeed();
+			void refreshSize();
+			void refreshPos();
+
 			void grow(int amount);
 			void shrink(int amount);
 			void divide();
-
-			void refreshSpeed();
+			void starve();
+			void die();
 
 			Microbe* findClosestPredator();
 			Microbe* findClosestPrey();
-			//Food* findClosestFood(); //					make food object too
+			Nutrient* findClosestNutrient();
 			void getNewWanderGoal();
 
 			void move(Vector2 direction);
@@ -50,23 +56,24 @@
 			void wander();
 
 			void devour(Microbe* target);
-			//void graze(Food* target); //				make food object too
-			void starve();
-			void die();
-
-			int getSize();
-			int getSpeed();
-
-			std::string getSpecies();
+			void graze(Nutrient* target);
 
 			bool overlapsOther(Microbe* target);
-			//bool overlapsFood(Food* target); //	make food object too
+			bool overlapsNutrient(Nutrient* target);
 
+			bool canGraze(Nutrient* target);
 			bool canDevour(Microbe* target);
 			bool canBeDevouredBy(Microbe* target);
 
 			bool isSameSpecies(Microbe* target);
+			bool hasReachedWanderGoal();
+
+			int getSize();
+			int getSpeed();
+			std::string getSpecies();
 	};
+
+	Vector2 getNormalisedDirection(Vector2 start, Vector2 end);
 
 	// NOTE : add way to add/remove microbes from a global list
 

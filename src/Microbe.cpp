@@ -1,19 +1,12 @@
-#include "../include/Object.h"
 #include "../include/Microbe.h"
-
-//testpush
+#include <raylib.h>
 
 Microbe::Microbe(Vector2 _position, Sprite _sprite, std::string _species, bool _isPlayer) :
-	Object(_position, _sprite)
+	Nutrient(_position, _sprite, MICROBE_START_SIZE)
 {
-	this->size = MICROBE_START_SIZE;
-	this->refreshSpeed(); // makes speed invertly proportional to size
-
-	hitbox.box.height = this->size;
-	hitbox.box.width = this->size;
-
-	hitbox.box.x = position.x; // + hitbox.offset.x;
-	hitbox.box.y = position.y; // + hitbox.offset.y;
+	this->refreshSpeed(); //	makes speed invertly proportional to its size
+	this->refreshSize(); //		sets hitbox size to size
+	this->refreshPos(); //		sets hitbox position to position ( clamped to petriDish )
 
 	this->species = _species;
 	this->isPlayer = _isPlayer;
@@ -25,22 +18,31 @@ Microbe::~Microbe()
 
 void Microbe::step()
 {
-	hitbox.box.height = this->size;
-	hitbox.box.width = this->size;
+	this->shrink(MICROBE_STARVE_RATE); // lose size each tick
 
-	hitbox.box.x = position.x; // + hitbox.offset.x;
-	hitbox.box.y = position.y; // + hitbox.offset.y;
-
-	this->shrink(MICROBE_STARVE_RATE);
+	this->refreshPos();
+	this->refreshSize();
+	this->refreshSpeed();
 
 	if (this->isPlayer)
 	{
 		// player controls here
 	}
 	else
-	{
-		// Bot logic here
-	}
+		this->wander();
+}
+
+
+void Microbe::refreshSpeed()
+{
+	// speed is inversely proportional to size, and linearly distributed between min and max speed
+
+	float speed_range = MICROBE_MAX_SPEED - MICROBE_MIN_SPEED;
+	float size_range = MICROBE_MAX_SIZE - MICROBE_MIN_SIZE;
+
+	float norm_size = (this->size - MICROBE_MIN_SIZE) / size_range;
+
+	this->speed = MICROBE_MIN_SPEED + ((1 - norm_size) * speed_range);
 }
 
 void Microbe::grow(int amount)
@@ -73,21 +75,29 @@ void Microbe::divide()
 		newMicrobe->size = this->size;
 		newMicrobe->refreshSpeed();
 
-		// add newMicrobe to object list
+		// add newMicrobe to PetriDish
 	}
 }
 
-void Microbe::refreshSpeed()
+void Microbe::starve()
 {
-	// speed is inversely proportional to size, and linearly distributed between min and max speed
+	if (this->isPlayer)
+	{
+		// tag to Microbe of same species
+		// game over if none found
+	}
 
-	float speed_range = MICROBE_MAX_SPEED - MICROBE_MIN_SPEED;
-	float size_range = MICROBE_MAX_SIZE - MICROBE_MIN_SIZE;
+	// NOTE : use nutrient sprite instead
+	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->size);
 
-	float norm_size = (this->size - MICROBE_MIN_SIZE) / size_range;
+	// add nutrient to PetriDish
 
-	this->speed = MICROBE_MIN_SPEED + ((1 - norm_size) * speed_range);
+	this->die();
+}
 
+void Microbe::die()
+{
+	// remove this from PetriDish
 }
 
 Microbe* Microbe::findClosestPredator()
@@ -104,98 +114,86 @@ Microbe* Microbe::findClosestPrey()
 	return nullptr;
 }
 
-/*
-Food* Microbe::findClosestFood()
+
+Nutrient* Microbe::findClosestNutrient()
 {
-	// find closest food
+	// find closest nutrient
 	// return pointer to it
 	return nullptr;
 }
-*/
+
 
 void Microbe::getNewWanderGoal()
 {
-	// create a random goal within a certain distance from this->position
+	// create a random goal within a certain distance from this->position, and set it as wanderGoal
 }
 
 void Microbe::move(Vector2 direction)
 {
-	// assumes direction is normalized. if not, normalize it here
+	// NOTE : assumes direction is normalized
 	this->position.x += direction.x * this->speed;
 	this->position.y += direction.y * this->speed;
 }
 
 void Microbe::moveTowards(Vector2 target)
 {
-	// create a normalized vector from this->position to target
-	// this->move(vector)
+	Vector2 direction = getNormalisedDirection(this->position, target);
+	this->move(direction);
 }
 
 void Microbe::moveAwayFrom(Vector2 target)
 {
-	// create a normalized vector from target to this->position
-	// this->move(vector)
+	Vector2 direction = getNormalisedDirection(target, this->position);
+	this->move(direction);
 }
 
 void Microbe::wander()
 {
-	// look for predators, prey, food
+	// if found predators of other species, move away from them
+	// if found prey of other species, move towards them
+	// if found nutrients, move towards them
+	// if found same species, move away from them
 	// if none found, use wander goal
 	// if goal reach, set new goal
-
 }
 
 void Microbe::devour(Microbe* target)
 {
 	if (this->canDevour(target))
 	{
-		this->grow(target->size * MICROBE_DIGESTION_FACTOR);
+		this->grow(target->getSize() * MICROBE_DIGESTION_FACTOR);
 		target->die();
 	}
 }
 
-/*
-void Microbe::graze(Food* target)
+
+void Microbe::graze(Nutrient* target)
 {
-	if (this->canDevour(target))
+	if (this->canGraze(target))
 	{
-		this->grow(target->size);
-		target->shrink(target->size);
+		this->grow(target->getSize());
+		target->die();
 	}
 }
-*/
 
-void Microbe::starve()
-{
-	// create food from remains
-	if (this->isPlayer)
-	{
-		// find new player of same species, else game over
-	}
-	this->die();
-}
-
-void Microbe::die()
-{
-	// remove this from object list
-}
-
-int Microbe::getSize() {return this->size;}
-int Microbe::getSpeed() {return this->speed;}
-std::string Microbe::getSpecies() {return this->species;}
 
 bool Microbe::overlapsOther(Microbe* target)
 {
 	// check if this->hitbox overlaps with target->hitbox
 	return false;
 }
-/*
-bool Microbe::overlapsFood(Food* target)
+
+bool Microbe::overlapsNutrient(Nutrient* target)
 {
 	// check if this->hitbox overlaps with target->hitbox
 	return false;
 }
-*/
+
+bool Microbe::canGraze(Nutrient* target)
+{
+	if (this->size * MICROBE_CANIBALISM_FACTOR < target->getSize()) {return false;}
+	return true;
+}
 
 bool Microbe::canDevour(Microbe* target)
 {
@@ -204,12 +202,21 @@ bool Microbe::canDevour(Microbe* target)
 	return true;
 }
 
-bool Microbe::canBeDevouredBy(Microbe* target)
+bool Microbe::canBeDevouredBy(Microbe* target) {return target->canDevour(this);}
+bool Microbe::isSameSpecies(Microbe* target) {return this->species == target->species;}
+
+bool Microbe::hasReachedWanderGoal()
 {
-	return target->canDevour(this);
+	if (this->position.x > this->wanderGoal.x + MICROBE_GOAL_RADIUS ||
+		this->position.x < this->wanderGoal.x - MICROBE_GOAL_RADIUS)
+		return false;
+
+	if (this->position.y > this->wanderGoal.y + MICROBE_GOAL_RADIUS ||
+		this->position.y < this->wanderGoal.y - MICROBE_GOAL_RADIUS)
+		return false;
+
+	return true;
 }
 
-bool Microbe::isSameSpecies(Microbe* target)
-{
-	return this->species == target->species;
-}
+int Microbe::getSpeed() {return this->speed;}
+std::string Microbe::getSpecies() {return this->species;}
