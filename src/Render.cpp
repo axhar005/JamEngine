@@ -42,7 +42,6 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
-	const Color box = {255, 10, 0, 70};
 	unsigned int hits = 0;
 	///
 	if (this->_2DCamera) { BeginMode2D(*this->_2DCamera); } //? look for cam
@@ -57,7 +56,6 @@ void Engine::render(void) {
 				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
 				DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
-				// DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
 				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
@@ -89,7 +87,6 @@ void Engine::render(void) {
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
 	Mouse.update();
-	Mouse.setWindowSize({90,50});
 	char s[50];
 	sprintf(s, "totals hits = %u", hits);
 	DrawText(s, 4,20, 30, BLUE);
@@ -103,6 +100,8 @@ void Engine::render(void) {
 			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
+	//const std::string st("this is\na test a longawdawdadw   lest\na\na\nb\nwww  a\n");
+	//Mouse.setText(st);
 	Mouse.drawWindow();
 	//mouse test
 }

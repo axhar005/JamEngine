@@ -3,7 +3,7 @@
 
 #include "engineSetup.h"
 
-#define MAXOPA 130
+#define MAXOPA 160
 
 typedef struct EngineMouse {
     private:
@@ -19,8 +19,6 @@ typedef struct EngineMouse {
             const Vector2 p = GetMouseDelta();
             this->box.x += p.x;
             this->box.y += p.y;
-            this->box.width  = 3;
-            this->box.height = 3;
             this->window.x = this->box.x;
             this->window.y = this->box.y - this->window.height;
             if (draw && t < MAXOPA) {
@@ -51,10 +49,30 @@ typedef struct EngineMouse {
                 this->window.height + (ofset * 2)};
             DrawRectangleRec(outline, back);
             DrawRectangleRec(window, color);
+            DrawText(this->text.c_str(), this->window.x + 2, this->window.y, 20, back);
         }
         void setText(const std::string& s) {
             this->text = s;
-    }
+            Vector2 newVec;
+            newVec.x = 10;
+            newVec.y = 0;
+            float localW = 0;
+            for (size_t i = 0; i < s.size(); i++) {
+                if (s[i] == ' ')
+                    localW += 6;
+                else
+                    localW += 12;
+                if (s[i] == '\n') {
+                    if (localW > newVec.y)
+                        newVec.x = localW;
+                    localW = 0;
+                    newVec.y += 22;
+                }
+            }
+            if (localW && newVec.x == 0)
+                newVec.x = localW;
+            this->setWindowSize(newVec);
+        }
 } EngineMouse;
 
 
