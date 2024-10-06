@@ -3,7 +3,7 @@
 #include "../include/Microbe.h"
 
 PetriDish::PetriDish(Vector2 _position, Sprite _sprite, int _radius) :
-	Object(_position, _sprite, false)
+	Object(_position, _sprite, true)
 {
 	this->radius = _radius;
 }
