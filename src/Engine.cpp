@@ -262,6 +262,7 @@ void Engine::loop(void (*func)(Engine &))
 
 	while (!WindowShouldClose() && !_closeWindow)
 	{
+		Mouse.update();
 		func(*this);
 		stepLoop();
 		BeginDrawing();
