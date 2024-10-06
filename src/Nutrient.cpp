@@ -1,7 +1,7 @@
 #include "../include/Nutrient.h"
 #include "../include/PetriDish.h"
 
-Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, int _size, bool addToPetriDish) :
+Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, float _size, bool addToPetriDish) :
 	Object(_position, _sprite, true)
 {
 	this->petriDish = _petriDish;
@@ -25,7 +25,9 @@ void Nutrient::step()
 	this->grow(NUTRIENT_GROWTH_RATE); // gain size each tick
 
 	this->refreshSize();
-	//this->refreshPos();
+	this->refreshPos();
+
+	// add overlapping nutrient fusion logic ??
 }
 
 void Nutrient::refreshSize()
@@ -36,13 +38,24 @@ void Nutrient::refreshSize()
 
 void Nutrient::refreshPos()
 {
-	// clamp position to within petriDish
-
 	hitbox.box.x = position.x; // + hitbox.offset.x;
 	hitbox.box.y = position.y; // + hitbox.offset.y;
+
+	this->clampPos();
 }
 
-void Nutrient::grow(int amount)
+void Nutrient::clampPos()
+{
+
+	if ( getDistance(this->position, Vector2{0, 0}) >= this->petriDish->getRadius())
+	{
+		Vector2 newPosDir = getNormalisedDirection(Vector2{0, 0}, this->position);
+		this->position.x = newPosDir.x * this->petriDish->getRadius();
+		this->position.y = newPosDir.y * this->petriDish->getRadius();
+	}
+}
+
+void Nutrient::grow(float amount)
 {
 	this->size += amount;
 	if (this->size > NUTRIENT_MAX_SIZE)
@@ -50,6 +63,16 @@ void Nutrient::grow(int amount)
 		this->size = NUTRIENT_MAX_SIZE;
 	}
 }
+
+void Nutrient::shrink(float amount)
+{
+	this->size -= amount;
+	if (this->size < NUTRIENT_MIN_SIZE)
+	{
+		this->die();
+	}
+}
+
 
 void Nutrient::setRandomSize()
 {
@@ -62,10 +85,18 @@ void Nutrient::setRandomSize()
 void Nutrient::die()
 {
 	this->petriDish->removeNutrient(this);
-	delete this;
+	//this->petriDish->spawnNutrient(this->sprite, 1);
+	//delete this;
+
+	// tmp fix for object deletion bug
+	this->position = this->petriDish->getRandomPos();
+	this->refreshPos();
+
+	this->setRandomSize();
+	this->refreshSize();
 }
 
-int Nutrient::getSize() {return this->size;}
+float Nutrient::getSize() {return this->size;}
 PetriDish* Nutrient::getPetriDish() {return this->petriDish;}
 
 bool Nutrient::overlapsOther(Nutrient* other)

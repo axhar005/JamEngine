@@ -1,5 +1,4 @@
-#include "../include/Microbe.h"
-#include <cmath>
+#include "../include/microAddons.h"
 
 float getDistance(Vector2 start, Vector2 end)
 {

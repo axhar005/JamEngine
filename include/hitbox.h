@@ -1,6 +1,6 @@
 #ifndef HITBOX_H
 # define HITBOX_H
-	#include "../include/engineSetup.h"
+	#include <raylib.h>
 	struct Ellipse
 	{
 		Vector2 center;
