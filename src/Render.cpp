@@ -93,4 +93,7 @@ void Engine::render(void) {
 			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
+	//mouse test
+	Mouse.setWindowSize({90,50});
+	Mouse.drawWindow();
 }
