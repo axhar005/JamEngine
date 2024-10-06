@@ -7,21 +7,21 @@
 	#define MICROBE_START_SIZE		16
 	#define MICROBE_MIN_DIV_SIZE	32
 
-	#define MICROBE_MIN_SPEED				1.0f
-	#define MICROBE_MAX_SPEED				4.0f
-	//#define MICROBE_MIN_WANDER_DIST	128
+	#define MICROBE_MIN_SPEED			1.0f
+	#define MICROBE_MAX_SPEED			4.0f
 
 	#define MICROBE_STARVE_RATE				0.0f // to be implemented
 	#define MICROBE_CANIBALISM_FACTOR	0.8f
 	#define MICROBE_VEGANISM_FACTOR		0.9f
 	#define MICROBE_DIGESTION_FACTOR	0.9f
 
-	#define MICROBE_FLEE_RADIUS		128
-	#define MICROBE_PURSUE_RADIUS	128
-	#define MICROBE_GRAZE_RADIUS	128
-	#define MICROBE_SPREAD_RADIUS	16
+	#define MICROBE_GOAL_RADIUS		16.0f
+	#define MICROBE_SPREAD_RADIUS	32.0f
+	#define MICROBE_FLEE_RADIUS		64.0f
+	#define MICROBE_PURSUE_RADIUS	128.0f
+	#define MICROBE_GRAZE_RADIUS	256.0f
 
-	#define MICROBE_GOAL_RADIUS		16
+	#define MAX_SEARCH_RADIUS		123456789.0f
 
 	// a class for entities that can move and interact with other entities or nutrients ( food )
 	class Microbe : public Nutrient
@@ -61,8 +61,9 @@
 			void becomePlayer();
 			void playerDeathTransfer();
 
-			void devour(Microbe* target);
-			void graze(Nutrient* target);
+			void tryEat();
+			void tryGraze(Nutrient* target);
+			void tryDevour(Microbe* target);
 
 			bool canGraze(Nutrient* target);
 			bool canDevour(Microbe* target);
@@ -75,9 +76,5 @@
 			bool getIsPlayer();
 			std::string getSpecies();
 	};
-
-	float getDistance(Vector2 start, Vector2 end);
-	Vector2 getNormalisedDirection(Vector2 start, Vector2 end);
-	Vector2 getNormalisedVector(Vector2 vector);
 
 #endif

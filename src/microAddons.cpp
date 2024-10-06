@@ -1,9 +1,11 @@
 #include "../include/microAddons.h"
+//#include <stdio.h>
 
 float getDistance(Vector2 start, Vector2 end)
 {
 	Vector2 direction = {end.x - start.x, end.y - start.y};
-	return sqrt((direction.x * direction.x) + (direction.y * direction.y));
+	float distance = sqrt((direction.x * direction.x) + (direction.y * direction.y));
+	return distance;
 }
 
 Vector2 getNormalisedVector(Vector2 vector)
@@ -18,6 +20,7 @@ Vector2 getNormalisedVector(Vector2 vector)
 	}
 	else
 	{
+		//printf("Warning: zero length vector\n");
 		direction.x = 0;
 		direction.y = 0;
 	}

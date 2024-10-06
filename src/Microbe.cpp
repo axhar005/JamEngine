@@ -1,8 +1,8 @@
 #include "../include/Microbe.h"
 #include "../include/PetriDish.h"
 #include "../include/Engine.h"
-#include <cstdint>
 #include <cmath>
+#include <raylib.h>
 
 Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer) :
 	Nutrient(_position, _sprite, _petriDish, MICROBE_START_SIZE, false)
@@ -12,6 +12,7 @@ Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::
 	this->refreshSpeed(); //	makes speed invertly proportional to its size
 	this->refreshSize(); //		sets hitbox size to size
 	this->refreshPos(); //		sets hitbox position to position ( clamped to petriDish )
+	this->wanderGoal = this->petriDish->getRandomPos();
 
 	this->species = _species;
 	this->isPlayer = _isPlayer;
@@ -29,17 +30,20 @@ void Microbe::step()
 	this->refreshSize();
 	this->refreshSpeed();
 
-	if (this->isPlayer) {
+	if (this->isPlayer)
+	{
 		// get user input
 		const Vector2 dir = {
 			(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
 			(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
 		this->move(dir);
+
+		if (IsKeyPressed(KEY_SPACE))
+			this->tryEat();
 	}
 	else
 		this->autoplay();
 }
-
 
 void Microbe::refreshSpeed()
 {
@@ -111,14 +115,14 @@ void Microbe::die()
 
 Microbe* Microbe::findClosestPredator()
 {
-	int closest_distance = INT16_MAX;
+	float closest_distance = MAX_SEARCH_RADIUS;
 	Microbe* target = nullptr;
 
 	for (Microbe* predator : this->petriDish->getMicrobes())
 	{
 		if (this->canBeDevouredBy(predator))
 		{
-			int distance = getDistance(this->position, predator->position);
+			float distance = getDistance(this->position, predator->position);
 			if (distance < closest_distance)
 			{
 				closest_distance = distance;
@@ -131,14 +135,14 @@ Microbe* Microbe::findClosestPredator()
 
 Microbe* Microbe::findClosestPrey()
 {
-	int closest_distance = INT16_MAX;
+	float closest_distance = MAX_SEARCH_RADIUS;
 	Microbe* target = nullptr;
 
 	for (Microbe* prey : this->petriDish->getMicrobes())
 	{
 		if (this->canDevour(prey))
 		{
-			int distance = getDistance(this->position, prey->position);
+			float distance = getDistance(this->position, prey->position);
 			if (distance < closest_distance)
 			{
 				closest_distance = distance;
@@ -151,14 +155,14 @@ Microbe* Microbe::findClosestPrey()
 
 Microbe* Microbe::findClosestAlly()
 {
-	int closest_distance = INT16_MAX;
+	float closest_distance = MAX_SEARCH_RADIUS;
 	Microbe* target = nullptr;
 
 	for (Microbe* ally : this->petriDish->getMicrobes())
 	{
-		if (this->isSameSpecies(ally))
+		if (ally != this && this->isSameSpecies(ally))
 		{
-			int distance = getDistance(this->position, ally->position);
+			float distance = getDistance(this->position, ally->position);
 			if (distance < closest_distance)
 			{
 				closest_distance = distance;
@@ -171,12 +175,12 @@ Microbe* Microbe::findClosestAlly()
 
 Nutrient* Microbe::findClosestNutrient()
 {
-	int closest_distance = INT16_MAX;
+	float closest_distance = MAX_SEARCH_RADIUS;
 	Nutrient* target = nullptr;
 
 	for (Nutrient* nutrient : this->petriDish->getNutrients())
 	{
-		int distance = getDistance(this->position, nutrient->position);
+		float distance = getDistance(this->position, nutrient->position);
 		if (distance < closest_distance)
 		{
 			closest_distance = distance;
@@ -191,22 +195,24 @@ void Microbe::setNewWanderGoal() {this->wanderGoal = this->petriDish->getRandomP
 void Microbe::move(Vector2 direction)
 {
 	Vector2 vector = getNormalisedVector(direction);
+	//printf("Moving by %f, %f\n", vector.x, vector.y);
 
-	this->position.x = this->position.x + (vector.x * this->speed);
-	this->position.y = this->position.y + (vector.y * this->speed);
+	this->position.x += (vector.x * this->speed);
+	this->position.y += (vector.y * this->speed);
 
-	this->clampPos();
 	this->refreshPos();
 }
 
 void Microbe::moveTowards(Vector2 target)
 {
+	//printf("Moving towards %f, %f\n", target.x, target.y);
 	Vector2 direction = Vector2{target.x - this->position.x, target.y - this->position.y};
 	this->move(direction);
 }
 
 void Microbe::moveAwayFrom(Vector2 target)
 {
+	//printf("Moving away from %f, %f\n", target.x, target.y);
 	Vector2 direction = Vector2{this->position.x - target.x, this->position.y - target.y};
 	this->move(direction);
 }
@@ -215,7 +221,6 @@ void Microbe::wander()
 {
 	if (this->hasReachedWanderGoal())
 		this->setNewWanderGoal();
-
 	this->moveTowards(this->wanderGoal);
 }
 
@@ -223,54 +228,71 @@ void Microbe::autoplay()
 {
 	// NOTE : make sure to avoid walls
 	// if found predators of other species, move away from them
+	// else if found same species, move away from them
 	// else if found nutrients, move towards them
 	// else if found prey of other species, move towards them
-	// else if found same species, move away from them
 	// else if none found, use wander goal
 
 	Nutrient* target;
+	float distance;
 
 	// insert logic to avoid walls
 
 	target = this->findClosestPredator();
-	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_FLEE_RADIUS)
+	if (target != nullptr)
+		distance = getDistance(this->position, target->position);
+
+	if (target != nullptr && distance < MICROBE_FLEE_RADIUS)
 	{
+		this->setName("runnin");
 		this->moveAwayFrom(target->position);
 		return;
 	}
 
-	target = this->findClosestAlly();
-	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_SPREAD_RADIUS)
-	{
-		//this->moveAwayFrom(target->position);
-		this->wander();
-		return;
-	}
-
 	target = this->findClosestNutrient();
-	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_GRAZE_RADIUS)
+	if (target != nullptr)
+		distance = getDistance(this->position, target->position);
+
+	if (target != nullptr && distance < MICROBE_GRAZE_RADIUS)
 	{
+		this->setName("eafin");
 		this->moveTowards(target->position);
-		if (this->overlapsOther(target))
-			this->graze(target);
+		if (distance < MICROBE_GOAL_RADIUS)
+			this->tryGraze(target);
 		return;
 	}
 
 	if (this->size > MICROBE_MIN_DIV_SIZE)
 	{
+		printf("dividin\n");
 		this->divide();
 		return;
 	}
 
 	target = this->findClosestPrey();
-	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_PURSUE_RADIUS)
+	if (target != nullptr)
+		distance = getDistance(this->position, target->position);
+
+	if (target != nullptr && distance < MICROBE_PURSUE_RADIUS)
 	{
+		this->setName("huntin");
 		this->moveTowards(target->position);
+		//if (distance < MICROBE_GOAL_RADIUS)
+			//this->tryDevour((Microbe*)target);
 		return;
 	}
 
-	// insert logic to get away from same species
+	target = this->findClosestAlly();
+	if (target != nullptr)
+		distance = getDistance(this->position, target->position);
 
+	if (target != nullptr && distance < MICROBE_SPREAD_RADIUS)
+	{
+		this->setName("skidadlin");
+		this->wander();
+		return;
+	}
+	this->setName("wanderin");
 	this->wander();
 }
 
@@ -303,16 +325,18 @@ void Microbe::playerDeathTransfer()
 	}
 }
 
-void Microbe::devour(Microbe* target)
+void Microbe::tryEat()
 {
-	if (this->canDevour(target))
-	{
-		this->grow(target->getSize() * MICROBE_DIGESTION_FACTOR);
-		target->die();
-	}
+	Nutrient* target = this->findClosestNutrient();
+	if (target != nullptr)
+		this->tryGraze(target);
+
+	//Microbe* prey = this->findClosestPrey(); // segfaults
+	//if (target != nullptr)
+		//this->tryDevour(prey);
 }
 
-void Microbe::graze(Nutrient* target)
+void Microbe::tryGraze(Nutrient* target)
 {
 	if (this->canGraze(target))
 	{
@@ -321,8 +345,18 @@ void Microbe::graze(Nutrient* target)
 	}
 }
 
+void Microbe::tryDevour(Microbe* target)
+{
+	if (this->canDevour(target))
+	{
+		this->grow(target->getSize() * MICROBE_DIGESTION_FACTOR);
+		target->die();
+	}
+}
+
 bool Microbe::canGraze(Nutrient* target)
 {
+	if (!this->overlapsOther(target)) {return false;}
 	if (this->size * MICROBE_VEGANISM_FACTOR < target->getSize()) {return false;}
 	return true;
 }
@@ -330,6 +364,7 @@ bool Microbe::canGraze(Nutrient* target)
 bool Microbe::canDevour(Microbe* target)
 {
 	if (this->isSameSpecies(target)) {return false;}
+	if (!this->overlapsOther(target)) {return false;}
 	if (this->size * MICROBE_CANIBALISM_FACTOR < target->size ) {return false;}
 	return true;
 }
