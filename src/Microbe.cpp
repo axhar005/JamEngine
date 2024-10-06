@@ -31,9 +31,9 @@ void Microbe::step()
 
 	if (this->isPlayer) {
 		// get user input
-		const Vector2 dir = 
-		{(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
-		(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
+		const Vector2 dir = {
+			(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
+			(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
 		this->move(dir);
 	}
 	else

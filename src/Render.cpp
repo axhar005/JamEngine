@@ -37,8 +37,8 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
-#define drawId      false
-#define drawTrigger true
+#define drawId      true
+#define drawTrigger false
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
