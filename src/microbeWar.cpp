@@ -44,8 +44,8 @@ void initObject(Engine& e)
 
 	player = (Object*)petriDish->getPlayer();
 	Trigger* t = new Trigger({0,0}, {10,10});
-	t->setTarget(player);
-
+	t->add(player);
+	e.triggerList.push_back(t);
 	e.sortLayer();
 }
 
