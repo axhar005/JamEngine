@@ -46,9 +46,14 @@ Engine& Engine::getInstance()
 	return *_instance;
 }
 
+void Engine::closeWindow()
+{
+	_closeWindow = true;
+}
+
 void Engine::loadTextureImage()
 {
-	for (const auto &item : textures)
+	for (const auto &item : _textures)
 	{
 		const std::string &key = item.first;
 		const std::vector<std::string>& paths = item.second;
@@ -245,22 +250,29 @@ bool Engine::removeObject(Object* object)
 {
 	if (!object)
 		return false;
-	for (auto it = objectList.begin(); it != objectList.end(); ) {
+	for (auto it = objectList.begin(); it != objectList.end(); )
+	{
 		if (*it == object){
-			for (auto itt = renderList.begin(); itt != renderList.end(); ) {
-				if (*itt == object){
+			for (auto itt = renderList.begin(); itt != renderList.end(); )
+			{
+				if (*itt == object)
+				{
 					renderList.erase(itt);
 				}
 				break;
 			}
-			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); ) {
-				if (*itt == object){
+			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); )
+			{
+				if (*itt == object)
+				{
 					uiRenderList.erase(itt);
 				}
 				break;
 			}
-			for (auto itt = triggerList.begin(); itt != triggerList.end(); ) {
-				if (*itt == object){
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); )
+			{
+				if (*itt == object)
+				{
 					triggerList.erase(itt);
 				}
 				break;
@@ -292,7 +304,8 @@ void Engine::renderLoop()
 	}
 }
 
-void Engine::importSound(const char* name) {
+void Engine::importSound(const char* name)
+{
 	std::string tmpname;
 	if (!name)
 		return;
@@ -313,7 +326,8 @@ void Engine::importSound(const char* name) {
 	}
 }
 
-void Engine::removeAllSound(void) {
+void Engine::removeAllSound(void)
+{
 	for (std::map<std::string, Sound>::iterator it = this->soundMap.begin();
 	it != this->soundMap.end(); it++) {
 		Sound tmp = (*it).second;
@@ -321,13 +335,20 @@ void Engine::removeAllSound(void) {
 	}
 }
 
-void Engine::playSound(const char* name) {
+void Engine::playSound(const char* name)
+{
 	if (!name)
 		return ;
 	if (soundMap.find(name) != soundMap.end()) {
 		if (IsSoundReady(soundMap[name]))
 			PlaySound(soundMap[name]);
 	}
+}
+
+void Engine::initTexture(TexturePath textures)
+{
+	_textures = textures;
+	loadTextureImage();
 }
 
 void Engine::loop(void (*func)(Engine &))
@@ -347,9 +368,4 @@ void Engine::loop(void (*func)(Engine &))
 		}
 		EndDrawing();
 	}
-}
-
-void Engine::closeWindow()
-{
-	_closeWindow = true;
 }

@@ -47,12 +47,11 @@ void mainLoop(Engine& e)
 
 void initTexture(Engine& e)
 {
-	e.textures = {
+	e.initTexture({
 		{"fireball", {"asset/no_texture.png"}},
 		{"dev", {"asset/test.png"}},
 		// {"player_down", {"asset/player/player_down_0.png", "asset/player/player_down_1.png"}},
-	};
-	e.loadTextureImage();
+	});
 }
 
 void initAudio(Engine& e) {
