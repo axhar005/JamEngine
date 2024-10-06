@@ -32,7 +32,7 @@ void Microbe::step()
 		// player controls here
 	}
 	else
-		this->wander();
+		this->autoplay();
 }
 
 
@@ -85,9 +85,7 @@ void Microbe::divide()
 void Microbe::starve()
 {
 	if (this->isPlayer)
-	{
 		this->playerDeathTransfer();
-	}
 
 	// NOTE : use nutrient sprite instead
 	Nutrient* nutrient = new Nutrient(this->position, Engine::getInstance().getSprite("Nutrient"), this->petriDish, this->size);
@@ -101,9 +99,7 @@ void Microbe::die()
 	this->petriDish->removeMicrobe(this);
 
 	if (this->isPlayer)
-	{
 		this->playerDeathTransfer();
-	}
 
 	delete this;
 }
@@ -182,7 +178,7 @@ void Microbe::clampPos()
 	}
 }
 
-void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
+void Microbe::move(Vector2 direction)
 {
 	Vector2 vector = getNormalisedVector(direction);
 
@@ -195,17 +191,25 @@ void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
 
 void Microbe::moveTowards(Vector2 target)
 {
-	Vector2 direction = getNormalisedDirection(this->position, target);
+	Vector2 direction = Vector2{target.x - this->position.x, target.y - this->position.y};
 	this->move(direction);
 }
 
 void Microbe::moveAwayFrom(Vector2 target)
 {
-	Vector2 direction = getNormalisedDirection(target, this->position);
+	Vector2 direction = Vector2{this->position.x - target.x, this->position.y - target.y};
 	this->move(direction);
 }
 
 void Microbe::wander()
+{
+	if (this->hasReachedWanderGoal())
+		this->setNewWanderGoal();
+
+	this->moveTowards(this->wanderGoal);
+}
+
+void Microbe::autoplay()
 {
 	// NOTE : make sure to avoid walls
 	// if found predators of other species, move away from them
@@ -249,10 +253,7 @@ void Microbe::wander()
 
 	// insert logic to get away from same species
 
-	if (this->hasReachedWanderGoal())
-		this->setNewWanderGoal();
-
-	this->moveTowards(this->wanderGoal);
+	this->wander();
 }
 
 void Microbe::becomePlayer()

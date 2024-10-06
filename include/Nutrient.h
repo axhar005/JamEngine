@@ -23,7 +23,7 @@
 
 		public:
 			Nutrient(Vector2 _position, Sprite _sprite, PetriDish *_petriDish, int _size, bool addToPetriDish = true);
-			~Nutrient();
+			virtual ~Nutrient();
 
 			void step();
 

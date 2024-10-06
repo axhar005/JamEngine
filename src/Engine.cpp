@@ -213,7 +213,7 @@ bool Engine::removeObjectFromRender(Object* object)
 {
 	if (!object)
 		return false;
-	for (auto it = renderList.begin(); it != renderList.end(); ) {
+	for (auto it = renderList.begin(); it != renderList.end(); it++) {
 		if (*it == object){
 			renderList.erase(it);
 			return true;
@@ -224,7 +224,7 @@ bool Engine::removeObjectFromRender(Object* object)
 
 bool Engine::removeObjectFromRenderByID(int id)
 {
-	for (auto it = renderList.begin(); it != renderList.end(); ) {
+	for (auto it = renderList.begin(); it != renderList.end(); it++) {
 		if ((*it)->id == id){
 			renderList.erase(it);
 			return true;
@@ -235,42 +235,43 @@ bool Engine::removeObjectFromRenderByID(int id)
 
 bool Engine::removeObjectByID(int id)
 {
-	for (auto it = objectList.begin(); it != objectList.end(); ) {
+	for (auto it = objectList.begin(); it != objectList.end(); it++) {
 		if ((*it)->id == id){
-			for (auto itt = renderList.begin(); itt != renderList.end(); ) {
+			for (auto itt = renderList.begin(); itt != renderList.end(); it++) {
 				if ((*itt)->id == id){
 					renderList.erase(itt);
 				}
 				break;
 			}
-			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); ) {
+			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); it++) {
 				if ((*itt)->id == id){
 					uiRenderList.erase(itt);
 				}
 				break;
 			}
-			for (auto itt = triggerList.begin(); itt != triggerList.end(); ) {
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); it++) {
 				if ((*itt)->id == id){
 					triggerList.erase(itt);
 				}
 				break;
 			}
-			delete *it;
 			objectList.erase(it);
+			delete *it;
 			return true;
 		}
 	}
 	return false;
+			printf("delete object\n");
 }
 
 bool Engine::removeObject(Object* object)
 {
 	if (!object)
 		return false;
-	for (auto it = objectList.begin(); it != objectList.end(); )
+	for (auto it = objectList.begin(); it != objectList.end(); it++)
 	{
 		if (*it == object){
-			for (auto itt = renderList.begin(); itt != renderList.end(); )
+			for (auto itt = renderList.begin(); itt != renderList.end(); it++)
 			{
 				if (*itt == object)
 				{
@@ -278,7 +279,7 @@ bool Engine::removeObject(Object* object)
 				}
 				break;
 			}
-			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); )
+			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); it++)
 			{
 				if (*itt == object)
 				{
@@ -286,7 +287,7 @@ bool Engine::removeObject(Object* object)
 				}
 				break;
 			}
-			for (auto itt = triggerList.begin(); itt != triggerList.end(); )
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); it++)
 			{
 				if (*itt == object)
 				{
@@ -294,8 +295,8 @@ bool Engine::removeObject(Object* object)
 				}
 				break;
 			}
-			delete *it;
 			objectList.erase(it);
+			delete *it;
 			return true;
 		}
 	}
@@ -304,7 +305,7 @@ bool Engine::removeObject(Object* object)
 
 void Engine::removeAll()
 {
-	for (auto it = objectList.begin(); it != objectList.end(); ) {
+	for (auto it = objectList.begin(); it != objectList.end(); it++) {
 		delete *it;
 	}
 	renderList.clear();

@@ -70,8 +70,8 @@ PetriDish* Nutrient::getPetriDish() {return this->petriDish;}
 
 bool Nutrient::overlapsOther(Nutrient* other)
 {
-	//if (CheckCollisionRecs(this->hitbox.box, other->hitbox.box))
-		//return true;
+	if (CheckCollisionRecs(this->hitbox.box, other->hitbox.box))
+		return true;
 	return false;
 }
 

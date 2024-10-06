@@ -34,7 +34,7 @@
 
 		public:
 			Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer);
-			~Microbe();
+			virtual ~Microbe();
 
 			void step();
 
@@ -56,6 +56,7 @@
 			void moveTowards(Vector2 target);
 			void moveAwayFrom(Vector2 target);
 			void wander();
+			void autoplay();
 
 			void becomePlayer();
 			void playerDeathTransfer();
