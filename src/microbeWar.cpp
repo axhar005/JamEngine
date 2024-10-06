@@ -35,10 +35,10 @@ void initAudio(Engine& e) {
 
 void initObject(Engine& e)
 {
-	PetriDish* petriDish = new PetriDish({0,0}, e.getSprite("PetriDish"), 1000);
+	PetriDish* petriDish = new PetriDish({0,0}, e.getSprite("PetriDish"), 1024);
 
 	petriDish->spawnNutrient(e.getSprite("Nutrient"), PETRI_NUTRIENT_COUNT);
-	petriDish->spawnMicrobe("BadGuys", e.getSprite("Microbe_2"), 10);
+	petriDish->spawnMicrobe("BadGuys", e.getSprite("Microbe_2"), 16);
 	petriDish->spawnMicrobe("GoodGuys", e.getSprite("Microbe_1"), 15);
 	petriDish->spawnPlayer("GoodGuys", e.getSprite("Player"));
 

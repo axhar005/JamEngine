@@ -1,5 +1,4 @@
-#include "../include/Microbe.h"
-#include <cmath>
+#include "../include/microAddons.h"
 
 float getDistance(Vector2 start, Vector2 end)
 {
@@ -26,7 +25,4 @@ Vector2 getNormalisedVector(Vector2 vector)
 	return direction;
 }
 
-Vector2 getNormalisedDirection(Vector2 start, Vector2 end)
-{
-	return (getNormalisedVector(Vector2{end.x - start.x, end.y - start.y}));
-}
+Vector2 getNormalisedDirection(Vector2 start, Vector2 end) {return (getNormalisedVector(Vector2{end.x - start.x, end.y - start.y}));}

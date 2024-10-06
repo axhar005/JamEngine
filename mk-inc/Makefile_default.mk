@@ -92,7 +92,7 @@ $(RAYLIB_BUILD_DIR)/libraylib.a:
 		echo "Using system-installed Raylib."; \
 	fi
 
-run:
+run: all
 	./$(NAME)
 
 rerun: re run

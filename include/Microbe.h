@@ -1,5 +1,5 @@
-#ifndef FIREBALL_H
-# define FIREBALL_H
+#ifndef MICROBE_H
+# define MICROBE_H
 	#include "Nutrient.h"
 
 	#define MICROBE_MIN_SIZE			8
@@ -19,7 +19,7 @@
 	#define MICROBE_FLEE_RADIUS		128
 	#define MICROBE_PURSUE_RADIUS	128
 	#define MICROBE_GRAZE_RADIUS	128
-	#define MICROBE_SPREAD_RADIUS	128
+	#define MICROBE_SPREAD_RADIUS	16
 
 	#define MICROBE_GOAL_RADIUS		16
 
@@ -34,28 +34,29 @@
 
 		public:
 			Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer);
-			~Microbe();
+			virtual ~Microbe();
 
 			void step();
 
 			void refreshSpeed();
 
-			void grow(int amount);
-			void shrink(int amount);
+			void grow(float amount);
+			void shrink(float amount);
 			void divide();
 			void starve();
 			void die();
 
 			Microbe* findClosestPredator();
 			Microbe* findClosestPrey();
+			Microbe* findClosestAlly();
 			Nutrient* findClosestNutrient();
 			void setNewWanderGoal();
 
-			void clampPos();
 			void move(Vector2 direction);
 			void moveTowards(Vector2 target);
 			void moveAwayFrom(Vector2 target);
 			void wander();
+			void autoplay();
 
 			void becomePlayer();
 			void playerDeathTransfer();
@@ -70,7 +71,7 @@
 			bool isSameSpecies(Microbe* target);
 			bool hasReachedWanderGoal();
 
-			int getSpeed();
+			float getSpeed();
 			bool getIsPlayer();
 			std::string getSpecies();
 	};
