@@ -27,9 +27,11 @@ void Microbe::step()
 	this->refreshSize();
 	this->refreshSpeed();
 
-	if (this->isPlayer)
-	{
-		// player controls here
+	if (this->isPlayer) {
+		const Vector2 dir = 
+		{0 - (float)IsKeyDown(KEY_A) + (float)IsKeyDown(KEY_D),
+		0 - (float)IsKeyDown(KEY_W) + (float)IsKeyDown(KEY_S)};
+		this->move(dir);
 	}
 	else
 		this->wander();
