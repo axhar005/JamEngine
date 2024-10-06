@@ -44,7 +44,8 @@ class Engine
 			// Texture
 			void loadTextureImage();
 			void initTexture(TexturePath textures);
-			SpriteMap 					sprites;
+			Sprite getSprite(std::string name);
+			SpriteMap 					spriteMap;
 			
 			// Window
 			void closeWindow();

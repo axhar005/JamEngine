@@ -56,7 +56,7 @@ void Engine::render(void) {
 				const char *name = tmp.getName().c_str();
 				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
-				DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
+				DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
 				DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
@@ -64,7 +64,6 @@ void Engine::render(void) {
 				#endif
 				tmp.draw();
 				hits++;
-				tmp.draw();
 			}
 		}
 	}

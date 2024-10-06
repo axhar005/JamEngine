@@ -1,7 +1,7 @@
 #include "../include/Object.h"
 #include "../include/Engine.h"
 
-Object::Object(Vector2 _position, Sprite _sprite, bool _visible) : visible(_visible), sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), layer(0)
+Object::Object(Vector2 _position, Sprite _sprite, bool _visible) : visible(_visible), sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), rotation(0), layer(0)
 {
 	if (!sprite.empty()){
 		texture = &sprite[frameIndex].texture;
@@ -15,7 +15,7 @@ Object::Object(Vector2 _position, Sprite _sprite, bool _visible) : visible(_visi
 		e.addObjectToRender(this);
 }
 
-Object::Object(Vector2 _position, bool _visible) :  visible(_visible), position(_position), frameIndex(0), animationSpeed(0), layer(0)
+Object::Object(Vector2 _position, bool _visible) :  visible(_visible), position(_position), frameIndex(0), animationSpeed(0), rotation(0), layer(0)
 {
 	hitbox.offset = {0, 0};
 	hitbox.box = {0, 0, 0, 0};
@@ -25,7 +25,7 @@ Object::Object(Vector2 _position, bool _visible) :  visible(_visible), position(
 		e.addObjectToRender(this);
 }
 
-Object::Object(Vector2 _position, Sprite _sprite, bool _visible, int _layerLV) :  visible(_visible), sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), layer(_layerLV)
+Object::Object(Vector2 _position, Sprite _sprite, bool _visible, int _layerLV) :  visible(_visible), sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), rotation(0), layer(_layerLV)
 {
 	if (!sprite.empty()){
 		texture = &sprite[frameIndex].texture;
@@ -56,6 +56,15 @@ Object::~Object()
 void Object::update(){
 	hitbox.box.x = position.x + hitbox.offset.x;
 	hitbox.box.y = position.y + hitbox.offset.x;
+	if (animationSpeed != 0)
+	{
+		int next = frameIndex++;
+		if (next < 0)
+			next = sprite.size() - 1;
+		else if (next > sprite.size() - 1)
+			next = 0;
+		texture = &sprite[next].texture;
+	}
 }
 
 void Object::step()
@@ -90,4 +99,11 @@ void Object::setVisible(bool _visible){
 	{
 		Engine::getInstance().removeObjectFromRenderByID(this->id);
 	}
+}
+
+void Object::setSprite(std::string name)
+{
+	rotation = 0;
+	frameIndex = 0;
+	sprite = Engine::getInstance().getSprite(name);
 }

@@ -50,6 +50,7 @@ void initTexture(Engine& e)
 	e.initTexture({
 		{"fireball", {"asset/no_texture.png"}},
 		{"dev", {"asset/test.png"}},
+		{"dev_2", {"asset/16x32_test.png"}},
 		// {"player_down", {"asset/player/player_down_0.png", "asset/player/player_down_1.png"}},
 	});
 }
@@ -60,15 +61,14 @@ void initAudio(Engine& e) {
 
 void initObject(Engine& e)
 {
-	player = new Player({0,0}, e.sprites["dev"], true);
-	e.objectList[0]->hitbox.box.height = 20;
-	e.objectList[0]->hitbox.box.width = 20;
+	player = new Player({0,0}, e.getSprite("dev"), true);
+	playerid = player->id;
 	Trigger* tt = new Trigger({0,0,}, {10, 10});
 	trigerid = tt->id;
 	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigerid);
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
-			Object* tmpobj = new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"], true, 1);
+			Object* tmpobj = new Fireball({float(16 * j), float(16 * i)}, e.getSprite("fireball"), true, 1);
 			// tmpobj->setLayer(1);
 			tmpobj->setName("X");
 		}

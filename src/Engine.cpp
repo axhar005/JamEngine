@@ -72,19 +72,36 @@ void Engine::loadTextureImage()
 			s.texture = LoadTextureFromImage(s.image);
 			spriteList.push_back(s);
 		}
-		sprites[key] = spriteList;
+		spriteMap[key] = spriteList;
 	}
 }
 
 void Engine::unloadTextureImage()
 {
-	for (auto &item : sprites)
+	for (auto &item : spriteMap)
 	{
 		for (auto &s : item.second)
 		{
 			UnloadTexture(s.texture);
 			UnloadImage(s.image);
 		}
+	}
+}
+
+void Engine::initTexture(TexturePath textures)
+{
+	_textures = textures;
+	loadTextureImage();
+}
+
+Sprite Engine::getSprite(std::string name)
+{
+	SpriteMap::iterator it = spriteMap.find(name);
+
+	if (it != spriteMap.end()) {
+		return it->second;
+	} else {
+		throw std::runtime_error("The sprite '" + name + "' was not found in the SpriteMap.");
 	}
 }
 
@@ -345,21 +362,26 @@ void Engine::playSound(const char* name)
 	}
 }
 
-void Engine::initTexture(TexturePath textures)
-{
-	_textures = textures;
-	loadTextureImage();
-}
 
 void Engine::loop(void (*func)(Engine &))
 {
 	SetTargetFPS(60);
 	SetExitKey(KEY_ESCAPE);
 
+	const float targetFrameTime = 1.0f / 60.0f;
+	float accumulatedTime = 0.0f;
+
 	while (!WindowShouldClose() && !_closeWindow)
 	{
-		func(*this);
-		stepLoop();
+		float deltaTime = GetFrameTime();
+		accumulatedTime += deltaTime;
+		
+		while (accumulatedTime >= targetFrameTime)
+		{
+			func(*this);
+			stepLoop();
+			accumulatedTime -= targetFrameTime;
+		}
 		BeginDrawing();
 		{
 			ClearBackground(RAYWHITE);

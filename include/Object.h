@@ -5,7 +5,7 @@
 	class Object
 	{
 		private:
-			std::string		 name;
+			std::string		name;
 			bool			visible;
 
 		protected:
@@ -24,6 +24,7 @@
 			void 			setLayer(int _layerLV);
 			bool 			getVisible();
 			void 			setVisible(bool _visible);
+			void			setSprite(std::string name);
 
 			int				id;
 			Sprite			sprite;
