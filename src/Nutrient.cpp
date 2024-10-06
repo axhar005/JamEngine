@@ -2,7 +2,7 @@
 #include "../include/PetriDish.h"
 
 Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, int _size, bool addToPetriDish) :
-	Object(_position, _sprite)
+	Object(_position, _sprite, false)
 {
 	this->petriDish = _petriDish;
 	if (addToPetriDish)

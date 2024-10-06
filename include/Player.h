@@ -9,9 +9,8 @@
 		private:
 
 		public:
-			Player(Vector2 _position);
-			Player(Vector2 _position, Sprite _sprite);
-			Player(Vector2 _position, Sprite _sprite, int _layerLV);
+			Player(Vector2 _position, Sprite _sprite, bool _visible);
+			Player(Vector2 _position, Sprite _sprite, bool _visible, int _layerLV);
 			~Player();
 			void 	step();
 			void 	draw();

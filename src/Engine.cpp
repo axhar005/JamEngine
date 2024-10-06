@@ -12,6 +12,7 @@ Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 	_windowName = windowName;
 	_objectUniqueID = 0;
 	_closeWindow = false;
+	_2DCamera = NULL;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
 	//sound <--- 
 	InitAudioDevice();
@@ -82,12 +83,12 @@ void Engine::unloadTextureImage()
 	}
 }
 
-static bool  lookLayer(Object* &a, Object* &b) {
+static bool  lookLayer(Object* a, Object* b) {
 	return (a->layer < b->layer);
 }
 
 void Engine::sortLayer(void) {
-	std::sort(renderList.begin(), renderList.end(), lookLayer);
+	std::stable_sort(renderList.begin(), renderList.end(), lookLayer);
 }
 
 void Engine::stepLoop()
@@ -107,7 +108,16 @@ void Engine::drawLoop()
 	}
 }
 
-int Engine::addObject(Object* object, bool render)
+Object* Engine::getObjectByID(int id)
+{
+	for (auto &&obj : objectList)
+	{
+		if(obj->id == id){ return obj; }
+	}
+	return NULL;
+}
+
+int Engine::addObject(Object* object)
 {
 	if (object == NULL)
 		return -1;
@@ -119,8 +129,6 @@ int Engine::addObject(Object* object, bool render)
 	}
 	object->id = _objectUniqueID;
 	objectList.push_back(object);
-	if (render)
-		renderList.push_back(object);
 	return _objectUniqueID++;
 }
 
@@ -146,16 +154,53 @@ int Engine::addObject(Trigger* trigger)
 	return _objectUniqueID++;
 }
 
-Object* Engine::getObjectByID(int id)
+bool Engine::addObjectToRender(Object* object)
 {
-	for (auto &&obj : objectList)
+	if (!object)
+		return false;
+	for (auto &&obj : renderList)
 	{
-		if(obj->id == id){ return obj; }
+		if(obj == object){
+			return false;
+		}
 	}
-	return NULL;
+	renderList.push_back(object);
+	// sortLayer();
+	return true;
 }
 
-bool Engine::removeObjectRenderByID(int id)
+bool Engine::addObjectToRenderByID(int id)
+{
+	for (auto &&obj : renderList)
+	{
+		if(obj->id == id){
+			return false;
+		}
+	}
+	Object* tmp = getObjectByID(id);
+	if (tmp)
+	{
+		renderList.push_back(tmp);
+		// sortLayer();
+		return true;
+	}
+	return false;
+}
+
+bool Engine::removeObjectFromRender(Object* object)
+{
+	if (!object)
+		return false;
+	for (auto it = renderList.begin(); it != renderList.end(); ) {
+		if (*it == object){
+			renderList.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Engine::removeObjectFromRenderByID(int id)
 {
 	for (auto it = renderList.begin(); it != renderList.end(); ) {
 		if ((*it)->id == id){
@@ -196,6 +241,38 @@ bool Engine::removeObjectByID(int id)
 	return false;
 }
 
+bool Engine::removeObject(Object* object)
+{
+	if (!object)
+		return false;
+	for (auto it = objectList.begin(); it != objectList.end(); ) {
+		if (*it == object){
+			for (auto itt = renderList.begin(); itt != renderList.end(); ) {
+				if (*itt == object){
+					renderList.erase(itt);
+				}
+				break;
+			}
+			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); ) {
+				if (*itt == object){
+					uiRenderList.erase(itt);
+				}
+				break;
+			}
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); ) {
+				if (*itt == object){
+					triggerList.erase(itt);
+				}
+				break;
+			}
+			delete *it;
+			objectList.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
 void Engine::removeAll()
 {
 	for (auto it = objectList.begin(); it != objectList.end(); ) {
@@ -214,8 +291,6 @@ void Engine::renderLoop()
 		DrawTexture(*obj->texture, obj->position.x, obj->position.y, WHITE);
 	}
 }
-
-
 
 void Engine::importSound(const char* name) {
 	std::string tmpname;

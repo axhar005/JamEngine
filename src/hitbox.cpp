@@ -29,9 +29,9 @@ bool CheckCollisionEllipseRecs(Rectangle rec1, Rectangle rec2) {
 }
 
 // Function to get the collision point between two rectangles as ellipses (or NULL if no collision)
-Vector2 *GetEllipseCollision(Rectangle rec1, Rectangle rec2) {
+bool GetEllipseCollision(Vector2& pos, Rectangle rec1, Rectangle rec2) {
 	if (!CheckCollisionEllipseRecs(rec1, rec2)) {
-		return NULL; // No collision
+		return false; // No collision
 	}
 
 	// Convert rectangles to ellipses
@@ -39,9 +39,8 @@ Vector2 *GetEllipseCollision(Rectangle rec1, Rectangle rec2) {
 	Ellipse e2 = getEllipseFromRec(rec2);
 
 	// Simplified: return the midpoint between the two ellipse centers
-	Vector2 *collisionPoint = (Vector2 *)malloc(sizeof(Vector2));
-	collisionPoint->x = (e1.center.x + e2.center.x) / 2;
-	collisionPoint->y = (e1.center.y + e2.center.y) / 2;
+	pos.x = (e1.center.x + e2.center.x) / 2;
+	pos.y = (e1.center.y + e2.center.y) / 2;
 
-	return collisionPoint;
+	return true;
 }
