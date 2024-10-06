@@ -1,6 +1,7 @@
 #include "../include/Microbe.h"
 #include "../include/PetriDish.h"
 #include "../include/Engine.h"
+#include <cstdint>
 #include <cmath>
 
 Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer) :
