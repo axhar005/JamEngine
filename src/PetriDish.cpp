@@ -7,8 +7,6 @@ PetriDish::PetriDish(Vector2 _position, Sprite _sprite, int _radius) :
 	Object(_position, _sprite, false)
 {
 	this->radius = _radius;
-
-	Engine::getInstance().addObject(this, false);
 }
 
 PetriDish::~PetriDish()

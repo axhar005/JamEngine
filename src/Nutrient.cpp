@@ -15,8 +15,6 @@ Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, int
 
 	this->refreshSize();
 	this->refreshPos();
-
-	Engine::getInstance().addObject(this, true);
 }
 
 Nutrient::~Nutrient()
