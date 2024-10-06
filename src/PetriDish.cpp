@@ -1,11 +1,14 @@
 #include "../include/PetriDish.h"
 #include "../include/Nutrient.h"
 #include "../include/Microbe.h"
+#include "../include/Engine.h"
 
 PetriDish::PetriDish(Vector2 _position, Sprite _sprite, int _radius) :
 	Object(_position, _sprite, false)
 {
 	this->radius = _radius;
+
+	Engine::getInstance().addObject(this, false);
 }
 
 PetriDish::~PetriDish()
@@ -40,7 +43,7 @@ void PetriDish::spawnMicrobe(std::string species, Sprite _sprite, int count)
 	}
 }
 
-void PetriDish::spawnNutrient(int count, Sprite _sprite)
+void PetriDish::spawnNutrient(Sprite _sprite, int count)
 {
 	for (int i = 0; i < count; i++)
 	{

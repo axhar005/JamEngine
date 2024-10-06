@@ -1,5 +1,6 @@
 #include "../include/Microbe.h"
 #include "../include/PetriDish.h"
+#include "../include/Engine.h"
 
 Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer) :
 	Nutrient(_position, _sprite, _petriDish, MICROBE_START_SIZE, false)
@@ -85,12 +86,11 @@ void Microbe::starve()
 {
 	if (this->isPlayer)
 	{
-		// tag to Microbe of same species
-		// game over if none found
+		this->playerDeathTransfer();
 	}
 
 	// NOTE : use nutrient sprite instead
-	Nutrient* nutrient = new Nutrient(this->position, this->sprite, this->petriDish, this->size);
+	Nutrient* nutrient = new Nutrient(this->position, Engine::getInstance().sprites["Nutrient"], this->petriDish, this->size);
 	this->petriDish->addNutrient(nutrient);
 	this->petriDish->removeMicrobe(this);
 	this->die();
@@ -99,6 +99,12 @@ void Microbe::starve()
 void Microbe::die()
 {
 	this->petriDish->removeMicrobe(this);
+
+	if (this->isPlayer)
+	{
+		this->playerDeathTransfer();
+	}
+
 	delete this;
 }
 
@@ -237,6 +243,35 @@ void Microbe::wander()
 		this->setNewWanderGoal();
 
 	this->moveTowards(this->wanderGoal);
+}
+
+void Microbe::becomePlayer()
+{
+	this->isPlayer = true;
+	this->sprite = Engine::getInstance().sprites["Player"];
+}
+
+void Microbe::playerDeathTransfer()
+{
+	Microbe* newPlayer = nullptr;
+	for (Microbe* microbe : this->petriDish->getMicrobes())
+	{
+		if (microbe->getSpecies() != this->species)
+			continue;
+		if (microbe == this)
+			continue;
+
+		newPlayer = microbe;
+		break;
+	}
+
+	if (newPlayer != nullptr)
+		newPlayer->becomePlayer();
+	else
+	{
+		// GAME OVER
+		return;
+	}
 }
 
 void Microbe::devour(Microbe* target)
