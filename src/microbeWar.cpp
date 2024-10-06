@@ -6,11 +6,11 @@ Object* player;
 
 void mainLoop(Engine& e)
 {
-	static float zoom = 1;
-	const float zoomJump = 0.1;
+	static float zoom = 2.0f;
+	const float zoomFactor = 1.1f;
 
-	if (IsKeyDown(KEY_UP))		{zoom += zoomJump; zoom = fmin(zoom, 5.0f);}
-	if (IsKeyDown(KEY_DOWN))	{zoom -= zoomJump; zoom = fmax(zoom, 0.2f);}
+	if (IsKeyDown(KEY_UP))		{zoom *= zoomFactor; zoom = fmin(zoom, 8.0f);}
+	if (IsKeyDown(KEY_DOWN))	{zoom /= zoomFactor; zoom = fmax(zoom, 0.25f);}
 
 	e.set2DCameraZoom(zoom);
 	e.set2DCameraPosition(player, true);

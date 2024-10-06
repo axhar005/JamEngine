@@ -1,6 +1,7 @@
 #include "../include/PetriDish.h"
 #include "../include/Nutrient.h"
 #include "../include/Microbe.h"
+#include "../include/microAddons.h"
 
 PetriDish::PetriDish(Vector2 _position, Sprite _sprite, int _radius) :
 	Object(_position, _sprite, true)
@@ -72,7 +73,7 @@ Vector2 PetriDish::getRandomPos()
 	pos.y = GetRandomValue( -this->getRadius(), this->getRadius());
 
 	pos = getNormalisedDirection(Vector2{0, 0}, pos);
-	int distance = GetRandomValue(0, this->getRadius());
+	float distance = fmax(GetRandomValue(0, this->getRadius()), GetRandomValue(0, this->getRadius()));
 
 	pos.x *= distance;
 	pos.y *= distance;
