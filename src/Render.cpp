@@ -57,7 +57,7 @@ void Engine::render(void) {
 				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
 				DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
-				DrawRectangleRec(tmp.hitbox.box, box);
+				// DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
 				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);

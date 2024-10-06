@@ -58,7 +58,7 @@ void Object::update(){
 	hitbox.box.y = position.y + hitbox.offset.x;
 	if (animationSpeed != 0)
 	{
-		int next = frameIndex++;
+		size_t next = frameIndex++;
 		if (next < 0)
 			next = sprite.size() - 1;
 		else if (next > sprite.size() - 1)
@@ -69,7 +69,7 @@ void Object::update(){
 
 void Object::step()
 {
-
+	
 }
 
 void Object::draw()

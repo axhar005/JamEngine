@@ -32,11 +32,5 @@ void Fireball::step()
 
 void Fireball::draw()
 {
-	Engine& e = Engine::getInstance();
-	if (CheckCollisionEllipseRecs(this->hitbox.box, e.objectList[0]->hitbox.box))
-	{
-		DrawRectangleRec(this->hitbox.box, {255, 255, 0, 200});
-		Ellipse el = getEllipseFromRec(this->hitbox.box);
-		DrawCircleV(el.center,el.radiusX, {0, 255, 128, 200});
-	}
+
 }

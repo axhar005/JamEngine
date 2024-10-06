@@ -38,11 +38,8 @@ void mainLoop(Engine& e)
 		e.renderList[i]->position.x +=  +a;
 		e.renderList[i]->position.y +=  -a;
 	}
-	if (CheckCollisionEllipseRecs(player->hitbox.box, e.objectList[2]->hitbox.box)){
-		player->showHitbox = true;
-	}else{
-		player->showHitbox = false;
-	}
+	if (IsKeyPressed(KEY_H))
+		delete e.objectList[4];
 	e.sortLayer();
 }
 
