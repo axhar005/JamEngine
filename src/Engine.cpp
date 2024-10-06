@@ -14,7 +14,7 @@ Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 	_closeWindow = false;
 	_2DCamera = NULL;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
-	//sound <--- 
+	//sound <---
 	InitAudioDevice();
 	SetMasterVolume(1);
 }
@@ -372,7 +372,7 @@ void Engine::loop(void (*func)(Engine &))
 	{
 		float deltaTime = GetFrameTime();
 		accumulatedTime += deltaTime;
-		
+
 		while (accumulatedTime >= targetFrameTime)
 		{
 			func(*this);
@@ -381,7 +381,7 @@ void Engine::loop(void (*func)(Engine &))
 		}
 		BeginDrawing();
 		{
-			ClearBackground(RAYWHITE);
+			ClearBackground(BCKG_COLOR);
 			DrawGrid(20, 10.0f);
 			render();
 		}

@@ -77,5 +77,6 @@
 
 	float getDistance(Vector2 start, Vector2 end);
 	Vector2 getNormalisedDirection(Vector2 start, Vector2 end);
+	Vector2 getNormalisedVector(Vector2 vector);
 
 #endif

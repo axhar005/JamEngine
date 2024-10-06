@@ -184,8 +184,10 @@ void Microbe::clampPos()
 
 void Microbe::move(Vector2 direction)	// NOTE : assumes direction is normalized
 {
-	this->position.x = this->position.x + direction.x * this->speed;
-	this->position.y = this->position.y + direction.y * this->speed;
+	Vector2 vector = getNormalisedVector(direction);
+
+	this->position.x = this->position.x + vector.x * this->speed;
+	this->position.y = this->position.y + vector.y * this->speed;
 
 	this->clampPos();
 	this->refreshPos();
@@ -232,6 +234,12 @@ void Microbe::wander()
 		return;
 	}
 
+	if (this->size > MICROBE_MIN_DIV_SIZE)
+	{
+		this->divide();
+		return;
+	}
+
 	target = this->findClosestPrey();
 	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_PURSUE_RADIUS)
 	{
@@ -271,7 +279,7 @@ void Microbe::playerDeathTransfer()
 		newPlayer->becomePlayer();
 	else
 	{
-		// GAME OVER
+		// TODO : GAME OVER
 		return;
 	}
 }
