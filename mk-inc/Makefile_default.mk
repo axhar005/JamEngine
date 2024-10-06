@@ -95,6 +95,8 @@ $(RAYLIB_BUILD_DIR)/libraylib.a:
 run:
 	./$(NAME)
 
+rerun: re run
+
 raylib:
 	git clone --depth=1 $(RAYLIB_REPO_URL) $(RAYLIB_DIR);
 

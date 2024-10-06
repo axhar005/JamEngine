@@ -12,6 +12,8 @@
 		class Microbe;
 	#endif
 
+	#define PETRI_NUTRIENT_COUNT 32
+
 	// the playfield that contains our Nutrients and Microbes
 	class PetriDish : public Object
 	{

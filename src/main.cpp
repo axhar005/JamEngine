@@ -2,6 +2,7 @@
 #include "../include/Fireball.h"
 #include "../include/Player.h"
 
+/*
 Player* player;
 int		tid;
 int		trigerid;
@@ -95,3 +96,4 @@ int main()
 	e.loop(mainLoop);
 	return 0;
 }
+*/

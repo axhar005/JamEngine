@@ -4,10 +4,10 @@
 	#include <raylib.h>
 	#include "engineSetup.h"
 
-	#define NUTRIENT_MIN_SIZE 1
-	#define NUTRIENT_MAX_SIZE 8
+	#define NUTRIENT_MIN_SIZE 2
+	#define NUTRIENT_MAX_SIZE 16
 
-	#define NUTRIENT_GROWTH_RATE 0 // to be implemented
+	#define NUTRIENT_GROWTH_RATE 0.0f // to be implemented
 
 	class PetriDish;
 
@@ -18,7 +18,7 @@
 			void setRandomSize();
 
 		protected:
-			int size;
+			float size;
 			PetriDish* petriDish;
 
 		public:
