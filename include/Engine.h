@@ -3,6 +3,7 @@
 	#include "engineSetup.h"
 	#include "Object.h"
 	#include "Trigger.h"
+	#include "mouse.h"
 
 class Engine
 {
@@ -71,6 +72,9 @@ class Engine
 			void	playSound(const char* name);
 			float							volume;
 			std::map<std::string, Sound>	soundMap;
+
+			// Mouse
+			EngineMouse 				Mouse;
 };
 
 #endif

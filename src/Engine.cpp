@@ -329,10 +329,7 @@ void Engine::importSound(const char* name)
 	const char* tmp = strrchr(name, '/');
 	if (!tmp)
 		return ;
-	if (tmp[0] == '/')
-		tmpname = tmp + 1;
-	else
-		tmpname = tmp;
+	tmpname = tmp[0] == '/' ? tmp + 1 : tmp;
 	if (soundMap.find(tmpname) == soundMap.end()) {
 		Sound s = LoadSound(name);
 		std::cout << tmpname << std::endl;
