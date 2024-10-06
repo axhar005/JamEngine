@@ -1,10 +1,9 @@
 #include "../include/PetriDish.h"
 #include "../include/Nutrient.h"
 #include "../include/Microbe.h"
-#include "../include/Engine.h"
 
 PetriDish::PetriDish(Vector2 _position, Sprite _sprite, int _radius) :
-	Object(_position, _sprite, false)
+	Object(_position, _sprite, true)
 {
 	this->radius = _radius;
 }

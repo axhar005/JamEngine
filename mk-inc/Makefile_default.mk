@@ -92,8 +92,10 @@ $(RAYLIB_BUILD_DIR)/libraylib.a:
 		echo "Using system-installed Raylib."; \
 	fi
 
-run:
+run: all
 	./$(NAME)
+
+rerun: re run
 
 raylib:
 	git clone --depth=1 $(RAYLIB_REPO_URL) $(RAYLIB_DIR);

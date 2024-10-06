@@ -5,6 +5,8 @@
 	#include "Trigger.h"
 	#include "mouse.h"
 
+	#define BCKG_COLOR 	{ 64, 64, 64, 255 }
+
 class Engine
 {
 		private:
@@ -20,14 +22,14 @@ class Engine
 			void drawLoop();
 			void render(void);
 			void removeAll();
-			TexturePath 				_textures;
-			static Engine*				_instance;
+			TexturePath 		_textures;
+			static Engine*	_instance;
 			int							_windowHeight;
 			int							_windowWidth;
 			int							_objectUniqueID;
 			bool						_closeWindow;
-			std::string					_windowName;
-			Camera2D*					_2DCamera;
+			std::string			_windowName;
+			Camera2D*				_2DCamera;
 
 		public:
 			static Engine& getInstance();
@@ -35,8 +37,8 @@ class Engine
 			void loop(void (*func)(Engine &));
 
 			// Camera
-			void set2DCameraPotions(Vector2 pos);
-			void set2DCameraPotions(Object* obj, bool center);
+			void set2DCameraPosition(Vector2 pos);
+			void set2DCameraPosition(Object* obj, bool center);
 			void set2DCameraZoom(float zoom);
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);
@@ -47,7 +49,7 @@ class Engine
 			void initTexture(TexturePath textures);
 			Sprite getSprite(std::string name);
 			SpriteMap 					spriteMap;
-			
+
 			// Window
 			void closeWindow();
 

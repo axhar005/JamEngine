@@ -3,21 +3,21 @@
 void  Engine::set2DCamera(Camera2D& camera) { this->_2DCamera = &camera; }
 void  Engine::set2DCameraZoom(float zoom) { if (this->_2DCamera) { this->_2DCamera->zoom = zoom; } }
 
-void  Engine::set2DCameraPotions(Object* obj, bool center = true) {
+void  Engine::set2DCameraPosition(Object* obj, bool center = true) {
 	if (this->_2DCamera && obj) {
 		Vector2 tmp = obj->position;
 		if (center) {
 			tmp.x += obj->hitbox.box.width / 2;
 			tmp.y += obj->hitbox.box.height / 2;
 		}
-		this->set2DCameraPotions(tmp);
+		this->set2DCameraPosition(tmp);
 	}
 }
 
-void  Engine::set2DCameraPotions(Vector2 pose) { 
+void  Engine::set2DCameraPosition(Vector2 pose) {
 	if (this->_2DCamera) {
-		pose.x -= float(GetScreenWidth() / 2)  / this->_2DCamera->zoom;
-		pose.y -= float(GetScreenHeight() / 2) / this->_2DCamera->zoom;
+		pose.x -= float((float)GetScreenWidth() / 2)  / this->_2DCamera->zoom;
+		pose.y -= float((float)GetScreenHeight() / 2) / this->_2DCamera->zoom;
 		this->_2DCamera->target = pose;
 	}
 }
@@ -37,7 +37,7 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
-#define drawId      false
+#define drawId      true
 #define drawTrigger false
 
 void Engine::render(void) {
@@ -67,16 +67,23 @@ void Engine::render(void) {
 			}
 		}
 	}
-	#if (drawTrigger)
 	for (size_t i = 0; i < this->triggerList.size(); i++) {
 		if (triggerList[i]) {
 			Trigger* tmp = triggerList[i];
+			#if (drawTrigger)
 			tmp->draw();
+			#endif
 			// if you want to see that the zone were the box overlap
-			tmp->hit();
+			const std::vector<int> list = tmp->hit();
+			std::cout << list.size() << "\n";
+			if (list.size()) {
+				Mouse.draw = true;
+				Mouse.drawWindow();
+			}
+			else
+				Mouse.draw = false;
 		}
 	}
-	#endif
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
 	char s[50];
@@ -94,5 +101,4 @@ void Engine::render(void) {
 	}
 	//mouse test
 	Mouse.setWindowSize({90,50});
-	Mouse.drawWindow();
 }

@@ -3,11 +3,12 @@
 	#include "../include/Object.h"
 	#include <raylib.h>
 	#include "engineSetup.h"
+	#include "microAddons.h"
 
-	#define NUTRIENT_MIN_SIZE 1
-	#define NUTRIENT_MAX_SIZE 8
+	#define NUTRIENT_MIN_SIZE 4.0f
+	#define NUTRIENT_MAX_SIZE 16.0f
 
-	#define NUTRIENT_GROWTH_RATE 0 // to be implemented
+	#define NUTRIENT_GROWTH_RATE 0.0f // to be implemented
 
 	class PetriDish;
 
@@ -18,27 +19,28 @@
 			void setRandomSize();
 
 		protected:
-			int size;
+			float size;
 			PetriDish* petriDish;
 
 		public:
-			Nutrient(Vector2 _position, Sprite _sprite, PetriDish *_petriDish, int _size, bool addToPetriDish = true);
-			~Nutrient();
+			Nutrient(Vector2 _position, Sprite _sprite, PetriDish *_petriDish, float _size, bool addToPetriDish = true);
+			virtual ~Nutrient();
 
 			void step();
 
 			void refreshSize();
 			void refreshPos();
+			void clampPos();
 
-			void grow(int amount);
-			//void shrink(int amount);
+			void grow(float amount);
+			void shrink(float amount);
 			//void divide();
 			void die();
 
-			int getSize();
+			float getSize();
 			PetriDish* getPetriDish();
 
-			bool overlapsNutrient(Nutrient* target);
+			bool overlapsOther(Nutrient* other);
 
 			bool isOnEdge();
 	};

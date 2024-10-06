@@ -1,3 +1,4 @@
+/*
 #include "../include/Engine.h"
 #include "../include/Fireball.h"
 #include "../include/Player.h"
@@ -26,7 +27,7 @@ void mainLoop(Engine& e)
 	if (IsKeyDown(KEY_UP)   && zoom + zoomJump <= 7) {zoom += zoomJump; }
 	if (IsKeyDown(KEY_DOWN) && zoom - zoomJump > 0.1)  {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
-	e.set2DCameraPotions(player, true);
+	e.set2DCameraPosition(player, true);
 	if (IsKeyPressed(KEY_O)) {
 		showTrigger = !showTrigger;
 		for(size_t i = 0; i < e.triggerList.size(); i++) {
@@ -89,3 +90,4 @@ int main()
 	e.loop(mainLoop);
 	return 0;
 }
+*/

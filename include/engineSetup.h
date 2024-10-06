@@ -12,6 +12,7 @@
 	#include <array>
 	#include <strings.h>
 	#include <string.h>
+	#include <cstdint>
 	#include "hitbox.h"
 
 	#define VECTOR_RESERVE 100

@@ -20,8 +20,8 @@ typedef struct EngineMouse {
         this->box.height = 3;
         this->window.x = this->box.x;
         this->window.y = this->box.y - this->window.height;
-        if (draw && t < MAXOPA) { t +=  1; std::cout << (int)this->t << std::endl; }
-        if (!draw && t > 0)     { t += -1; std::cout << (int)this->t << std::endl; }
+        if (draw && t < MAXOPA) { t +=  1; }
+        if (!draw && t > 0)     { t += -1; }
         color = {255, 255, 255, t};
         back = {0, 0, 0, t};
     };
@@ -30,14 +30,16 @@ typedef struct EngineMouse {
         window.height = size.y;
     };
     void drawWindow(void) {
-        const int ofset = 4;
-        const Rectangle outline = {
-            this->window.x -ofset,
-            this->window.y -ofset,
-            this->window.width +  (ofset * 2),
-            this->window.height + (ofset * 2)};
-        DrawRectangleRec(outline, back);
-        DrawRectangleRec(window, color);
+        if (t) {
+            const int ofset = 4;
+            const Rectangle outline = {
+                this->window.x -ofset,
+                this->window.y -ofset,
+                this->window.width +  (ofset * 2),
+                this->window.height + (ofset * 2)};
+            DrawRectangleRec(outline, back);
+            DrawRectangleRec(window, color);
+        }
     }
 } EngineMouse;
 
