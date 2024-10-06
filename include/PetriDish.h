@@ -32,7 +32,7 @@
 
 			void spawnPlayer(std::string species, Sprite _sprite);
 			void spawnMicrobe(std::string species, Sprite _sprite, int count);
-			void spawnNutrient(int count, Sprite _sprite);
+			void spawnNutrient(Sprite _sprite, int count);
 
 			std::vector<Nutrient*> getNutrients();
 			std::vector<Microbe*> getMicrobes();

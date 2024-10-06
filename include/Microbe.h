@@ -67,6 +67,9 @@
 			void moveAwayFrom(Vector2 target);
 			void wander();
 
+			void becomePlayer();
+			void playerDeathTransfer();
+
 			void devour(Microbe* target);
 			void graze(Nutrient* target);
 
