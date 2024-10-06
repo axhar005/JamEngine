@@ -1,6 +1,5 @@
 #include "../include/Nutrient.h"
 #include "../include/PetriDish.h"
-#include "../include/Engine.h"
 
 Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, int _size, bool addToPetriDish) :
 	Object(_position, _sprite, false)

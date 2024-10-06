@@ -14,10 +14,10 @@ void  Engine::set2DCameraPotions(Object* obj, bool center = true) {
 	}
 }
 
-void  Engine::set2DCameraPotions(Vector2 pose) { 
+void  Engine::set2DCameraPotions(Vector2 pose) {
 	if (this->_2DCamera) {
-		pose.x -= float(GetScreenWidth() / 2)  / this->_2DCamera->zoom;
-		pose.y -= float(GetScreenHeight() / 2) / this->_2DCamera->zoom;
+		pose.x -= float((float)GetScreenWidth() / 2)  / this->_2DCamera->zoom;
+		pose.y -= float((float)GetScreenHeight() / 2) / this->_2DCamera->zoom;
 		this->_2DCamera->target = pose;
 	}
 }

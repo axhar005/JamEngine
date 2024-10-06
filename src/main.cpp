@@ -1,8 +1,8 @@
+/*
 #include "../include/Engine.h"
 #include "../include/Fireball.h"
 #include "../include/Player.h"
 
-/*
 Player* player;
 int		tid;
 int		trigerid;

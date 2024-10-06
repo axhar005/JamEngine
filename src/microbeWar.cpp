@@ -1,5 +1,4 @@
 #include "../include/Engine.h"
-#include "../include/Microbe.h"
 #include "../include/PetriDish.h"
 #include <cmath>
 
@@ -17,7 +16,7 @@ void mainLoop(Engine& e)
 
 void initTexture(Engine& e)
 {
-	e.textures = {
+	e.initTexture({
 		//{"dev", {"asset/test.png"}},
 		{"PetriDish",{"asset/PetriDish.png"}},
 		{"Nutrient", {"asset/Nutrient.png"}},
@@ -25,7 +24,7 @@ void initTexture(Engine& e)
 		{"Microbe_1",{"asset/Cell_1.png"}},
 		{"Microbe_2",{"asset/Cell_2.png"}},
 		{"Microbe_3",{"asset/Cell_3.png"}},
-	};
+	});
 	e.loadTextureImage();
 }
 
@@ -35,12 +34,12 @@ void initAudio(Engine& e) {
 
 void initObject(Engine& e)
 {
-	PetriDish* petriDish = new PetriDish({0,0}, e.sprites["PetriDish"], 1000);
+	PetriDish* petriDish = new PetriDish({0,0}, e.getSprite("PetriDish"), 1000);
 
 	//petriDish->spawnNutrient(e.sprites["Nutrient"], PETRI_NUTRIENT_COUNT);
 	//petriDish->spawnMicrobe("BadGuys", e.sprites["Microbe_2"], 10);
-	petriDish->spawnMicrobe("GoodGuys", e.sprites["Microbe_1"], 15);
-	petriDish->spawnPlayer("GoodGuys", e.sprites["Player"]);
+	petriDish->spawnMicrobe("GoodGuys", e.getSprite("Microbe_1"), 15);
+	petriDish->spawnPlayer("GoodGuys", e.getSprite("Player"));
 
 	e.sortLayer();
 }
