@@ -63,8 +63,6 @@
 			void devour(Microbe* target);
 			void graze(Nutrient* target);
 
-			bool overlapsMicrobe(Microbe* target);
-
 			bool canGraze(Nutrient* target);
 			bool canDevour(Microbe* target);
 			bool canBeDevouredBy(Microbe* target);

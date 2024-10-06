@@ -227,6 +227,8 @@ void Microbe::wander()
 	if (target != nullptr && getDistance(this->position, target->position) < MICROBE_GRAZE_RADIUS)
 	{
 		this->moveTowards(target->position);
+		if (this->overlapsOther(target))
+			this->graze(target);
 		return;
 	}
 
@@ -290,13 +292,6 @@ void Microbe::graze(Nutrient* target)
 		this->grow(target->getSize());
 		target->die();
 	}
-}
-
-bool Microbe::overlapsMicrobe(Microbe* target)
-{
-	(void)target;
-	// check if this->hitbox overlaps with target->hitbox
-	return false;
 }
 
 bool Microbe::canGraze(Nutrient* target)

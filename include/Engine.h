@@ -35,8 +35,8 @@ class Engine
 			void loop(void (*func)(Engine &));
 
 			// Camera
-			void set2DCameraPotions(Vector2 pos);
-			void set2DCameraPotions(Object* obj, bool center);
+			void set2DCameraPosition(Vector2 pos);
+			void set2DCameraPosition(Object* obj, bool center);
 			void set2DCameraZoom(float zoom);
 			void set2DCamera(Camera2D& camera);
 			void Remove2DCamera(void);

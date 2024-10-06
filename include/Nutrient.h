@@ -4,7 +4,7 @@
 	#include <raylib.h>
 	#include "engineSetup.h"
 
-	#define NUTRIENT_MIN_SIZE 2
+	#define NUTRIENT_MIN_SIZE 4
 	#define NUTRIENT_MAX_SIZE 16
 
 	#define NUTRIENT_GROWTH_RATE 0.0f // to be implemented
@@ -38,7 +38,7 @@
 			int getSize();
 			PetriDish* getPetriDish();
 
-			bool overlapsNutrient(Nutrient* target);
+			bool overlapsOther(Nutrient* other);
 
 			bool isOnEdge();
 	};

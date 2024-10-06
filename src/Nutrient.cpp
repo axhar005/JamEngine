@@ -2,7 +2,7 @@
 #include "../include/PetriDish.h"
 
 Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, int _size, bool addToPetriDish) :
-	Object(_position, _sprite, false)
+	Object(_position, _sprite, true)
 {
 	this->petriDish = _petriDish;
 	if (addToPetriDish)
@@ -68,10 +68,10 @@ void Nutrient::die()
 int Nutrient::getSize() {return this->size;}
 PetriDish* Nutrient::getPetriDish() {return this->petriDish;}
 
-bool Nutrient::overlapsNutrient(Nutrient* target)
+bool Nutrient::overlapsOther(Nutrient* other)
 {
-	(void)target;
-	// check if this->hitbox overlaps with target->hitbox
+	//if (CheckCollisionRecs(this->hitbox.box, other->hitbox.box))
+		//return true;
 	return false;
 }
 
