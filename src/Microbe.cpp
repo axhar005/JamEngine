@@ -327,6 +327,7 @@ void Microbe::playerDeathTransfer()
 
 void Microbe::tryEat()
 {
+	printf("Eating\n");
 	Nutrient* target = this->findClosestNutrient();
 	if (target != nullptr)
 		this->tryGraze(target);
