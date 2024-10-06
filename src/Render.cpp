@@ -56,7 +56,7 @@ void Engine::render(void) {
 				const char *name = tmp.getName().c_str();
 				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
-				DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
+				DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
 				DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
@@ -64,7 +64,6 @@ void Engine::render(void) {
 				#endif
 				tmp.draw();
 				hits++;
-				tmp.draw();
 			}
 		}
 	}
@@ -85,7 +84,7 @@ void Engine::render(void) {
 	DrawText(s, 4,20, 30, BLUE);
 	DrawFPS(0,0);
 	char ss[50];
-	sprintf(ss, "pos x: %.0f, pos y: %.0f", Engine::getInstance().objectList[objectList.size()-1]->position.x, Engine::getInstance().objectList[objectList.size()-1]->position.y);
+	// sprintf(ss, "pos x: %.0f, pos y: %.0f", Engine::getInstance().objectList[objectList.size()-1]->position.x, Engine::getInstance().objectList[objectList.size()-1]->position.y);
 	DrawText(ss, 4, 60, 30, BLUE);
 	for (size_t i = 0; i < uiRenderList.size(); i++) {
 		if (uiRenderList[i] && uiRenderList[i]->texture) {

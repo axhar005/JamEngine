@@ -12,6 +12,7 @@ Engine::Engine(int windowWidth, int windowHeight, std::string windowName)
 	_windowName = windowName;
 	_objectUniqueID = 0;
 	_closeWindow = false;
+	_2DCamera = NULL;
 	InitWindow(_windowWidth, _windowHeight, _windowName.c_str());
 	//sound <--- 
 	InitAudioDevice();
@@ -45,9 +46,14 @@ Engine& Engine::getInstance()
 	return *_instance;
 }
 
+void Engine::closeWindow()
+{
+	_closeWindow = true;
+}
+
 void Engine::loadTextureImage()
 {
-	for (const auto &item : textures)
+	for (const auto &item : _textures)
 	{
 		const std::string &key = item.first;
 		const std::vector<std::string>& paths = item.second;
@@ -66,19 +72,36 @@ void Engine::loadTextureImage()
 			s.texture = LoadTextureFromImage(s.image);
 			spriteList.push_back(s);
 		}
-		sprites[key] = spriteList;
+		spriteMap[key] = spriteList;
 	}
 }
 
 void Engine::unloadTextureImage()
 {
-	for (auto &item : sprites)
+	for (auto &item : spriteMap)
 	{
 		for (auto &s : item.second)
 		{
 			UnloadTexture(s.texture);
 			UnloadImage(s.image);
 		}
+	}
+}
+
+void Engine::initTexture(TexturePath textures)
+{
+	_textures = textures;
+	loadTextureImage();
+}
+
+Sprite Engine::getSprite(std::string name)
+{
+	SpriteMap::iterator it = spriteMap.find(name);
+
+	if (it != spriteMap.end()) {
+		return it->second;
+	} else {
+		throw std::runtime_error("The sprite '" + name + "' was not found in the SpriteMap.");
 	}
 }
 
@@ -107,7 +130,16 @@ void Engine::drawLoop()
 	}
 }
 
-int Engine::addObject(Object* object, bool render)
+Object* Engine::getObjectByID(int id)
+{
+	for (auto &&obj : objectList)
+	{
+		if(obj->id == id){ return obj; }
+	}
+	return NULL;
+}
+
+int Engine::addObject(Object* object)
 {
 	if (object == NULL)
 		return -1;
@@ -119,8 +151,6 @@ int Engine::addObject(Object* object, bool render)
 	}
 	object->id = _objectUniqueID;
 	objectList.push_back(object);
-	if (render)
-		renderList.push_back(object);
 	return _objectUniqueID++;
 }
 
@@ -146,16 +176,53 @@ int Engine::addObject(Trigger* trigger)
 	return _objectUniqueID++;
 }
 
-Object* Engine::getObjectByID(int id)
+bool Engine::addObjectToRender(Object* object)
 {
-	for (auto &&obj : objectList)
+	if (!object)
+		return false;
+	for (auto &&obj : renderList)
 	{
-		if(obj->id == id){ return obj; }
+		if(obj == object){
+			return false;
+		}
 	}
-	return NULL;
+	renderList.push_back(object);
+	// sortLayer();
+	return true;
 }
 
-bool Engine::removeObjectRenderByID(int id)
+bool Engine::addObjectToRenderByID(int id)
+{
+	for (auto &&obj : renderList)
+	{
+		if(obj->id == id){
+			return false;
+		}
+	}
+	Object* tmp = getObjectByID(id);
+	if (tmp)
+	{
+		renderList.push_back(tmp);
+		// sortLayer();
+		return true;
+	}
+	return false;
+}
+
+bool Engine::removeObjectFromRender(Object* object)
+{
+	if (!object)
+		return false;
+	for (auto it = renderList.begin(); it != renderList.end(); ) {
+		if (*it == object){
+			renderList.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Engine::removeObjectFromRenderByID(int id)
 {
 	for (auto it = renderList.begin(); it != renderList.end(); ) {
 		if ((*it)->id == id){
@@ -196,6 +263,45 @@ bool Engine::removeObjectByID(int id)
 	return false;
 }
 
+bool Engine::removeObject(Object* object)
+{
+	if (!object)
+		return false;
+	for (auto it = objectList.begin(); it != objectList.end(); )
+	{
+		if (*it == object){
+			for (auto itt = renderList.begin(); itt != renderList.end(); )
+			{
+				if (*itt == object)
+				{
+					renderList.erase(itt);
+				}
+				break;
+			}
+			for (auto itt = uiRenderList.begin(); itt != uiRenderList.end(); )
+			{
+				if (*itt == object)
+				{
+					uiRenderList.erase(itt);
+				}
+				break;
+			}
+			for (auto itt = triggerList.begin(); itt != triggerList.end(); )
+			{
+				if (*itt == object)
+				{
+					triggerList.erase(itt);
+				}
+				break;
+			}
+			delete *it;
+			objectList.erase(it);
+			return true;
+		}
+	}
+	return false;
+}
+
 void Engine::removeAll()
 {
 	for (auto it = objectList.begin(); it != objectList.end(); ) {
@@ -215,9 +321,8 @@ void Engine::renderLoop()
 	}
 }
 
-
-
-void Engine::importSound(const char* name) {
+void Engine::importSound(const char* name)
+{
 	std::string tmpname;
 	if (!name)
 		return;
@@ -235,7 +340,8 @@ void Engine::importSound(const char* name) {
 	}
 }
 
-void Engine::removeAllSound(void) {
+void Engine::removeAllSound(void)
+{
 	for (std::map<std::string, Sound>::iterator it = this->soundMap.begin();
 	it != this->soundMap.end(); it++) {
 		Sound tmp = (*it).second;
@@ -243,7 +349,8 @@ void Engine::removeAllSound(void) {
 	}
 }
 
-void Engine::playSound(const char* name) {
+void Engine::playSound(const char* name)
+{
 	if (!name)
 		return ;
 	if (soundMap.find(name) != soundMap.end()) {
@@ -252,16 +359,26 @@ void Engine::playSound(const char* name) {
 	}
 }
 
+
 void Engine::loop(void (*func)(Engine &))
 {
 	SetTargetFPS(60);
 	SetExitKey(KEY_ESCAPE);
 
+	const float targetFrameTime = 1.0f / 60.0f;
+	float accumulatedTime = 0.0f;
+
 	while (!WindowShouldClose() && !_closeWindow)
 	{
-		Mouse.update();
-		func(*this);
-		stepLoop();
+		float deltaTime = GetFrameTime();
+		accumulatedTime += deltaTime;
+		
+		while (accumulatedTime >= targetFrameTime)
+		{
+			func(*this);
+			stepLoop();
+			accumulatedTime -= targetFrameTime;
+		}
 		BeginDrawing();
 		{
 			ClearBackground(RAYWHITE);
@@ -270,9 +387,4 @@ void Engine::loop(void (*func)(Engine &))
 		}
 		EndDrawing();
 	}
-}
-
-void Engine::closeWindow()
-{
-	_closeWindow = true;
 }

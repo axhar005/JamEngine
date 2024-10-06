@@ -90,7 +90,7 @@ void Microbe::starve()
 	}
 
 	// NOTE : use nutrient sprite instead
-	Nutrient* nutrient = new Nutrient(this->position, Engine::getInstance().sprites["Nutrient"], this->petriDish, this->size);
+	Nutrient* nutrient = new Nutrient(this->position, Engine::getInstance().getSprite("Nutrient"), this->petriDish, this->size);
 	this->petriDish->addNutrient(nutrient);
 	this->petriDish->removeMicrobe(this);
 	this->die();
@@ -248,7 +248,7 @@ void Microbe::wander()
 void Microbe::becomePlayer()
 {
 	this->isPlayer = true;
-	this->sprite = Engine::getInstance().sprites["Player"];
+	this->sprite = Engine::getInstance().getSprite("Player");
 }
 
 void Microbe::playerDeathTransfer()

@@ -1,13 +1,13 @@
 # include "../include/Trigger.h"
 
-Trigger::Trigger(Vector2 _pos, Vector2 _size) :  Object(_pos), target(NULL) {
+Trigger::Trigger(Vector2 _pos, Vector2 _size) :  Object(_pos, false), target(NULL) {
 	hitList.reserve(10);
 	this->hitbox.box.height = _size.y;
 	this->hitbox.box.width = _size.x;
 	this->drawTrigger = false;
 }
 
-Trigger::Trigger(Object* _target, Vector2 _size) : Object(_target->position), target(_target) {
+Trigger::Trigger(Object* _target, Vector2 _size) : Object(_target->position, false), target(_target) {
 	hitList.reserve(10);
 	this->hitbox.box.height = _size.y;
 	this->hitbox.box.width = _size.x;

@@ -10,5 +10,5 @@
 
 	Ellipse getEllipseFromRec(Rectangle rec);
 	bool CheckCollisionEllipseRecs(Rectangle rec1, Rectangle rec2);
-	Vector2 *GetEllipseCollision(Rectangle rec1, Rectangle rec2);
+	bool GetEllipseCollision(Vector2& pos, Rectangle rec1, Rectangle rec2);
 #endif

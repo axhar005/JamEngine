@@ -27,7 +27,7 @@ void mainLoop(Engine& e)
 	if (IsKeyDown(KEY_UP)   && zoom + zoomJump <= 7) {zoom += zoomJump; }
 	if (IsKeyDown(KEY_DOWN) && zoom - zoomJump > 0.1)  {zoom -= zoomJump; }
 	e.set2DCameraZoom(zoom);
-	e.set2DCameraPotions(e.renderList[e.renderList.size() -1], true);
+	e.set2DCameraPotions(player, true);
 	if (IsKeyPressed(KEY_O)) {
 		showTrigger = !showTrigger;
 		for(size_t i = 0; i < e.triggerList.size(); i++) {
@@ -49,12 +49,12 @@ void mainLoop(Engine& e)
 
 void initTexture(Engine& e)
 {
-	e.textures = {
+	e.initTexture({
 		{"fireball", {"asset/no_texture.png"}},
 		{"dev", {"asset/test.png"}},
+		{"dev_2", {"asset/16x32_test.png"}},
 		// {"player_down", {"asset/player/player_down_0.png", "asset/player/player_down_1.png"}},
-	};
-	e.loadTextureImage();
+	});
 }
 
 void initAudio(Engine& e) {
@@ -63,26 +63,23 @@ void initAudio(Engine& e) {
 
 void initObject(Engine& e)
 {
-	playerid = e.addObject(new Player({0,0},e.sprites["dev"]), true);
-	e.objectList[0]->hitbox.box.height = 20;
-	e.objectList[0]->hitbox.box.width = 20;
-	trigerid = e.addObject(new Trigger({0,0,}, {10, 10}), false);
-	e.triggerList.push_back((Trigger *)e.getObjectByID(trigerid));
+	player = new Player({0,0}, e.getSprite("dev"), true);
+	playerid = player->id;
+	Trigger* tt = new Trigger({0,0,}, {10, 10});
+	trigerid = tt->id;
 	Trigger* triggerObj = (Trigger*)e.getObjectByID(trigerid);
 	for (int j = 0; j < 200; j++) {
 		for (int i = 0; i < 200; i++) {
-			Object* tmpobj = new Fireball({float(16 * j), float(16 * i)}, e.sprites["fireball"]);
-			tmpobj->layer = 1;
+			Object* tmpobj = new Fireball({float(16 * j), float(16 * i)}, e.getSprite("fireball"), true, 1);
+			// tmpobj->setLayer(1);
 			tmpobj->setName("X");
-			int a = e.addObject(tmpobj, true);
 		}
 	}
-	player = (Player*)e.getObjectByID(playerid);
 	triggerObj->add(player);
-	player->layer = 4;
+	player->setLayer(4);
 	player->setName("dev");
 	e.sortLayer();
-	e.importSound("audio/untitled.wav");
+	// e.importSound("audio/untitled.wav");
 }
 
 int main()
