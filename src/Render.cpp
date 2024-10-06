@@ -38,7 +38,7 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 }
 
 #define drawId      false
-#define drawTrigger false
+#define drawTrigger true
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
@@ -67,16 +67,23 @@ void Engine::render(void) {
 			}
 		}
 	}
-	#if (drawTrigger)
 	for (size_t i = 0; i < this->triggerList.size(); i++) {
 		if (triggerList[i]) {
 			Trigger* tmp = triggerList[i];
+			#if (drawTrigger)
 			tmp->draw();
+			#endif
 			// if you want to see that the zone were the box overlap
-			tmp->hit();
+			const std::vector<int> list = tmp->hit();
+			std::cout << list.size() << "\n";
+			if (list.size()) {
+				Mouse.draw = true;
+				Mouse.drawWindow();
+			}
+			else
+				Mouse.draw = false;
 		}
 	}
-	#endif
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
 	char s[50];
@@ -94,5 +101,4 @@ void Engine::render(void) {
 	}
 	//mouse test
 	Mouse.setWindowSize({90,50});
-	Mouse.drawWindow();
 }

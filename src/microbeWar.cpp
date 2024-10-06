@@ -43,6 +43,8 @@ void initObject(Engine& e)
 	petriDish->spawnPlayer("GoodGuys", e.getSprite("Player"));
 
 	player = (Object*)petriDish->getPlayer();
+	Trigger* t = new Trigger({0,0}, {10,10});
+	t->setTarget(player);
 
 	e.sortLayer();
 }
