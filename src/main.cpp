@@ -43,10 +43,6 @@ void mainLoop(Engine& e)
 	}else{
 		player->showHitbox = false;
 	}
-	//for (size_t i = 0; i < e.renderList.size(); i++) {
-	//	std::cout << "|" << e.renderList[i]->id;
-	//}
-	//std::cout << std::endl;
 	e.sortLayer();
 }
 
