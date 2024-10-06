@@ -11,7 +11,8 @@ class Trigger : public Object {
 		Object*					target;
 	public:
 		bool drawTrigger;
-		Trigger(Vector2 pos);
+		Trigger(Vector2 _pos, Vector2 _size);
+		Trigger(Object* _target, Vector2 _size);
 		~Trigger();
 		void setTarget(Object* targetPtr);
 		void step();

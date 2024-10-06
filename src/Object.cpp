@@ -15,7 +15,7 @@ Object::Object(Vector2 _position) : position(_position), frameIndex(0), animatio
 
 }
 
-Object::Object(Vector2 _position, Sprite _sprite, int layerLV) : sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), layer(layerLV) {
+Object::Object(Vector2 _position, Sprite _sprite, int _layerLV) : sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), layer(_layerLV) {
 	if (!sprite.empty()){
 		texture = &sprite[frameIndex].texture;
 		hitbox.box.height = texture->height;
@@ -34,7 +34,7 @@ const std::string& Object::getName(void) {
 
 Object::~Object()
 {
-
+	Engine::getInstance().removeObjectByID(this->id);
 }
 
 void Object::update(){

@@ -3,6 +3,7 @@
 	#include "engineSetup.h"
 	#include "Object.h"
 	#include "Trigger.h"
+	#include "mouse.h"
 
 class Engine
 {
@@ -42,7 +43,7 @@ class Engine
 			void loadTextureImage();
 			Object* getObjectByID(int id);
 			static Engine& getInstance();
-			static void initInstance(int windowWidth, int windowHeight, std::string windowName);
+			static Engine& initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));
 			void closeWindow();
 
@@ -65,6 +66,8 @@ class Engine
 			void	removeAllSound(void);
 			void	playSound(const char* name);
 			std::map<std::string, Sound>		soundMap;
+			///
+			EngineMouse 				Mouse;
 };
 
 #endif

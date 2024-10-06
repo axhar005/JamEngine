@@ -62,6 +62,7 @@ void Engine::render(void) {
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
 				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
 				#endif
+				tmp.draw();
 				hits++;
 				tmp.draw();
 			}
@@ -92,4 +93,7 @@ void Engine::render(void) {
 			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
+	//mouse test
+	Mouse.setWindowSize({90,50});
+	Mouse.drawWindow();
 }

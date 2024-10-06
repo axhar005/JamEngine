@@ -28,13 +28,14 @@ Engine::~Engine()
 	removeAll();
 }
 
-void Engine::initInstance(int windowWidth, int windowHeight, std::string windowName) {
-		if (_instance == nullptr) {
-			_instance = new Engine(windowWidth, windowHeight, windowName);
-		} else {
-			throw std::runtime_error("Instance alrady initialized.");
-		}
+Engine& Engine::initInstance(int windowWidth, int windowHeight, std::string windowName) {
+	if (_instance == nullptr) {
+		_instance = new Engine(windowWidth, windowHeight, windowName);
+	} else {
+		throw std::runtime_error("Instance alrady initialized.");
 	}
+	return *_instance;
+}
 
 Engine& Engine::getInstance()
 {
@@ -49,7 +50,7 @@ void Engine::loadTextureImage()
 	for (const auto &item : textures)
 	{
 		const std::string &key = item.first;
-		const std::vector<std::string> &paths = item.second;
+		const std::vector<std::string>& paths = item.second;
 
 		std::vector<SpriteFrame> spriteList;
 		spriteList.reserve(paths.size());
@@ -81,12 +82,12 @@ void Engine::unloadTextureImage()
 	}
 }
 
-static bool  lookLayer(Object* &a, Object* &b) {
+static bool  lookLayer(Object* a, Object* b) {
 	return (a->layer < b->layer);
 }
 
 void Engine::sortLayer(void) {
-	std::sort(renderList.begin(), renderList.end(), lookLayer);
+	std::stable_sort(renderList.begin(), renderList.end(), lookLayer);
 }
 
 void Engine::stepLoop()
@@ -258,6 +259,7 @@ void Engine::loop(void (*func)(Engine &))
 
 	while (!WindowShouldClose() && !_closeWindow)
 	{
+		Mouse.update();
 		func(*this);
 		stepLoop();
 		BeginDrawing();
