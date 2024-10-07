@@ -7,7 +7,8 @@
 
 typedef struct EngineMouse {
     private:
-        std::string text;
+        std::string   title;
+        std::string   text;
     public:
         Rectangle     box;
         Rectangle     window;
@@ -23,18 +24,15 @@ typedef struct EngineMouse {
             this->window.y = this->box.y - this->window.height;
             if (draw && t < MAXOPA) {
                 t +=  4;
-                if (t > 255) {
-                    t = 255;
-                    }
+                if (t > 255) { t = 255; }
             }
             if (!draw && t > 0) {
                 t += -6;
-                if (t < 0) {
-                    t = 0;
-                    }
+                if (t < 0) { t = 0; }
             }
             color = {255, 255, 255, (unsigned char)t};
             back = {0, 0, 0, (unsigned char)t};
+            this->drawWindow();
         };
         void setWindowSize(Vector2 size) {
             window.width  = size.x;
@@ -49,20 +47,22 @@ typedef struct EngineMouse {
                 this->window.height + (ofset * 2)};
             DrawRectangleRec(outline, back);
             DrawRectangleRec(window, color);
-            DrawText(this->text.c_str(), this->window.x + 2, this->window.y, 20, back);
+            DrawText(this->text.c_str(),
+                this->window.x + 2,
+                this->window.y, 20, back);
         }
         void setText(const std::string& s) {
             this->text = s;
             Vector2 newVec;
             newVec.x = 10;
-            newVec.y = 0;
+            newVec.y = 10;
             float localW = 0;
             for (size_t i = 0; i < s.size(); i++) {
                 if (s[i] == ' ')
                     localW += 6;
                 else
                     localW += 12;
-                if (s[i] == '\n') {
+                if (s[i] == '\n' || s[i] == 0) {
                     if (localW > newVec.y)
                         newVec.x = localW;
                     localW = 0;

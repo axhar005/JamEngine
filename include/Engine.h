@@ -32,6 +32,7 @@ class Engine
 			Camera2D*				_2DCamera;
 
 		public:
+			bool	run = true;
 			static Engine& getInstance();
 			static Engine& initInstance(int windowWidth, int windowHeight, std::string windowName);
 			void loop(void (*func)(Engine &));

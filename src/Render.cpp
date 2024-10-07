@@ -98,28 +98,27 @@ void Engine::render(void) {
 			#endif
 			// if you want to see that the zone were the box overlap
 			const std::vector<int> list = tmp->hit();
-			if (list.size() && i == 0) { Mouse.draw = true; } // 
+			if (list.size() && i == 0) { 
+				Mouse.draw = true;
+				Object* tmpObj = getObjectByID(list[0]);
+				if (tmpObj) { Mouse.setText(tmpObj->getName()); } // setup data for the mouse window
+			} //
 			else { Mouse.draw = false; }
 		}
 	}
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
-	Mouse.update();
 	char s[50];
-	sprintf(s, "totals hits = %u", hits);
+	sprintf(s, "in view%u", hits);
 	DrawText(s, 4,20, 30, BLUE);
-	DrawFPS(0,0);
-	//char ss[50];
-	// sprintf(ss, "pos x: %.0f, pos y: %.0f", Engine::getInstance().objectList[objectList.size()-1]->position.x, Engine::getInstance().objectList[objectList.size()-1]->position.y);
-	//DrawText(ss, 4, 60, 30, BLUE);
+	DrawFPS(1,1);
 	for (size_t i = 0; i < uiRenderList.size(); i++) {
 		if (uiRenderList[i] && uiRenderList[i]->texture) {
 			const Object& tmp = *uiRenderList[i];
 			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
-	//const std::string st("this is\na test a longawdawdadw   lest\na\na\nb\nwww  a\n");
-	//Mouse.setText(st);
-	Mouse.drawWindow();
-	//mouse test
+	const char* pause = this->run ? "space ||" : "space >";
+	DrawText(pause, GetScreenWidth() - 140, 30, 30, BLACK);
+	Mouse.update();
 }

@@ -11,7 +11,7 @@ void mainLoop(Engine& e)
 
 	if (IsKeyDown(KEY_UP))		{zoom *= zoomFactor; zoom = fmin(zoom, 8.0f);}
 	if (IsKeyDown(KEY_DOWN))	{zoom /= zoomFactor; zoom = fmax(zoom, 0.25f);}
-
+	if (IsKeyPressed(KEY_SPACE)) { e.run = !e.run; } // pause the game
 	e.set2DCameraZoom(zoom);
 	e.set2DCameraPosition(player, true);
 }
@@ -35,6 +35,7 @@ void initAudio(Engine& e) {
 
 void initObject(Engine& e)
 {
+	Trigger* t = new Trigger({0,0}, {10,10}); // mouse info
 	PetriDish* petriDish = new PetriDish({0,0}, e.getSprite("PetriDish"), 1024);
 
 	petriDish->spawnNutrient(e.getSprite("Nutrient"), PETRI_NUTRIENT_COUNT);
@@ -43,22 +44,26 @@ void initObject(Engine& e)
 	petriDish->spawnPlayer("GoodGuys", e.getSprite("Player"));
 
 	player = (Object*)petriDish->getPlayer();
-	Trigger* t = new Trigger({0,0}, {10,10});
 	t->add(player);
-	e.triggerList.push_back(t);
+	player->setName("this is the player!\n");
 	e.sortLayer();
 }
 
 int main()
 {
-	Engine& e = Engine::initInstance(1280, 720, "MicrobeWar");
-
-	initTexture(e);
-	initAudio(e);
-	initObject(e);
-	Camera2D cam = {{0,0}, {0,0}, 0, 1};
-	e.set2DCamera(cam);
-	e.loop(mainLoop);
-
+	try
+	{
+		Engine& e = Engine::initInstance(1280, 720, "MicrobeWar");
+		initTexture(e);
+		initAudio(e);
+		initObject(e);
+		Camera2D cam = {{0,0}, {0,0}, 0, 1};
+		e.set2DCamera(cam);
+		e.loop(mainLoop);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	return 0;
 }

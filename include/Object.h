@@ -6,6 +6,7 @@
 	{
 		private:
 			std::string		name;
+			std::string		dis;
 
 		protected:
 			Object(Vector2 _position, bool _visible);
@@ -27,6 +28,7 @@
 			void 			setVisible(bool _visible);
 			void			setSprite(std::string name);
 
+			void			setDes(const char* s);
 			int				id;
 			Sprite			sprite;
 			Vector2			position;

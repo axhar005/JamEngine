@@ -7,9 +7,9 @@
 
 class Trigger : public Object {
 	private:
-		std::vector<Object*>	hitList;
 		Object*					target;
 	public:
+		std::vector<Object*>	hitList;
 		bool drawTrigger;
 		Trigger(Vector2 _pos, Vector2 _size);
 		Trigger(Object* _target, Vector2 _size);

@@ -24,25 +24,28 @@ Microbe::~Microbe()
 
 void Microbe::step()
 {
-	this->shrink(MICROBE_STARVE_RATE); // lose size each tick
+	Engine& e = Engine::getInstance();
+	if (e.run) {
+		this->shrink(MICROBE_STARVE_RATE); // lose size each tick
 
-	this->refreshPos();
-	this->refreshSize();
-	this->refreshSpeed();
+		this->refreshPos();
+		this->refreshSize();
+		this->refreshSpeed();
 
-	if (this->isPlayer)
-	{
-		// get user input
-		const Vector2 dir = {
-			(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
-			(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
-		this->move(dir);
+		if (this->isPlayer)
+		{
+			// get user input
+			const Vector2 dir = {
+				(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
+				(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
+			this->move(dir);
 
-		if (IsKeyPressed(KEY_SPACE))
-			this->tryEat();
+			if (IsKeyPressed(KEY_SPACE))
+				this->tryEat();
+		}
+		else
+			this->autoplay();
 	}
-	else
-		this->autoplay();
 }
 
 void Microbe::refreshSpeed()
@@ -244,7 +247,6 @@ void Microbe::autoplay()
 
 	if (target != nullptr && distance < MICROBE_FLEE_RADIUS)
 	{
-		this->setName("runnin");
 		this->moveAwayFrom(target->position);
 		return;
 	}
@@ -255,7 +257,6 @@ void Microbe::autoplay()
 
 	if (target != nullptr && distance < MICROBE_GRAZE_RADIUS)
 	{
-		this->setName("eafin");
 		this->moveTowards(target->position);
 		if (distance < MICROBE_GOAL_RADIUS)
 			this->tryGraze(target);
@@ -275,7 +276,6 @@ void Microbe::autoplay()
 
 	if (target != nullptr && distance < MICROBE_PURSUE_RADIUS)
 	{
-		this->setName("huntin");
 		this->moveTowards(target->position);
 		//if (distance < MICROBE_GOAL_RADIUS)
 			//this->tryDevour((Microbe*)target);
@@ -288,11 +288,9 @@ void Microbe::autoplay()
 
 	if (target != nullptr && distance < MICROBE_SPREAD_RADIUS)
 	{
-		this->setName("skidadlin");
 		this->wander();
 		return;
 	}
-	this->setName("wanderin");
 	this->wander();
 }
 

@@ -30,6 +30,8 @@ Object::Object(Vector2 _position, Sprite _sprite, bool _visible, int _layerLV) :
 	addToEngine();
 }
 
+//const std::string& Object::getDis(void){};
+
 void Object::addToEngine()
 {
 	Engine& e = Engine::getInstance();
@@ -41,6 +43,11 @@ void Object::addToEngine()
 void Object::setName(const char* _name) {
 	if (_name)
 		this->name = _name;
+}
+
+void Object::setDes(const char* s) {
+	if (s)
+		this->dis = s;
 }
 
 const std::string& Object::getName(void) {

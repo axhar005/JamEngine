@@ -2,6 +2,7 @@
 #include "../include/Nutrient.h"
 #include "../include/Microbe.h"
 #include "../include/microAddons.h"
+#include "Engine.h"
 
 PetriDish::PetriDish(Vector2 _position, Sprite _sprite, int _radius) :
 	Object(_position, _sprite, true)
@@ -34,19 +35,29 @@ void PetriDish::spawnPlayer(std::string species, Sprite _sprite)
 
 void PetriDish::spawnMicrobe(std::string species, Sprite _sprite, int count)
 {
+	Engine& e = Engine::getInstance();
 	for (int i = 0; i < count; i++)
 	{
 		Microbe* microbe = new Microbe(this->getRandomPos(), _sprite, this, species, false);
+		microbe->setName("Microbe\n");
 		this->addMicrobe(microbe);
+		if (e.triggerList.size()) {
+			e.triggerList[0]->add(microbe);
+		}
 	}
 }
 
 void PetriDish::spawnNutrient(Sprite _sprite, int count)
 {
+	Engine& e = Engine::getInstance();
 	for (int i = 0; i < count; i++)
 	{
 		Nutrient* nutrient = new Nutrient(this->getRandomPos(), _sprite, this, 0);
+		nutrient->setName("Nutrient\n");
 		this->addNutrient(nutrient);
+		if (e.triggerList.size()) {
+			e.triggerList[0]->add(nutrient);
+		}
 	}
 }
 
