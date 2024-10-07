@@ -42,7 +42,6 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
-	const Color box = {255, 10, 0, 70};
 	unsigned int hits = 0;
 	///
 	if (this->_2DCamera) { BeginMode2D(*this->_2DCamera); } //? look for cam
@@ -87,35 +86,40 @@ void Engine::render(void) {
 	for (size_t i = 0; i < this->triggerList.size(); i++) {
 		if (triggerList[i]) {
 			Trigger* tmp = triggerList[i];
+			if (i == 0 && this->_2DCamera) {
+				tmp->position = this->_2DCamera->target;
+				tmp->position.x += -3 + (GetMouseX() / this->_2DCamera->zoom);
+				tmp->position.y += -3 + (GetMouseY() / this->_2DCamera->zoom);
+				tmp->hitbox.box.width =  5;
+				tmp->hitbox.box.height = 5;
+			}
 			#if (drawTrigger)
 			tmp->draw();
 			#endif
 			// if you want to see that the zone were the box overlap
 			const std::vector<int> list = tmp->hit();
-			// std::cout << list.size() << "\n";
-			if (list.size()) {
-				Mouse.draw = true;
-				Mouse.drawWindow();
-			}
-			else
-				Mouse.draw = false;
+			if (list.size() && i == 0) { Mouse.draw = true; } // 
+			else { Mouse.draw = false; }
 		}
 	}
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
+	Mouse.update();
 	char s[50];
 	sprintf(s, "totals hits = %u", hits);
 	DrawText(s, 4,20, 30, BLUE);
 	DrawFPS(0,0);
-	char ss[50];
+	//char ss[50];
 	// sprintf(ss, "pos x: %.0f, pos y: %.0f", Engine::getInstance().objectList[objectList.size()-1]->position.x, Engine::getInstance().objectList[objectList.size()-1]->position.y);
-	DrawText(ss, 4, 60, 30, BLUE);
+	//DrawText(ss, 4, 60, 30, BLUE);
 	for (size_t i = 0; i < uiRenderList.size(); i++) {
 		if (uiRenderList[i] && uiRenderList[i]->texture) {
 			const Object& tmp = *uiRenderList[i];
 			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
+	//const std::string st("this is\na test a longawdawdadw   lest\na\na\nb\nwww  a\n");
+	//Mouse.setText(st);
+	Mouse.drawWindow();
 	//mouse test
-	Mouse.setWindowSize({90,50});
 }

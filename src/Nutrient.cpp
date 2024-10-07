@@ -32,22 +32,22 @@ void Nutrient::step()
 
 void Nutrient::refreshSize()
 {
-	hitbox.box.height = this->size;
-	hitbox.box.width = this->size;
+	this->hitbox.box.height = this->size;
+	this->hitbox.box.width = this->size;
 }
 
 void Nutrient::refreshPos()
 {
-	hitbox.box.x = position.x; // + hitbox.offset.x;
-	hitbox.box.y = position.y; // + hitbox.offset.y;
+	//this->clampPos();
 
-	this->clampPos();
+	this->hitbox.box.x = this->position.x; // + hitbox.offset.x;
+	this->hitbox.box.y = this->position.y; // + hitbox.offset.y;
 }
 
 void Nutrient::clampPos()
 {
 
-	if ( getDistance(this->position, Vector2{0, 0}) >= this->petriDish->getRadius())
+	if ( getDistance(this->position, Vector2{0, 0}) > this->petriDish->getRadius())
 	{
 		Vector2 newPosDir = getNormalisedDirection(Vector2{0, 0}, this->position);
 		this->position.x = newPosDir.x * this->petriDish->getRadius();
