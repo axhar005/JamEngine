@@ -9,20 +9,14 @@ Object::Object(Vector2 _position, Sprite _sprite, bool _visible) : visible(_visi
 		hitbox.box.width = texture->width;
 		hitbox.offset = {0, 0};
 	}
-	Engine& e = Engine::getInstance();
-	e.addObject(this);
-	if (visible)
-		e.addObjectToRender(this);
+	addToEngine();
 }
 
 Object::Object(Vector2 _position, bool _visible) :  visible(_visible), position(_position), frameIndex(0), animationSpeed(0), rotation(0), layer(0)
 {
 	hitbox.offset = {0, 0};
 	hitbox.box = {0, 0, 0, 0};
-	Engine& e = Engine::getInstance();
-	e.addObject(this);
-	if (visible)
-		e.addObjectToRender(this);
+	addToEngine();
 }
 
 Object::Object(Vector2 _position, Sprite _sprite, bool _visible, int _layerLV) :  visible(_visible), sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), rotation(0), layer(_layerLV)
@@ -33,6 +27,11 @@ Object::Object(Vector2 _position, Sprite _sprite, bool _visible, int _layerLV) :
 		hitbox.box.width = texture->width;
 		hitbox.offset = {0, 0};
 	}
+	addToEngine();
+}
+
+void Object::addToEngine()
+{
 	Engine& e = Engine::getInstance();
 	e.addObject(this);
 	if (visible)

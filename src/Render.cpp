@@ -37,7 +37,7 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 	return ViewPort;
 }
 
-#define drawId      true
+#define drawId      false
 #define drawTrigger false
 
 void Engine::render(void) {
@@ -56,7 +56,24 @@ void Engine::render(void) {
 				const char *name = tmp.getName().c_str();
 				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
-				DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
+				// DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
+				DrawTexturePro(
+					*tmp.texture,
+					(Rectangle){ 0.0f, 0.0f, (float)tmp.texture->width, (float)tmp.texture->height },
+					(Rectangle){
+						tmp.position.x + ((tmp.texture->width * 1.0f) / 2.0f),
+						tmp.position.y + ((tmp.texture->height * 1.0f) / 2.0f),
+						tmp.texture->width * 1.0f,
+						tmp.texture->height * 1.0f
+					},
+					(Vector2){
+						(tmp.texture->width * 1.0f) / 2.0f,
+						(tmp.texture->height * 1.0f) / 2.0f
+					},
+					tmp.rotation,
+					WHITE
+				);
+
 				// DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
@@ -75,7 +92,7 @@ void Engine::render(void) {
 			#endif
 			// if you want to see that the zone were the box overlap
 			const std::vector<int> list = tmp->hit();
-			std::cout << list.size() << "\n";
+			// std::cout << list.size() << "\n";
 			if (list.size()) {
 				Mouse.draw = true;
 				Mouse.drawWindow();

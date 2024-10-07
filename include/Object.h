@@ -6,10 +6,11 @@
 	{
 		private:
 			std::string		name;
-			bool			visible;
 
 		protected:
 			Object(Vector2 _position, bool _visible);
+			void	addToEngine();
+			bool			visible;
 
 		public:
 			Object(Vector2 _position, Sprite _sprite, bool _visible);
