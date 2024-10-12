@@ -1,5 +1,5 @@
-#include "../include/Nutrient.h"
-#include "../include/PetriDish.h"
+#include "../../include/Nutrient.h"
+#include "../../include/PetriDish.h"
 #include <raylib.h>
 
 Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, float _size, bool addToPetriDish) :
@@ -115,7 +115,7 @@ bool Nutrient::isOnEdge()
 }
 
 bool Nutrient::canBeConsumedBy(Nutrient* target) {return target->canConsume(this);}
-bool Nutrient::canConsume(Nutrient* target) {return false;}
+bool Nutrient::canConsume(Nutrient* target) {(void)target; return false;}
 
 float				Nutrient::getSize() {return this->size;}
 Vector2&		Nutrient::getPosition() {return this->position;}

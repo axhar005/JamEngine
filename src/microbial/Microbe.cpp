@@ -1,6 +1,6 @@
-#include "../include/Microbe.h"
-#include "../include/PetriDish.h"
-#include "../include/Engine.h"
+#include "../../include/Microbe.h"
+#include "../../include/PetriDish.h"
+#include "../../include/Engine.h"
 #include <cmath>
 #include <raylib.h>
 
@@ -80,12 +80,13 @@ void Microbe::refreshState()
 			this->state = GRAZING;
 		return;
 	}
-
-	if (this->size > MICROBE_MIN_DIV_SIZE)
+/*
+	if (this->size > MICROBE_MIN_DIV_SIZE) // lags the game real fast since entity count isn"t bounded
 	{
 		this->state = DIVIDING;
 		return;
 	}
+*/
 
 	target = this->findClosestPrey();
 	if (target != nullptr)

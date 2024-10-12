@@ -7,6 +7,7 @@ CC = gcc
 CFLAGS = -Wall -std=c++11 -O2 -g
 CFLAGS += -MMD -MP
 SRC_DIR = src
+OBJ_DIR = obj
 
 #--- OS DETECTION ---#
 ifeq ($(OS),Windows_NT)
@@ -63,8 +64,7 @@ else ifeq ($(UNAME_S),Windows)
 endif
 
 #--- SOURCE FILES AND OBJECTS ---#
-SRC = $(wildcard $(SRC_DIR)/*.cpp)
-OBJ_DIR = object
+SRC = $(wildcard $(SRC_DIR)/**.cpp)
 OBJ = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC))
 DEP = $(OBJ:.o=.d)
 
@@ -72,6 +72,10 @@ DEP = $(OBJ:.o=.d)
 all: $(NAME)
 
 $(NAME): $(RAYLIB_BUILD_DIR)/libraylib.a $(OBJ)
+	#@echo $(OBJ)
+	#@echo $(SRC)
+	#@echo $(DEP)
+	#@echo $(SUB_DIRS)
 	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp

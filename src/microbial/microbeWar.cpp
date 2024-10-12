@@ -1,5 +1,5 @@
-#include "../include/Engine.h"
-#include "../include/PetriDish.h"
+#include "../../include/Engine.h"
+#include "../../include/PetriDish.h"
 #include <cmath>
 
 Object* player;
@@ -30,6 +30,7 @@ void initTexture(Engine& e)
 }
 
 void initAudio(Engine& e) {
+	(void)e;
 	//e.importSound("audio/untitled.wav");
 }
 
