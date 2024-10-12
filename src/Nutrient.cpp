@@ -87,7 +87,7 @@ void Nutrient::setRandomSize()
 
 void Nutrient::die()
 {
-	this->petriDish->removeNutrient(this);
+	//this->petriDish->removeNutrient(this);
 	//this->petriDish->spawnNutrient(this->sprite, 1);
 	//delete this;
 

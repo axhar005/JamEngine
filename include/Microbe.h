@@ -2,6 +2,10 @@
 # define MICROBE_H
 	#include "Nutrient.h"
 
+	/* NOTES (LL)
+		make it so ->getPosition() is used instead of ->position
+	*/
+
 	#define MICROBE_MIN_SIZE			8
 	#define MICROBE_MAX_SIZE			64
 	#define MICROBE_START_SIZE		16

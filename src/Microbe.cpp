@@ -39,7 +39,8 @@ void Microbe::step()
 		this->move(dir);
 
 		if (IsKeyPressed(KEY_SPACE))
-			this->tryEat();
+			if (this->tryEat())
+				printf("Player ate something\n");
 	}
 	else
 		this->autoplay();
