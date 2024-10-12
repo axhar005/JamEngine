@@ -1,10 +1,12 @@
 # include "../include/Trigger.h"
+# include "../include/Engine.h"
 
 Trigger::Trigger(Vector2 _pos, Vector2 _size) :  Object(_pos, false), target(NULL) {
 	hitList.reserve(10);
 	this->hitbox.box.height = _size.y;
 	this->hitbox.box.width = _size.x;
 	this->drawTrigger = false;
+	Engine::getInstance().addTrigger(this);
 }
 
 Trigger::Trigger(Object* _target, Vector2 _size) : Object(_target->position, false), target(_target) {
@@ -12,20 +14,22 @@ Trigger::Trigger(Object* _target, Vector2 _size) : Object(_target->position, fal
 	this->hitbox.box.height = _size.y;
 	this->hitbox.box.width = _size.x;
 	this->drawTrigger = false;
+	Engine::getInstance().addTrigger(this);
+
 }
 
 Trigger::~Trigger() {};
 
-void  Trigger::step() {
+void Trigger::step() {
 	this->hitbox.box.x = this->position.x;
 	this->hitbox.box.y = this->position.y;
 }
 
-void  Trigger::add(Object* obj) {
+void Trigger::add(Object* obj) {
 	if (obj) { hitList.push_back(obj); }
 }
 
-void  Trigger::add(std::vector<Object*>& objs) {
+void Trigger::add(std::vector<Object*>& objs) {
 	for (size_t i = 0; i < objs.size(); i++) {
 		this->add(objs[i]);
 	}

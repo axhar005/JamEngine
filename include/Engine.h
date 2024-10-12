@@ -56,7 +56,7 @@ class Engine
 			// Object
 			Object* getObjectByID(int id);
 			int addObject(Object* object);
-			int addObject(Trigger* trigger);
+			int addTrigger(Trigger* trigger);
 			bool addObjectToRender(Object* object);
 			bool addObjectToRenderByID(int id);
 			bool removeObject(Object* obj);

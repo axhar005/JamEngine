@@ -42,7 +42,6 @@ static Rectangle CalculateViewPort(Camera2D* camera) {
 
 void Engine::render(void) {
 	const Rectangle ViewPort = CalculateViewPort(this->_2DCamera);
-	const Color box = {255, 10, 0, 70};
 	unsigned int hits = 0;
 	///
 	if (this->_2DCamera) { BeginMode2D(*this->_2DCamera); } //? look for cam
@@ -56,7 +55,24 @@ void Engine::render(void) {
 				const char *name = tmp.getName().c_str();
 				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
-				DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
+				// DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
+				DrawTexturePro(
+					*tmp.texture,
+					(Rectangle){ 0.0f, 0.0f, (float)tmp.texture->width, (float)tmp.texture->height },
+					(Rectangle){
+						tmp.position.x + ((tmp.texture->width * 1.0f) / 2.0f),
+						tmp.position.y + ((tmp.texture->height * 1.0f) / 2.0f),
+						tmp.texture->width * 1.0f,
+						tmp.texture->height * 1.0f
+					},
+					(Vector2){
+						(tmp.texture->width * 1.0f) / 2.0f,
+						(tmp.texture->height * 1.0f) / 2.0f
+					},
+					tmp.rotation,
+					WHITE
+				);
+
 				// DrawRectangleRec(tmp.hitbox.box, box);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
@@ -89,7 +105,6 @@ void Engine::render(void) {
 	if (this->_2DCamera) { EndMode2D(); } //? end 2Dmode
 	///
 	Mouse.update();
-	Mouse.setWindowSize({90,50});
 	char s[50];
 	sprintf(s, "totals hits = %u", hits);
 	DrawText(s, 4,20, 30, BLUE);
@@ -103,6 +118,8 @@ void Engine::render(void) {
 			DrawTextureEx(*tmp.texture, tmp.position, 0, 1, WHITE);
 		}
 	}
+	//const std::string st("this is\na test a longawdawdadw   lest\na\na\nb\nwww  a\n");
+	//Mouse.setText(st);
 	Mouse.drawWindow();
 	//mouse test
 }

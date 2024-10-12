@@ -18,12 +18,12 @@ Player::~Player()
 
 void Player::step()
 {
-	// static int t = 0;
-	// if (t < 60)
-	// 	rotation++;
-	// else 
-	// 	t = 0;
-	// t++;
+	static int t = 0;
+	if (t < 60)
+		rotation++;
+	else 
+		t = 0;
+	t++;
 }
 
 void Player::draw()

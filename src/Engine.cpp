@@ -154,16 +154,10 @@ int Engine::addObject(Object* object)
 	return _objectUniqueID++;
 }
 
-int Engine::addObject(Trigger* trigger)
+int Engine::addTrigger(Trigger* trigger)
 {
 	if (trigger == NULL)
 		return -1;
-	for (auto &&obj : objectList)
-	{
-		if(obj == trigger){
-			return -1;
-		}
-	}
 	for (auto &&obj : triggerList)
 	{
 		if(obj == trigger){
@@ -171,7 +165,6 @@ int Engine::addObject(Trigger* trigger)
 		}
 	}
 	trigger->id = _objectUniqueID;
-	objectList.push_back(trigger);
 	triggerList.push_back(trigger);
 	return _objectUniqueID++;
 }
