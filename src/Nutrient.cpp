@@ -1,5 +1,6 @@
 #include "../include/Nutrient.h"
 #include "../include/PetriDish.h"
+#include <raylib.h>
 
 Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, float _size, bool addToPetriDish) :
 	Object(_position, _sprite, true)
@@ -11,6 +12,8 @@ Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, flo
 
 	if (this->size <= 0)
 		this->setRandomSize();
+
+	this->species = "Nutrient";
 
 	this->refreshSize();
 	this->refreshPos();
@@ -96,9 +99,6 @@ void Nutrient::die()
 	this->refreshSize();
 }
 
-float Nutrient::getSize() {return this->size;}
-PetriDish* Nutrient::getPetriDish() {return this->petriDish;}
-
 bool Nutrient::overlapsOther(Nutrient* other)
 {
 	if (CheckCollisionRecs(this->hitbox.box, other->hitbox.box))
@@ -109,6 +109,18 @@ bool Nutrient::overlapsOther(Nutrient* other)
 bool Nutrient::isOnEdge()
 {
 	// check if nutrient is near the edge of the petriDish, to avoid faceplanting into the wall
-	// TODO : implement me
-	return true;
+	if (getDistance(this->position, Vector2{0, 0}) > this->petriDish->getRadius() - this->size)
+		return true;
+	return false;
 }
+
+bool Nutrient::canBeConsumedBy(Nutrient* target) {return target->canConsume(this);}
+bool Nutrient::canConsume(Nutrient* target) {return false;}
+
+float				Nutrient::getSize() {return this->size;}
+Vector2&		Nutrient::getPosition() {return this->position;}
+std::string	Nutrient::getSpecies() {return this->species;}
+PetriDish*	Nutrient::getPetriDish() {return this->petriDish;}
+float				Nutrient::getDistanceTo(Nutrient* target) {return getDistance(this->position, target->position);}
+float				Nutrient::getTaxiCabDistanceTo(Nutrient* target) {return getTaxiCabDistance(this->position, target->position);}
+

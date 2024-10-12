@@ -19,8 +19,9 @@
 			void setRandomSize();
 
 		protected:
-			float size;
-			PetriDish* petriDish;
+			PetriDish*	petriDish;
+			float				size;
+			std::string	species;
 
 		public:
 			Nutrient(Vector2 _position, Sprite _sprite, PetriDish *_petriDish, float _size, bool addToPetriDish = true);
@@ -37,12 +38,19 @@
 			//void divide();
 			void die();
 
-			float getSize();
-			PetriDish* getPetriDish();
-
 			bool overlapsOther(Nutrient* other);
-
 			bool isOnEdge();
+
+			// NOTE : might lead to issues due to complexity of the concumption check logic overall
+			bool canBeConsumedBy(Nutrient* target);
+			bool canConsume(Nutrient* target);
+
+			float 			getSize();
+			Vector2&		getPosition();
+			std::string	getSpecies();
+			PetriDish*	getPetriDish();
+			float				getDistanceTo(Nutrient* target);
+			float				getTaxiCabDistanceTo(Nutrient* target);
 	};
 
 	// NOTE : fuse Nutrients that overlap?

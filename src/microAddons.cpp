@@ -8,6 +8,8 @@ float getDistance(Vector2 start, Vector2 end)
 	return distance;
 }
 
+float getTaxiCabDistance(Vector2 start, Vector2 end) {return fabs(start.x - end.x) + fabs(start.y - end.y);}
+
 Vector2 getNormalisedVector(Vector2 vector)
 {
 	Vector2 direction = {vector.x, vector.y};
