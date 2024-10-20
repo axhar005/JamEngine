@@ -35,9 +35,9 @@ void Trigger::add(std::vector<Object*>& objs) {
 	}
 }
 
-void Trigger::remove(int id) {
+void Trigger::remove(int _id) {
 	for (size_t i = 0; hitList.size(); i++) {
-		if (hitList[i]->id  == id) {
+		if (hitList[i]->id  == _id) {
 			hitList[i] = NULL;
 			return ;
 		}

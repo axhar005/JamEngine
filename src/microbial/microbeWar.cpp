@@ -1,6 +1,4 @@
-#include "../../include/Engine.h"
-#include "../../include/PetriDish.h"
-#include <cmath>
+#include "../../include/microbial/microSetup.h"
 
 Object* player;
 

@@ -1,8 +1,8 @@
 #ifndef PETRIDISH_H
 # define PETRIDISH_H
-	#include "Object.h"
+	#include "../Object.h"
 	#include <raylib.h>
-	#include "engineSetup.h"
+	#include "../engineSetup.h"
 
 	#ifndef NUTRIENT_H
 		class Nutrient;

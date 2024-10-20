@@ -6,10 +6,10 @@
 		make it so ->getPosition() is used instead of ->position
 	*/
 
-	#define MICROBE_MIN_SIZE			8
-	#define MICROBE_MAX_SIZE			64
-	#define MICROBE_START_SIZE		16
-	#define MICROBE_MIN_DIV_SIZE	32
+	#define MICROBE_MIN_MASS			8
+	#define MICROBE_MAX_MASS			64
+	#define MICROBE_START_MASS		16
+	#define MICROBE_MIN_DIV_MASS	32
 
 	#define MICROBE_MIN_SPEED			1.0f
 	#define MICROBE_MAX_SPEED			4.0f

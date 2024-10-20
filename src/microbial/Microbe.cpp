@@ -1,16 +1,12 @@
-#include "../../include/Microbe.h"
-#include "../../include/PetriDish.h"
-#include "../../include/Engine.h"
-#include <cmath>
-#include <raylib.h>
+#include "../../include/microbial/microSetup.h"
 
 Microbe::Microbe(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, std::string _species, bool _isPlayer) :
-	Nutrient(_position, _sprite, _petriDish, MICROBE_START_SIZE, false)
+	Nutrient(_position, _sprite, _petriDish, MICROBE_START_MASS, false)
 {
 	this->petriDish = _petriDish;
 	this->petriDish->addMicrobe(this);
-	this->refreshSpeed(); //	makes speed invertly proportional to its size
-	this->refreshSize(); //		sets hitbox size to size
+	this->refreshSpeed(); //	makes speed invertly proportional to its mass
+	this->refreshSize(); //		sets hitbox dims to sqrt(mass)
 	this->refreshPos(); //		sets hitbox position to position ( clamped to petriDish )
 	this->wanderGoal = this->petriDish->getRandomPos();
 
@@ -24,7 +20,7 @@ Microbe::~Microbe()
 
 void Microbe::step()
 {
-	this->shrink(MICROBE_STARVE_RATE); // lose size each tick
+	this->shrink(MICROBE_STARVE_RATE); // lose mass each tick
 
 	this->refreshPos();
 	this->refreshSize();
@@ -48,14 +44,14 @@ void Microbe::step()
 
 void Microbe::refreshSpeed()
 {
-	// speed is inversely proportional to size, and linearly distributed between min and max speed
+	// speed is inversely proportional to mass, and linearly distributed between min and max speed
 
 	float speed_range = MICROBE_MAX_SPEED - MICROBE_MIN_SPEED;
-	float size_range = MICROBE_MAX_SIZE - MICROBE_MIN_SIZE;
+	float mass_range = MICROBE_MAX_MASS - MICROBE_MIN_MASS;
 
-	float norm_size = (this->size - MICROBE_MIN_SIZE) / size_range;
+	float norm_mass = (this->mass - MICROBE_MIN_MASS) / mass_range;
 
-	this->speed = MICROBE_MIN_SPEED + ((1 - norm_size) * speed_range);
+	this->speed = MICROBE_MIN_SPEED + ((1 - norm_mass) * speed_range);
 }
 
 void Microbe::refreshState()
@@ -81,7 +77,7 @@ void Microbe::refreshState()
 		return;
 	}
 /*
-	if (this->size > MICROBE_MIN_DIV_SIZE) // lags the game real fast since entity count isn"t bounded
+	if (this->mass > MICROBE_MIN_DIV_MASS) // lags the game real fast since entity count isn"t bounded
 	{
 		this->state = DIVIDING;
 		return;
@@ -156,18 +152,18 @@ void Microbe::autoplay()
 
 void Microbe::grow(float amount)
 {
-	this->size += amount;
-	if (this->size > MICROBE_MAX_SIZE)
+	this->mass += amount;
+	if (this->mass > MICROBE_MAX_MASS)
 	{
-		this->size = MICROBE_MAX_SIZE;
+		this->mass = MICROBE_MAX_MASS;
 		this->refreshSpeed();
 	}
 }
 
 void Microbe::shrink(float amount)
 {
-	this->size -= amount;
-	if (this->size < MICROBE_MIN_SIZE)
+	this->mass -= amount;
+	if (this->mass < MICROBE_MIN_MASS)
 	{
 		this->starve();
 	}
@@ -175,13 +171,13 @@ void Microbe::shrink(float amount)
 
 void Microbe::divide()
 {
-	if (this->size > MICROBE_MIN_DIV_SIZE)
+	if (this->mass > MICROBE_MIN_DIV_MASS)
 	{
-		this->size /= 2;
+		this->mass /= 2;
 		this->refreshSpeed();
 
 		Microbe* newMicrobe = new Microbe(this->position, this->sprite, this->petriDish, this->species, false);
-		newMicrobe->size = this->size;
+		newMicrobe->mass = this->mass;
 		newMicrobe->refreshSpeed();
 
 		this->petriDish->addMicrobe(newMicrobe);
@@ -194,7 +190,7 @@ void Microbe::starve()
 		this->playerDeathTransfer();
 
 	// NOTE : use nutrient sprite instead
-	Nutrient* nutrient = new Nutrient(this->position, Engine::getInstance().getSprite("Nutrient"), this->petriDish, this->size);
+	Nutrient* nutrient = new Nutrient(this->position, Engine::getInstance().getSprite("Nutrient"), this->petriDish, this->mass);
 	this->petriDish->addNutrient(nutrient);
 	this->petriDish->removeMicrobe(this);
 	this->die();
@@ -301,7 +297,7 @@ bool Microbe::tryGraze(Nutrient* target)
 {
 	if (this->canGraze(target))
 	{
-		this->grow(target->getSize());
+		this->grow(target->getMass());
 		target->die(); // hacked to avoid caling delete on a Nutrient object
 		return true;
 	}
@@ -312,7 +308,7 @@ bool Microbe::tryDevour(Microbe* target)
 {
 	if (this->canDevour(target))
 	{
-		this->grow(target->getSize() * MICROBE_DIGESTION_FACTOR);
+		this->grow(target->getMass() * MICROBE_DIGESTION_FACTOR);
 		target->die(); // segfaults as of 2024/10/12 - LL
 		return true;
 	}
@@ -333,7 +329,7 @@ bool Microbe::canGraze(Nutrient* target)
 {
 	if (target->getSpecies() != "Nutrient") {return false;}
 	if (!this->overlapsOther(target)) {return false;}
-	//if (this->size * MICROBE_VEGANISM_FACTOR < target->getSize()) {return false;}
+	//if (this->mass * MICROBE_VEGANISM_FACTOR < target->getMass()) {return false;}
 	return true;
 }
 
@@ -342,7 +338,7 @@ bool Microbe::canDevour(Microbe* target)
 	if (this->isSameSpecies(target)) {return false;}
 	if (target->getSpecies() == "Nutrient") {return false;}
 	if (!this->overlapsOther(target)) {return false;}
-	if (this->size * MICROBE_CANIBALISM_FACTOR < target->getSize() ) {return false;}
+	if (this->mass * MICROBE_CANIBALISM_FACTOR < target->getMass() ) {return false;}
 	return true;
 }
 

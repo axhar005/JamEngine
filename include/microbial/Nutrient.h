@@ -1,12 +1,12 @@
 #ifndef NUTRIENT_H
 # define NUTRIENT_H
-	#include "../include/Object.h"
 	#include <raylib.h>
-	#include "engineSetup.h"
+	#include "../Object.h"
+	#include "../engineSetup.h"
 	#include "microAddons.h"
 
-	#define NUTRIENT_MIN_SIZE 4.0f
-	#define NUTRIENT_MAX_SIZE 16.0f
+	#define NUTRIENT_MIN_MASS 4.0f
+	#define NUTRIENT_MAX_MASS 16.0f
 
 	#define NUTRIENT_GROWTH_RATE 0.0f // to be implemented
 
@@ -16,11 +16,11 @@
 	class Nutrient : public Object
 	{
 		private:
-			void setRandomSize();
+			void setRandomMass();
 
 		protected:
 			PetriDish*	petriDish;
-			float				size;
+			float				mass;
 			std::string	species;
 
 		public:
@@ -46,6 +46,7 @@
 			bool canConsume(Nutrient* target);
 
 			float 			getSize();
+			float 			getMass();
 			Vector2&		getPosition();
 			std::string	getSpecies();
 			PetriDish*	getPetriDish();

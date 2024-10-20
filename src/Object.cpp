@@ -1,5 +1,6 @@
 #include "../include/Object.h"
 #include "../include/Engine.h"
+#include <cstddef>
 
 Object::Object(Vector2 _position, Sprite _sprite, bool _visible) : visible(_visible), sprite(_sprite), position(_position), frameIndex(0), animationSpeed(0), rotation(0), layer(0)
 {
@@ -55,20 +56,30 @@ Object::~Object()
 void Object::update(){
 	hitbox.box.x = position.x + hitbox.offset.x;
 	hitbox.box.y = position.y + hitbox.offset.x;
+
+	// NOTE (LL) : shouldn't we cap framIndex between 0 and sprite.size() - 1?,
+	// and just use a increment/decrementFramIndex method to do prevent missindexing?
+	// Also, frameindex could/should be a uint
 	if (animationSpeed != 0)
 	{
-		size_t next = frameIndex++;
-		if (next < 0)
+		size_t next;
+
+		if (frameIndex < 0)
 			next = sprite.size() - 1;
-		else if (next > sprite.size() - 1)
+		else if ((size_t)frameIndex > sprite.size() - 1)
 			next = 0;
+		else
+			next = frameIndex;
+
+		frameIndex++;
+
 		texture = &sprite[next].texture;
 	}
 }
 
 void Object::step()
 {
-	
+
 }
 
 void Object::draw()
@@ -100,9 +111,9 @@ void Object::setVisible(bool _visible){
 	}
 }
 
-void Object::setSprite(std::string name)
+void Object::setSprite(std::string _name)
 {
 	rotation = 0;
 	frameIndex = 0;
-	sprite = Engine::getInstance().getSprite(name);
+	sprite = Engine::getInstance().getSprite(_name);
 }

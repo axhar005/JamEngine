@@ -1,17 +1,15 @@
-#include "../../include/Nutrient.h"
-#include "../../include/PetriDish.h"
-#include <raylib.h>
+#include "../../include/microbial/microSetup.h"
 
-Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, float _size, bool addToPetriDish) :
+Nutrient::Nutrient(Vector2 _position, Sprite _sprite, PetriDish* _petriDish, float _mass, bool addToPetriDish) :
 	Object(_position, _sprite, true)
 {
 	this->petriDish = _petriDish;
 	if (addToPetriDish)
 		this->petriDish->addNutrient(this);
-	this->size = _size;
+	this->mass = _mass;
 
-	if (this->size <= 0)
-		this->setRandomSize();
+	if (this->mass <= 0)
+		this->setRandomMass();
 
 	this->species = "Nutrient";
 
@@ -35,8 +33,8 @@ void Nutrient::step()
 
 void Nutrient::refreshSize()
 {
-	this->hitbox.box.height = this->size;
-	this->hitbox.box.width = this->size;
+	this->hitbox.box.height = this->getSize();
+	this->hitbox.box.width = this->getSize();
 }
 
 void Nutrient::refreshPos()
@@ -60,29 +58,26 @@ void Nutrient::clampPos()
 
 void Nutrient::grow(float amount)
 {
-	this->size += amount;
-	if (this->size > NUTRIENT_MAX_SIZE)
+	this->mass += amount;
+	if (this->mass > NUTRIENT_MAX_MASS)
 	{
-		this->size = NUTRIENT_MAX_SIZE;
+		this->mass = NUTRIENT_MAX_MASS;
 	}
 }
 
 void Nutrient::shrink(float amount)
 {
-	this->size -= amount;
-	if (this->size < NUTRIENT_MIN_SIZE)
+	this->mass -= amount;
+	if (this->mass < NUTRIENT_MIN_MASS)
 	{
 		this->die();
 	}
 }
 
 
-void Nutrient::setRandomSize()
+void Nutrient::setRandomMass()
 {
-	this->size = GetRandomValue(NUTRIENT_MIN_SIZE, NUTRIENT_MAX_SIZE);
-
-	hitbox.box.height = this->size;
-	hitbox.box.width = this->size;
+	this->mass = GetRandomValue(NUTRIENT_MIN_MASS, NUTRIENT_MAX_MASS);
 }
 
 void Nutrient::die()
@@ -95,7 +90,7 @@ void Nutrient::die()
 	this->position = this->petriDish->getRandomPos();
 	this->refreshPos();
 
-	this->setRandomSize();
+	this->setRandomMass();
 	this->refreshSize();
 }
 
@@ -109,7 +104,7 @@ bool Nutrient::overlapsOther(Nutrient* other)
 bool Nutrient::isOnEdge()
 {
 	// check if nutrient is near the edge of the petriDish, to avoid faceplanting into the wall
-	if (getDistance(this->position, Vector2{0, 0}) > this->petriDish->getRadius() - this->size)
+	if (getDistance(this->position, Vector2{0, 0}) > this->petriDish->getRadius() - this->getSize())
 		return true;
 	return false;
 }
@@ -117,7 +112,8 @@ bool Nutrient::isOnEdge()
 bool Nutrient::canBeConsumedBy(Nutrient* target) {return target->canConsume(this);}
 bool Nutrient::canConsume(Nutrient* target) {(void)target; return false;}
 
-float				Nutrient::getSize() {return this->size;}
+float				Nutrient::getSize() {return sqrtf(this->mass);}
+float				Nutrient::getMass() {return this->mass;}
 Vector2&		Nutrient::getPosition() {return this->position;}
 std::string	Nutrient::getSpecies() {return this->species;}
 PetriDish*	Nutrient::getPetriDish() {return this->petriDish;}
