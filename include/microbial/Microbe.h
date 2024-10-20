@@ -2,17 +2,13 @@
 # define MICROBE_H
 	#include "Nutrient.h"
 
-	/* NOTES (LL)
-		make it so ->getPosition() is used instead of ->position
-	*/
+	#define MICROBE_MIN_MASS			16 // mass = square of size
+	#define MICROBE_MAX_MASS			512
+	#define MICROBE_START_MASS		32
+	#define MICROBE_MIN_DIV_MASS	128
 
-	#define MICROBE_MIN_MASS			8
-	#define MICROBE_MAX_MASS			64
-	#define MICROBE_START_MASS		16
-	#define MICROBE_MIN_DIV_MASS	32
-
+	#define MICROBE_MAX_SPEED			3.0f
 	#define MICROBE_MIN_SPEED			1.0f
-	#define MICROBE_MAX_SPEED			4.0f
 
 	#define MICROBE_STARVE_RATE				0.0f // to be implemented
 	#define MICROBE_CANIBALISM_FACTOR	0.8f
@@ -63,7 +59,8 @@
 			void refreshSpeed();
 			void refreshState();
 
-			// AUTOMATION
+			// CONTROLS
+			void playerControls();
 			void autoplay();
 
 			// BASIC ACTIONS

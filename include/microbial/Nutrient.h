@@ -45,8 +45,8 @@
 			bool canBeConsumedBy(Nutrient* target);
 			bool canConsume(Nutrient* target);
 
-			float 			getSize();
 			float 			getMass();
+			float 			getSize();
 			Vector2&		getPosition();
 			std::string	getSpecies();
 			PetriDish*	getPetriDish();

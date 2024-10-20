@@ -112,11 +112,11 @@ bool Nutrient::isOnEdge()
 bool Nutrient::canBeConsumedBy(Nutrient* target) {return target->canConsume(this);}
 bool Nutrient::canConsume(Nutrient* target) {(void)target; return false;}
 
-float				Nutrient::getSize() {return sqrtf(this->mass);}
-float				Nutrient::getMass() {return this->mass;}
-Vector2&		Nutrient::getPosition() {return this->position;}
-std::string	Nutrient::getSpecies() {return this->species;}
-PetriDish*	Nutrient::getPetriDish() {return this->petriDish;}
-float				Nutrient::getDistanceTo(Nutrient* target) {return getDistance(this->position, target->position);}
-float				Nutrient::getTaxiCabDistanceTo(Nutrient* target) {return getTaxiCabDistance(this->position, target->position);}
+float				Nutrient::getMass()			{return this->mass;}
+float				Nutrient::getSize()			{return sqrtf(this->mass);}
+Vector2&		Nutrient::getPosition()	{return this->position;}
+std::string	Nutrient::getSpecies()	{return this->species;}
+PetriDish*	Nutrient::getPetriDish(){return this->petriDish;}
+float				Nutrient::getDistanceTo(Nutrient* target) {return getDistance(this->position, target->getPosition());}
+float				Nutrient::getTaxiCabDistanceTo(Nutrient* target) {return getTaxiCabDistance(this->position, target->getPosition());}
 

@@ -18,6 +18,38 @@ Microbe::~Microbe()
 {
 }
 
+void Microbe::playerControls()
+{
+	static bool sneak;
+
+	// hacky af but I'm lazy rn. implement better later
+	if (IsKeyPressed(KEY_LEFT_SHIFT ))
+		sneak = !sneak;
+	if (sneak)
+		this->speed = MICROBE_MIN_SPEED;
+
+	// get user input
+	const Vector2 dir = {
+		(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
+		(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
+	this->move(dir);
+
+	//debug actions
+	if (IsKeyPressed(KEY_R))
+		this->divide();
+	else if (IsKeyPressed(KEY_LEFT_CONTROL))
+		this->playerDeathTransfer();
+
+	if (IsKeyPressed(KEY_KP_EQUAL))
+		this->grow(16);
+	else if (IsKeyPressed(KEY_KP_SUBTRACT))
+		this->shrink(16);
+
+	if (IsKeyPressed(KEY_SPACE))
+		if (this->tryEat())
+			printf("Player ate something\n");
+}
+
 void Microbe::step()
 {
 	this->shrink(MICROBE_STARVE_RATE); // lose mass each tick
@@ -27,17 +59,7 @@ void Microbe::step()
 	this->refreshSpeed();
 
 	if (this->isPlayer)
-	{
-		// get user input
-		const Vector2 dir = {
-			(float)IsKeyDown(KEY_D) - (float)IsKeyDown(KEY_A),
-			(float)IsKeyDown(KEY_S) - (float)IsKeyDown(KEY_W)};
-		this->move(dir);
-
-		if (IsKeyPressed(KEY_SPACE))
-			if (this->tryEat())
-				printf("Player ate something\n");
-	}
+		this->playerControls();
 	else
 		this->autoplay();
 }
@@ -51,7 +73,7 @@ void Microbe::refreshSpeed()
 
 	float norm_mass = (this->mass - MICROBE_MIN_MASS) / mass_range;
 
-	this->speed = MICROBE_MIN_SPEED + ((1 - norm_mass) * speed_range);
+	this->speed = MICROBE_MIN_SPEED + ((1.0f - norm_mass) * speed_range);
 }
 
 void Microbe::refreshState()
@@ -77,7 +99,7 @@ void Microbe::refreshState()
 		return;
 	}
 /*
-	if (this->mass > MICROBE_MIN_DIV_MASS) // lags the game real fast since entity count isn"t bounded
+	if (this->mass > MICROBE_MIN_DIV_MASS) // lags the game real fast since entity count isn't bounded
 	{
 		this->state = DIVIDING;
 		return;
@@ -115,17 +137,17 @@ void Microbe::autoplay()
 	{
 		case FLEEING:
 			this->setName("runnin");
-			this->moveAwayFrom(this->targetGoal->position);
+			this->moveAwayFrom(this->targetGoal->getPosition());
 			break;
 
 		case GRAZING:
 			this->setName("grazin");
-			this->moveTowards(this->targetGoal->position);
+			this->moveTowards(this->targetGoal->getPosition());
 			break;
 
 		case HUNTING:
 			this->setName("huntin");
-			this->moveTowards(this->targetGoal->position);
+			this->moveTowards(this->targetGoal->getPosition());
 			break;
 
 		case BITING:

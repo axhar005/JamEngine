@@ -73,7 +73,8 @@ void Engine::render(void) {
 					WHITE
 				);
 
-				// DrawRectangleRec(tmp.hitbox.box, box);
+				if (SHOW_HITBOX)
+					DrawRectangleRec(tmp.hitbox.box, RED);
 				#if (drawId)
 				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
 				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
@@ -98,7 +99,7 @@ void Engine::render(void) {
 			#endif
 			// if you want to see that the zone were the box overlap
 			const std::vector<int> list = tmp->hit();
-			if (list.size() && i == 0) { Mouse.draw = true; } // 
+			if (list.size() && i == 0) { Mouse.draw = true; } //
 			else { Mouse.draw = false; }
 		}
 	}
