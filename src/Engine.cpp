@@ -240,10 +240,11 @@ bool Engine::removeObjectByID(int id)
 	{
 		if ((*it)->id == id)
 		{
-			renderList.erase(std::remove(renderList.begin(), renderList.end(), *it), renderList.end());
+			renderList.erase(  std::remove(renderList.begin(),   renderList.end(),   *it), renderList.end());
 			uiRenderList.erase(std::remove(uiRenderList.begin(), uiRenderList.end(), *it), uiRenderList.end());
-			triggerList.erase(std::remove(triggerList.begin(), triggerList.end(), *it), triggerList.end());
-			it = objectList.erase(it);
+			triggerList.erase( std::remove(triggerList.begin(),  triggerList.end(),  *it), triggerList.end());
+			printf("deleting object %i by id\n", id);
+			objectList.erase(it);
 			return true;
 		}
 		else
@@ -261,10 +262,11 @@ bool Engine::removeObject(Object* object)
 	{
 		if (*it == object)
 		{
-			renderList.erase(std::remove(renderList.begin(), renderList.end(), object), renderList.end());
+			renderList.erase(  std::remove(renderList.begin(),   renderList.end(),   object), renderList.end());
 			uiRenderList.erase(std::remove(uiRenderList.begin(), uiRenderList.end(), object), uiRenderList.end());
-			triggerList.erase(std::remove(triggerList.begin(), triggerList.end(), object), triggerList.end());
-			it = objectList.erase(it);
+			triggerList.erase( std::remove(triggerList.begin(),  triggerList.end(),  object), triggerList.end());
+			printf("deleting object %i\n", object->id);
+			objectList.erase(it);
 			return true;
 		}
 		else

@@ -37,9 +37,9 @@ void initObject(Engine& e)
 	PetriDish* petriDish = new PetriDish({0,0}, e.getSprite("PetriDish"), 1024);
 
 	petriDish->spawnNutrient(e.getSprite("Nutrient"), PETRI_NUTRIENT_COUNT);
-	petriDish->spawnMicrobe("BadGuys", e.getSprite("Microbe_2"), 16);
-	petriDish->spawnMicrobe("GoodGuys", e.getSprite("Microbe_1"), 15);
-	petriDish->spawnPlayer("GoodGuys", e.getSprite("Player"));
+	petriDish->spawnMicrobe("BadGuys",  e.getSprite("Microbe_2"), PETRI_MICROBE_COUNT);
+	petriDish->spawnMicrobe("GoodGuys", e.getSprite("Microbe_1"), PETRI_MICROBE_COUNT - 1);
+	petriDish->spawnPlayer("GoodGuys",  e.getSprite("Player"));
 
 	player = (Object*)petriDish->getPlayer();
 	Trigger* t = new Trigger({0,0}, {10,10});

@@ -50,17 +50,17 @@ void Engine::render(void) {
 			Object& tmp = *renderList[i]; //!! put back const after test
 			if (!this->_2DCamera || CheckCollisionRecs(ViewPort, tmp.hitbox.box)) {
 				#if (drawId)
-				char sdev[80];
-				bzero(sdev, 80);
-				const char *name = tmp.getName().c_str();
-				sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
+					char sdev[80];
+					bzero(sdev, 80);
+					const char *name = tmp.getName().c_str();
+					sprintf(sdev, "%li %u\n%s", i, tmp.layer, name);
 				#endif
 				// DrawTextureEx(*tmp.texture, tmp.position, tmp.rotation, 1, WHITE);
 				DrawTexturePro(
 					*tmp.texture,
 					(Rectangle){ 0.0f, 0.0f, (float)tmp.texture->width, (float)tmp.texture->height },
 					(Rectangle){
-						tmp.position.x + ((tmp.texture->width * 1.0f) / 2.0f),
+						tmp.position.x + ((tmp.texture->width  * 1.0f) / 2.0f),
 						tmp.position.y + ((tmp.texture->height * 1.0f) / 2.0f),
 						tmp.texture->width * 1.0f,
 						tmp.texture->height * 1.0f
@@ -72,12 +72,13 @@ void Engine::render(void) {
 					tmp.rotation,
 					WHITE
 				);
-
-				if (SHOW_HITBOX)
+				#if (SHOW_HITBOX)
 					DrawRectangleRec(tmp.hitbox.box, RED);
+				#endif
+
 				#if (drawId)
-				DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
-				DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
+					DrawText(sdev, tmp.position.x - 1, tmp.position.y -1, 8, BLACK);
+					DrawText(sdev, tmp.position.x, tmp.position.y, 8, WHITE);
 				#endif
 				tmp.draw();
 				hits++;
@@ -95,7 +96,7 @@ void Engine::render(void) {
 				tmp->hitbox.box.height = 5;
 			}
 			#if (drawTrigger)
-			tmp->draw();
+				tmp->draw();
 			#endif
 			// if you want to see that the zone were the box overlap
 			const std::vector<int> list = tmp->hit();

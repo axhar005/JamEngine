@@ -82,9 +82,11 @@ void Nutrient::setRandomMass()
 
 void Nutrient::die()
 {
-	//this->petriDish->removeNutrient(this);
-	//this->petriDish->spawnNutrient(this->sprite, 1);
-	//delete this;
+	/*
+	this->petriDish->removeNutrient(this);
+	this->petriDish->spawnNutrient(this->sprite, 1);
+	delete this;
+	*/
 
 	// tmp fix for object deletion bug
 	this->position = this->petriDish->getRandomPos();

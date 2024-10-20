@@ -43,6 +43,8 @@ void Microbe::playerControls()
 		this->divide();
 	else if (IsKeyPressed(KEY_KP_MULTIPLY))
 		this->playerDeathTransfer();
+	else if (IsKeyPressed(KEY_KP_DECIMAL))
+		this->starve();
 
 
 	if (IsKeyPressed(KEY_SPACE))
@@ -98,13 +100,13 @@ void Microbe::refreshState()
 			this->state = GRAZING;
 		return;
 	}
-/*
+
 	if (this->mass > MICROBE_MIN_DIV_MASS) // lags the game real fast since entity count isn't bounded
 	{
 		this->state = DIVIDING;
 		return;
 	}
-*/
+
 
 	target = this->findClosestPrey();
 	if (target != nullptr)
