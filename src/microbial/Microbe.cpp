@@ -35,15 +35,15 @@ void Microbe::playerControls()
 	this->move(dir);
 
 	//debug actions
-	if (IsKeyPressed(KEY_R))
+	if (IsKeyPressed(KEY_KP_SUBTRACT))
+		this->shrink(16);
+	else if (IsKeyPressed(KEY_KP_ADD))
+		this->grow(16);
+	else if (IsKeyPressed(KEY_KP_DIVIDE))
 		this->divide();
-	else if (IsKeyPressed(KEY_LEFT_CONTROL))
+	else if (IsKeyPressed(KEY_KP_MULTIPLY))
 		this->playerDeathTransfer();
 
-	if (IsKeyPressed(KEY_KP_EQUAL))
-		this->grow(16);
-	else if (IsKeyPressed(KEY_KP_SUBTRACT))
-		this->shrink(16);
 
 	if (IsKeyPressed(KEY_SPACE))
 		if (this->tryEat())
