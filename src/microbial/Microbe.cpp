@@ -249,7 +249,10 @@ void Microbe::playerDeathTransfer()
 	}
 
 	if (newPlayer != nullptr)
+	{
+		this->isPlayer = false;
 		newPlayer->becomePlayer();
+	}
 	else
 	{
 		// TODO : GAME OVER
@@ -351,7 +354,7 @@ bool Microbe::canGraze(Nutrient* target)
 {
 	if (target->getSpecies() != "Nutrient") {return false;}
 	if (!this->overlapsOther(target)) {return false;}
-	//if (this->mass * MICROBE_VEGANISM_FACTOR < target->getMass()) {return false;}
+	//if (this->mass * MICROBE_VEGANISM_FACTOR < target->getMass()) {return false;} // prevents eating plants bigger than you
 	return true;
 }
 
