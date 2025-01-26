@@ -27,7 +27,7 @@ $(PROJECT_NAME): $(OBJS)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_SUB_DIRS)
-	@$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM) -MMD -MP
+	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM) -MMD -MP
 
 # Include dependency files, so that they are recompiled if headers change
 -include $(OBJS:.o=.d)

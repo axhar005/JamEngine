@@ -24,7 +24,10 @@ void Microbe::playerControls()
 
 	// hacky af but I'm lazy rn. implement better later
 	if (IsKeyPressed(KEY_LEFT_SHIFT ))
-		sneak = !sneak;
+		sneak = true;
+	if (IsKeyReleased(KEY_LEFT_SHIFT))
+		sneak = false;
+
 	if (sneak)
 		this->speed = MICROBE_MIN_SPEED;
 
@@ -232,6 +235,7 @@ void Microbe::die()
 
 void Microbe::becomePlayer()
 {
+	printf("Player transfer\n");
 	this->isPlayer = true;
 	this->sprite = Engine::getInstance().getSprite("Player");
 }
@@ -239,11 +243,12 @@ void Microbe::becomePlayer()
 void Microbe::playerDeathTransfer()
 {
 	Microbe* newPlayer = nullptr;
+
 	for (Microbe* microbe : this->petriDish->getMicrobes())
 	{
-		if (microbe->getSpecies() != this->species)
-			continue;
 		if (microbe == this)
+			continue;
+		if (microbe->getSpecies() != this->species)
 			continue;
 
 		newPlayer = microbe;

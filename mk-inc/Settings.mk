@@ -12,7 +12,7 @@ OBJ_DIR = obj
 
 # Defines the path for raylib, if different than /usr/local
 # comment out if uneeded
-CUSTOM_RALIB_PATH = ~/.brew
+CUSTOM_RALIB_PATH = /home/.brew
 
 # Defines compiler flags:
 #  -O0									defines optimization level (no optimization, better for debugging)
